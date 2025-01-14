@@ -49,14 +49,14 @@ Post on Piazza if you run into any issues
 
 ## What you need to change in the skeleton
 
-- Change the Frontend CLIENT_ID (Skeleton.js) to your team's CLIENT_ID (obtain this at https://bit.ly/gauth-mit)
-- Change the Server CLIENT_ID to the same CLIENT_ID (auth.js)
-- Change the Database SRV (mongoConnectionURL) for Atlas (server.js). You got this in the MongoDB setup. remember to replace <password> and <dbname> (should be no < or > in your SRV) (From: https://bit.ly/mongo-setup)
-- Change the Database Name for MongoDB to whatever you put in the SRV to replace <dbname> (server.js)
+- Change the Frontend CLIENT_ID (Skeleton.js) to your team's CLIENT_ID (obtain this at https://bit.ly/gauth-mit) (done)
+- Change the Server CLIENT_ID to the same CLIENT_ID (auth.js) (done)
+- Change the Database SRV (mongoConnectionURL) for Atlas (server.js). You got this in the MongoDB setup. remember to replace <password> and <dbname> (should be no < or > in your SRV) (From: https://bit.ly/mongo-setup) (done)
+- Change the Database Name for MongoDB to whatever you put in the SRV to replace <dbname> (server.js) (done)
 - (Optional) Add a favicon to your website at the path client/dist/favicon.ico
-- (Optional) Update website title in client/dist/index.html
+- (Optional) Update website title in client/dist/index.html (done)
 - (Optional) Update this README file ;)
-- (Optional) Update the package.json file with your app name :) (line 2)
+- (Optional) Update the package.json file with your app name :) (line 2) (done)
 
 ## How to run this skeleton
 
