@@ -9,7 +9,11 @@ const Welcome = () => {
     <div className="u-welcome">
       <div className="welcome-content">
         <h1 className="welcome-title">Welcome to picVenture!</h1>
-        <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
+        <GoogleLogin
+          className="google-login"
+          onSuccess={handleLogin}
+          onError={(err) => console.log(err)}
+        />
       </div>
     </div>
   );
