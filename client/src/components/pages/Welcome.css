@@ -1,0 +1,25 @@
+.u-welcome {
+  background-color: pink;
+  background-image: url("../assets/picVenture.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.welcome-title {
+  color: white;
+  font-size: 4em;
+}
+
+.welcome-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
