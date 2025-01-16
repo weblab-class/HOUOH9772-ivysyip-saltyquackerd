@@ -1,0 +1,62 @@
+.Profile-avatarContainer {
+  padding: 10 35%;
+}
+
+.Profile-avatar {
+  margin-top: 100px;
+  /* make it responsive */
+  max-width: 25%;
+  width: 25%;
+  height: auto;
+  display: block;
+  /* div height to be the same as width*/
+  padding-top: 25%;
+
+  /* make it a circle */
+  border-radius: 50%;
+
+  /* Centering on image`s center*/
+  background-position-y: center;
+  background-position-x: center;
+  background-repeat: no-repeat;
+
+  /* it makes the clue thing, takes smaller dimension to fill div */
+  background-size: cover;
+
+  /* it is optional, for making this div centered in parent*/
+  margin: 0 auto;
+  top: 10;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("../../assets/Default_pfp.jpg");
+}
+
+.Profile-name {
+  font-size: 40px;
+  font-weight: 300;
+}
+
+.Profile-bio {
+  font-size: 15px;
+  font-weight: 100;
+}
+
+.Profile-line {
+  border-color: var(--grey);
+}
+
+.Profile-subContainer {
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.Profile-subContainer + .Profile-subContainer {
+  margin-left: var(--m);
+}
+
+.Profile-subTitle {
+  font-weight: 300;
+  font-size: 24px;
+  margin: var(--m) var(--s);
+}

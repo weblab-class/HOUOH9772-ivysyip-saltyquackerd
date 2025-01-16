@@ -51,6 +51,9 @@ const App = () => {
     <UserContext.Provider value={authContextValue}>
       <Outlet />
     </UserContext.Provider>
+    // <div className="App-container">
+    //   <Outlet context={{ userId: userId }} />
+    // </div>
   );
 };
 
