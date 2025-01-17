@@ -6,6 +6,7 @@
 | This file defines the routes for your server.
 |
 */
+const Group = require("./models/group");
 
 const express = require("express");
 
@@ -42,6 +43,23 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
+
+router.post("/creategroup", (req, res) => {
+  const newGroup = new Group({
+    join_code: req.body.join_code,
+    group_name: req.body.group_name,
+    users: req.body.users,
+  });
+
+  newGroup.save().then((group) => res.send(group));
+});
+
+router.get("/getgroup", (req, res) => {
+  Group.find({ users: { $in: ["user2"] } }).then((documents) => {
+    console.log(documents);
+  });
+  newGroup.save().then((group) => res.send(group));
+});
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

@@ -5,6 +5,7 @@ import Skeleton from "./components/pages/Skeleton";
 import NotFound from "./components/pages/NotFound";
 import Welcome from "./components/pages/Welcome";
 import Home from "./components/pages/Home";
+import Friends from "./components/pages/Friends";
 
 import {
   createBrowserRouter,
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
     <Route errorElement={<NotFound />} element={<App />}>
       <Route path="/" element={<Welcome />} />
       <Route path="/Home" element={<Home />} />
+      <Route path="/Friends" element={<Friends />} />
     </Route>
   )
 );
