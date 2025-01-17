@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App";
-import Skeleton from "./components/pages/Skeleton";
+import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
+// import Profile from "./components/pages/Profile";
+// import Friends from "./components/pages/Friends";
+// import Badges from "/components/pages/Badges";
 
 import {
   createBrowserRouter,
@@ -16,10 +19,14 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 //TODO: REPLACE WITH YOUR OWN CLIENT_ID
 const GOOGLE_CLIENT_ID = "935457940475-p7vk9j4bp0kkkqc91ajkckkhpkudjok9.apps.googleusercontent.com";
 
+// Include once the pages are made
+//      <Route path="/profile/:userId" element={<Profile />} />
+//      <Route path="/friends/" element={<Friends />} />
+//      <Route path="/badges/" element={<Badges />} />
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<NotFound />} element={<App />}>
-      <Route path="/" element={<Skeleton />} />
+      <Route path="/" element={<Home />} />
     </Route>
   )
 );
