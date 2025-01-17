@@ -1,3 +1,4 @@
+
 import React, { useContext } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 
@@ -41,6 +42,3 @@ const Home = () => {
       </a>
     </>
   );
-};
-
-export default Home;
