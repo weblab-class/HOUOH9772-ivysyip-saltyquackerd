@@ -8,6 +8,8 @@ import NotFound from "./components/pages/NotFound";
 // import Friends from "./components/pages/Friends";
 // import Badges from "/components/pages/Badges";
 import Welcome from "./components/pages/Welcome";
+import Profile from "./components/pages/Profile";
+import EditPage from "./components/pages/EditPage";
 
 import {
   createBrowserRouter,
@@ -29,6 +31,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<NotFound />} element={<App />}>
       <Route path="/" element={<Home />} />
+      <Route path="/profile/:userId" element={<Profile />} />
+      <Route path="/accounts/edit/:userId" element={<EditPage />} />
       <Route path="/Friends" element={<Friends />} />
     </Route>
   )
