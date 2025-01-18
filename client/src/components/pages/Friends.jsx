@@ -18,8 +18,12 @@ const Friends = () => {
   }, []);
 
   useEffect(() => {
-    get("/api/group", { userid: userId }).then((groups) => setGroups(groups));
+    refreshGroups();
   }, []);
+
+  const refreshGroups = () => {
+    get("/api/group", { userid: userId }).then((groups) => setGroups(groups));
+  };
 
   let groupsList = null;
   const hasGroups = groups.length !== 0;
@@ -36,7 +40,11 @@ const Friends = () => {
       ) : (
         <div>
           <button onClick={() => setCreateGroup(true)}>Create/Join Group</button>
-          <GroupPopup trigger={createGroup} setTrigger={setCreateGroup} />
+          <GroupPopup
+            trigger={createGroup}
+            setTrigger={setCreateGroup}
+            refreshGroups={refreshGroups}
+          />
           {groupsList}
         </div>
       )}
