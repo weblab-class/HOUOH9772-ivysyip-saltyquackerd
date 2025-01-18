@@ -1,1 +1,17 @@
-/* Fill me in :) */
+.u-homepage {
+    background-color: white;
+    background-image: url("../assets/homepage.png");
+    background-size: cover;
+    background-position: center center;
+    opacity: 1;
+    height: 100vh;
+    width: 100vw;
+
+}
+
+.home-title {
+    position: relative;
+    top: 100px;
+    font-size: x-large;
+    text-align: center;
+}
