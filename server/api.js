@@ -6,6 +6,7 @@
 | This file defines the routes for your server.
 |
 */
+const Group = require("./models/group");
 
 const express = require("express");
 
@@ -78,6 +79,28 @@ router.get("/accounts/edit/:user", (req, res) => {
       <button type="submit">Save</button>
     </form>
   `);
+});
+
+router.get("/user", (req, res) => {
+  User.find(req.query.userId).then((user) => {
+    res.send(user);
+  });
+});
+
+router.post("/newgroup", (req, res) => {
+  const newGroup = new Group({
+    join_code: req.body.join_code,
+    group_name: req.body.group_name,
+    users: req.body.users,
+  });
+
+  newGroup.save().then((group) => res.send(group));
+});
+
+router.get("/group", (req, res) => {
+  Group.find({ users: { $in: [req.query.userid] } }).then((groups) => {
+    res.send(groups);
+  });
 });
 
 // anything else falls to this "not found" case
