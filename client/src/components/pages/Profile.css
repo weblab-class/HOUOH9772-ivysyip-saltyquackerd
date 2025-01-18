@@ -3,33 +3,25 @@
 }
 
 .Profile-avatar {
-  margin-top: 100px;
   /* make it responsive */
-  max-width: 25%;
-  width: 25%;
-  height: auto;
+  max-width: 15%;
+  width: 15%;
+  height: 0;
+  padding-bottom: 15%; /* This maintains the aspect ratio */
   display: block;
-  /* div height to be the same as width*/
-  padding-top: 25%;
-
   /* make it a circle */
   border-radius: 50%;
-
-  /* Centering on image`s center*/
+  /* Centering on image's center */
   background-position-y: center;
   background-position-x: center;
   background-repeat: no-repeat;
-
   /* it makes the clue thing, takes smaller dimension to fill div */
   background-size: cover;
-
-  /* it is optional, for making this div centered in parent*/
+  /* it is optional, for making this div centered in parent */
   margin: 0 auto;
-  top: 10;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("../../assets/Default_pfp.jpg");
+  margin-top: 20px; /* Adds space above the profile picture */
+  position: relative; /* Allows for top positioning */
+  background-image: url("../assets/picVenture.jpg");
 }
 
 .Profile-name {
@@ -42,6 +34,10 @@
   font-weight: 100;
 }
 
+.Profile-edit-button {
+  background-color: rgba(255, 255, 255, 0.694);
+  border: none;
+}
 .Profile-line {
   border-color: var(--grey);
 }
