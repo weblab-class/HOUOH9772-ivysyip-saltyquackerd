@@ -8,7 +8,6 @@ import NotFound from "./components/pages/NotFound";
 // import Friends from "./components/pages/Friends";
 // import Badges from "/components/pages/Badges";
 import Welcome from "./components/pages/Welcome";
-import Friends from "./components/pages/Friends";
 
 import {
   createBrowserRouter,
@@ -29,8 +28,7 @@ const GOOGLE_CLIENT_ID = "935457940475-p7vk9j4bp0kkkqc91ajkckkhpkudjok9.apps.goo
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<NotFound />} element={<App />}>
-      <Route path="/" element={<Welcome />} />
-      <Route path="/Home" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/Friends" element={<Friends />} />
     </Route>
   )

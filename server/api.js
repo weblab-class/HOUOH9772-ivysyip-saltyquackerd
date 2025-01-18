@@ -44,7 +44,13 @@ router.post("/initsocket", (req, res) => {
 // | write your API methods below!|
 // |------------------------------|
 
-router.post("/creategroup", (req, res) => {
+router.get("/user", (req, res) => {
+  User.find(req.query.userId).then((user) => {
+    res.send(user);
+  });
+});
+
+router.post("/newgroup", (req, res) => {
   const newGroup = new Group({
     join_code: req.body.join_code,
     group_name: req.body.group_name,
@@ -54,11 +60,10 @@ router.post("/creategroup", (req, res) => {
   newGroup.save().then((group) => res.send(group));
 });
 
-router.get("/getgroup", (req, res) => {
-  Group.find({ users: { $in: ["user2"] } }).then((documents) => {
-    console.log(documents);
+router.get("/group", (req, res) => {
+  Group.find({ users: { $in: [req.query.userid] } }).then((groups) => {
+    res.send(groups);
   });
-  newGroup.save().then((group) => res.send(group));
 });
 
 // anything else falls to this "not found" case
