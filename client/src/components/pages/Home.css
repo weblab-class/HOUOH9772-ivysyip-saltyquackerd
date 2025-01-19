@@ -72,5 +72,8 @@ form {
 }
 
 .feed {
-    color: var(--mint);
+  width: 100vw;
+  height: 50vh;
+  margin-top: 200px; 
+  background-color: var(--mint);
 }

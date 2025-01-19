@@ -25,8 +25,6 @@ const Home = () => {
 
       <h1 className="challenge">wear something blue</h1>
       <h1 className="feed">
-
-        
       </h1>
     </div>
   );};
