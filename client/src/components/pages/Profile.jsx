@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { get } from "../../utilities";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import "../../utilities.css";
 import "./Profile.css";

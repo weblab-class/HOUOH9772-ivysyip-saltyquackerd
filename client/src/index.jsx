@@ -4,12 +4,16 @@ import App from "./components/App";
 import Home from "./components/pages/Home";
 import Friends from "./components/pages/Friends";
 import NotFound from "./components/pages/NotFound";
+<<<<<<< HEAD
 // import Profile from "./components/pages/Profile";
 // import Friends from "./components/pages/Friends";
 // import Badges from "/components/pages/Badges";
 import Welcome from "./components/pages/Welcome";
 import Profile from "./components/pages/Profile";
 import EditPage from "./components/pages/EditPage";
+=======
+import Profile from "./components/pages/Profile";
+>>>>>>> 8a286301b29601017d5693be55c0a9c9d75241f2
 
 import {
   createBrowserRouter,
