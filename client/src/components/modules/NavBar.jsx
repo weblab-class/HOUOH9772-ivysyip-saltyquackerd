@@ -10,7 +10,7 @@ import gearIcon from "../assets/gear.png";
 const NavBar = (props) => {
     const location = useLocation();
     const [isPopupVisible, setPopupVisible] = useState(false);
-    const { handleLogout } = useContext(UserContext);
+    const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
     const togglePopup = () => {
         setPopupVisible(!isPopupVisible)

@@ -49,7 +49,7 @@
 .popup .popuptext {
   visibility: hidden;
   width: 160px;
-  background-color: #AA336A;
+  background-color: #F2C9D5;
   color: black;
   text-align: center;
   border-radius: 6px;
@@ -60,6 +60,7 @@
   top: 100%;
   margin-top: 5px;
   margin-left: -100px;
+  box-shadow: 5px 5px 5px #AA336A;
 }
 
 /* Popup arrow */
@@ -71,7 +72,7 @@
   margin-left: 5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent #AA336A transparent;
+  border-color: transparent transparent #F2C9D5 transparent;
 }
 
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
