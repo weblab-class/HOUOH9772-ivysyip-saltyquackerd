@@ -15,8 +15,7 @@
 */
 
 /* TODO: REPLACE WITH YOUR OWN FONT! */
-@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Konkhmer+Sleokchher&display=swap");
 :root {
   --primary: #396dff;
   --primary--dim: #6987db;
