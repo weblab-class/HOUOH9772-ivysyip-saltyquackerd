@@ -20,7 +20,7 @@ const NavBar = (props) => {
       <nav className="NavBar-container">
         <div className="NavBar-linkContainer u-inlineBlock">
           <Link
-            to="/"
+            to="/home"
             className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
           >
             Home
