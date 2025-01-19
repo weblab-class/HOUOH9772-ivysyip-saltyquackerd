@@ -6,12 +6,46 @@
     opacity: 1;
     height: 100vh;
     width: 100vw;
+    padding-top: 50px;
 
 }
 
 .home-title {
     position: relative;
-    top: 100px;
+    top: 50px;
+    margin: 0px auto 50px auto;
     font-size: x-large;
     text-align: center;
+}
+
+.challenge {
+    position: relative;
+    font-size: x-large;
+    text-align: center;
+}
+
+.challenge-upload {
+    background-color: var(--mint);
+    height: 40vh;
+    width: 40vw;
+    margin: 60px auto 2px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 10px; 
+    
+}
+
+.upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
