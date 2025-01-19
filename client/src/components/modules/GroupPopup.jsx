@@ -41,7 +41,18 @@ const GroupPopup = (props) => {
   const handleJoinSubmit = (event) => {
     event.preventDefault();
 
-    if (groupName.trim()) {
+    if (inputGroupCode.trim()) {
+      post("/api/join", { join_code: inputGroupCode, userId: userId })
+        .then((group) => {
+          setInputGroupCode("");
+          handleClose();
+
+          props.refreshGroups();
+        })
+        .catch((error) => {
+          console.error("Error joining group:", error);
+          alert("Failed to join the group. Please check the group code and try again.");
+        });
     } else {
       alert("Please enter a valid name.");
     }
@@ -71,40 +82,58 @@ const GroupPopup = (props) => {
         </button>
         {!selected ? (
           <>
-            <button onClick={handleCreate}>Create Group</button>
-            <button onClick={handleJoin}>Join Group</button>
+            <button className="button" onClick={handleCreate}>
+              Create Group
+            </button>
+            <button className="button" onClick={handleJoin}>
+              Join Group
+            </button>
           </>
         ) : create ? (
           <div>
-            <h2>Creating a group!</h2>
-            <p>Your Group Code is: {groupCode}. Share with your friends!</p>
-            <form onSubmit={handleCreateSubmit}>
-              <label htmlFor="nameInput">Enter your group name:</label>
-              <input
-                type="text"
-                id="nameInput"
-                value={groupName}
-                onChange={(e) => setGroupName(e.target.value)}
-                placeholder="Your Name"
-                required
-              />
-              <button type="submit">Create Group</button>
+            <h2 className="group-title">Creating a group!</h2>
+            <p className="code">Your Group Code is: {groupCode}. Share with your friends!</p>
+            <form className="form-obj" onSubmit={handleCreateSubmit}>
+              <div className="form-group">
+                <label className="prompt" htmlFor="nameInput">
+                  Enter your group name
+                </label>
+                <input
+                  type="text"
+                  id="nameInput"
+                  className="text-input"
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.target.value)}
+                  placeholder="Your Group Name"
+                  required
+                />
+              </div>
+              <button className="submit-btn" type="submit">
+                Create Group
+              </button>
             </form>
           </div>
         ) : (
           <div>
-            <h2>Joining a group!</h2>
-            <form onSubmit={handleJoinSubmit}>
-              <label htmlFor="codeInput">Enter your group code:</label>
-              <input
-                type="text"
-                id="codeInput"
-                value={inputGroupCode}
-                onChange={(e) => setInputGroupCode(e.target.value)}
-                placeholder="Your group code"
-                required
-              />
-              <button type="submit">Create Group</button>
+            <h2 className="group-title">Joining a group!</h2>
+            <form className="form-obj" onSubmit={handleJoinSubmit}>
+              <div className="form-group">
+                <label className="prompt" htmlFor="codeInput">
+                  Enter your group code
+                </label>
+                <input
+                  type="text"
+                  id="codeInput"
+                  className="text-input"
+                  value={inputGroupCode}
+                  onChange={(e) => setInputGroupCode(e.target.value)}
+                  placeholder="Your group code"
+                  required
+                />
+              </div>
+              <button className="submit-btn" type="submit">
+                Join Group
+              </button>
             </form>
           </div>
         )}
