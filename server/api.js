@@ -11,6 +11,7 @@ const express = require("express");
 
 // import models so we can interact with the database
 const User = require("./models/user");
+const Picture = require("./models/picture");
 
 // import authentication library
 const auth = require("./auth");
@@ -57,33 +58,20 @@ router.get("/user", (req, res) => {
     });
 });
 
-const bodyParser = require("body-parser");
-
-let userBio = "This is the default bio."; // Store bio in memory (use database in production)
-
-router.use(bodyParser.urlencoded({ extended: true }));
-
-// Route for the Edit Profile Page (Form submission)
-router.post("/update-bio", (req, res) => {
-  userBio = req.body.bio; // Save new bio
-  res.redirect("/profile"); // Redirect to profile page
+router.get("/pictures", (req, res) => {
+  // empty selector means get all documents
+  Picture.find({}).then((pictures) => res.send(pictures));
 });
 
-// Route for the Profile Page
-router.get("/profile", (req, res) => {
-  res.send(`<h1>Your Profile</h1><p>${userBio}</p><a href="/edit-profile">Edit Bio</a>`);
-});
+// router.post("/picture", auth.ensureLoggedIn, (req, res) => {
+//   const newStory = new Story({
+//     creator_id: req.user._id,
+//     creator_name: req.user.name,
+//     content: req.body.content,
+//   });
 
-// Route for the Edit Profile Page
-router.get("/accounts/edit/:user", (req, res) => {
-  res.send(`
-    <h1>Edit Your Bio</h1>
-    <form action="/update-bio" method="POST">
-      <textarea name="bio">${userBio}</textarea>
-      <button type="submit">Save</button>
-    </form>
-  `);
-});
+//   newStory.save().then((story) => res.send(story));
+// });
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

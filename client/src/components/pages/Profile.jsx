@@ -1,25 +1,107 @@
 import React, { useState, useEffect, useContext } from "react";
 import { get } from "../../utilities";
 import { Link, useParams } from "react-router-dom";
-
+import Picture from "../modules/Picture";
 import "../../utilities.css";
 import "./Profile.css";
 
 const Profile = () => {
   let props = useParams(); // Retrieve userId from URL parameters
   const [user, setUser] = useState();
+  const [images, setImages] = useState([]);
 
+  const picture1 = {
+    creator_id: "678994f04058370c73cb3f55",
+    creator_name: "Hailey",
+    date: "1/18/2025",
+    challenge: "take a picture of a dog",
+    link: "https://www.photos-public-domain.com/wp-content/uploads/2012/05/small-dog-with-tongue-sticking-out.jpg",
+  };
+
+  const picture2 = {
+    creator_id: "678994f04058370c73cb3f55",
+    creator_name: "Hailey",
+    date: "1/18/2025",
+    challenge: "Take a picture of a cat",
+    link: "https://www.photos-public-domain.com/wp-content/uploads/2012/05/small-dog-with-tongue-sticking-out.jpg",
+  };
+
+  const picture3 = {
+    creator_id: "678994f04058370c73cb3f55",
+    creator_name: "Hailey",
+    date: "1/18/2025",
+    challenge: "Take a picture of a bird",
+    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
+  };
+
+  const picture4 = {
+    creator_id: "678994f04058370c73cb3f55",
+    creator_name: "Hailey",
+    date: "1/18/2025",
+    challenge: "Take a picture of a tree",
+    link: "https://www.photos-public-domain.com/wp-content/uploads/2012/05/small-dog-with-tongue-sticking-out.jpg",
+  };
+
+  const picture5 = {
+    creator_id: "678994f04058370c73cb3f55",
+    creator_name: "Hailey",
+    date: "1/18/2025",
+    challenge: "Take a picture of a bird",
+    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
+  };
+  const picture6 = {
+    creator_id: "678994f04058370c73cb3f55",
+    creator_name: "Hailey",
+    date: "1/18/2025",
+    challenge: "Take a picture of a bird",
+    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
+  };
+  const picture7 = {
+    creator_id: "678994f04058370c73cb3f55",
+    creator_name: "Hailey",
+    date: "1/18/2025",
+    challenge: "Take a picture of a bird",
+    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
+  };
+
+  let picturesList = [picture1, picture2, picture3, picture4, picture5, picture6, picture7];
   useEffect(() => {
     document.title = "Profile Page";
     get(`/api/user`, { userid: props.userId }).then((userObj) => setUser(userObj));
+    get("api/pictures").then((pictures) => {
+      // const filteredImages = pictures.filter((image) => image.creator_id === props.userId);
+      // console.log(image.creator_id === props.userId);
+      // setImages(filteredImages);
+    });
+    setImages(picturesList);
   }, []);
-
-  const [editing, setEditing] = useState(false);
-
-  const [text, setText] = useState("Bio");
 
   if (!user) {
     return <div> Loading!</div>;
+  }
+  //     <div className="picture-grid" key={`picture_${index}`}>
+
+  console.log(images);
+  if (images && images.length !== 0) {
+    picturesList = (
+      <div className="picture-grid">
+        {" "}
+        {/* Add the grid container here */}
+        {images.map((image, index) => (
+          <Picture
+            // className="picture-item"
+            key={`Picture_${index}`} // Add a unique key to each item
+            creator_name={image.creator_name}
+            creator_id={image.creator_id}
+            date={image.date}
+            challenge={image.challenge}
+            link={image.link}
+          />
+        ))}
+      </div>
+    );
+  } else {
+    picturesList = <div>No pictures!</div>;
   }
   return (
     <>
@@ -81,10 +163,12 @@ const Profile = () => {
           </>
         )}
       </div> */}
-      <div className="u-flex">
-        <div className="Profile-subContainer u-textCenter">
+      <div>
+        <div>
           <h4 className="Profile-subTitle">Past Uploads</h4>
+          <hr className="Profile-line" />
         </div>
+        {picturesList}
       </div>
     </>
   );

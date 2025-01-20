@@ -1,5 +1,5 @@
 .Profile-avatarContainer {
-  padding: 10 35%;
+  padding: 5 35%;
 }
 
 .Profile-avatar {
@@ -19,14 +19,14 @@
   background-size: cover;
   /* it is optional, for making this div centered in parent */
   margin: 0 auto;
-  margin-top: 20px; /* Adds space above the profile picture */
+  margin-top: 40px; /* Adds space above the profile picture */
   position: relative; /* Allows for top positioning */
   background-image: url("../assets/picVenture.jpg");
 }
 
 .Profile-name {
-  font-size: 40px;
-  font-weight: 300;
+  font-size: 30px;
+  font-weight: 50;
 }
 
 .Profile-bio {
@@ -52,7 +52,41 @@
 }
 
 .Profile-subTitle {
-  font-weight: 300;
-  font-size: 24px;
+  font-weight: 100;
+  font-size: 12x;
   margin: var(--m) var(--s);
+  margin-left: 80px;
+  color: gray;
+}
+
+.Profile-line {
+  color: gray;
+  background-color: gray;
+  width: 90%;
+  height: 1px;
+}
+.Profile-uploads-container {
+  margin-left: 60px;
+  color: gray;
+}
+.picture-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Auto-adjust columns */
+  gap: 5px; /* Spacing between items */
+  padding: 10px; /* Padding around the grid */
+  margin-left: 60px;
+  margin-right: 60px;
+  justify-content: center; /* Center the grid items */
+}
+
+@media (max-width: 768px) {
+  .picture-grid {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .picture-grid {
+    grid-template-columns: 1fr; /* One column on very small screens */
+  }
 }

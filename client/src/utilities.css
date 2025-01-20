@@ -15,7 +15,7 @@
 */
 
 /* TODO: REPLACE WITH YOUR OWN FONT! */
-@import url("https://fonts.googleapis.com/css2?family=Konkhmer+Sleokchher&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Konkhmer+Sleokchher&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 :root {
   --primary: #396dff;
   --primary--dim: #6987db;
@@ -23,7 +23,7 @@
   --medgrey: #e0e0e0;
   --grey: #f7f7f7;
   --white: #fff;
-  --pink: #FFDFD6;
+  --pink: #ffdfd6;
   --black: #000000;
 
   --xs: 4px;
