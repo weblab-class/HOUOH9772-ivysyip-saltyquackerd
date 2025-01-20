@@ -1,0 +1,91 @@
+.Tabs {
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  padding: 0;
+}
+
+.tab-nav {
+  width: 100%;
+  background-color: #f5f5ff;
+  padding: 8px 8px 0;
+}
+
+.tab-list {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0 16px;
+  border-bottom: 2px solid #dbdcfb;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tab-list::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-list li {
+  margin-bottom: -2px;
+  flex-shrink: 0;
+}
+
+.tab-list button {
+  position: relative;
+  padding: 12px 24px;
+  min-width: 100px;
+  background: transparent;
+  border: none;
+  border-radius: 12px 12px 0 0;
+  color: #6b6ca8;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.tab-list li:last-child button {
+  padding: 12px 20px;
+  font-size: 20px;
+  font-weight: 400;
+  min-width: unset;
+}
+
+.tab-list button:hover {
+  color: #4a4b8c;
+  background-color: #e8e9fd;
+}
+
+.tab-list button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(219, 220, 251, 0.5);
+}
+
+/* Active tab styles */
+.tab-list button[aria-selected="true"] {
+  color: #4a4b8c;
+  font-weight: bold;
+  background-color: #f5f5ff;
+  border: 2px solid #dbdcfb;
+  border-bottom: 2px solid #f5f5ff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tab-list {
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  .tab-list button {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-width: 80px;
+  }
+}
