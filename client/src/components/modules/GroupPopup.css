@@ -15,11 +15,12 @@
   padding: 32px;
   width: 100%;
   max-width: 640px;
-  background-color: pink;
+  background-color: #fff0f0;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  border-radius: 20px;
 }
 
 .popup-inner .close-btn {
@@ -40,25 +41,25 @@
 }
 
 .popup-inner .button {
-  width: 80%; /* Adjust width to be uniform */
-  max-width: 300px; /* Limit button width */
+  width: 80%;
+  max-width: 300px;
   padding: 10px 20px;
-  margin: 10px 0; /* Space between buttons */
+  margin: 10px 0;
   font-size: 16px;
   font-weight: bold;
   color: black;
-  background-color: #d9fdd3; /* Light green background */
+  background-color: #d9fdd3;
   border: none;
-  border-radius: 8px; /* Rounded corners for buttons */
+  border-radius: 8px;
   cursor: pointer;
-  text-align: center; /* Center the text */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .popup-inner .button:hover {
-  background-color: #b2ebb0; /* Darker green on hover */
-  transform: translateY(-2px); /* Slight upward movement on hover */
+  background-color: #b2ebb0;
+  transform: translateY(-2px);
 }
 
 .popup-inner .group-title {
@@ -82,22 +83,22 @@
 
 .form-group {
   display: flex;
-  flex-direction: column; /* Ensures label and input are stacked */
-  align-items: center; /* Centers the input field */
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 300px; /* Set a max width for alignment */
-  margin-bottom: 16px; /* Spacing below the group */
+  max-width: 300px;
+  margin-bottom: 16px;
 }
 
 .prompt {
   font-size: 14px;
   font-weight: bold;
   align-self: flex-start;
-  margin-bottom: 8px; /* Space between label and input */
+  margin-bottom: 8px;
 }
 
 .text-input {
-  width: 100%; /* Matches the width of the container */
+  width: 100%;
   padding: 8px 12px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -106,7 +107,7 @@
 }
 
 .text-input:focus {
-  border-color: #b2ebb0; /* Add focus effect */
+  border-color: #b2ebb0;
   outline: none;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
 }
@@ -117,7 +118,7 @@
   font-size: 16px;
   font-weight: bold;
   color: black;
-  background-color: #d9fdd3; /* Green button */
+  background-color: #d9fdd3;
   border: none;
   border-radius: 8px;
   cursor: pointer;

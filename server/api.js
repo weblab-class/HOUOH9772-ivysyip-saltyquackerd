@@ -103,6 +103,16 @@ router.get("/group", (req, res) => {
   });
 });
 
+router.post("/join", (req, res) => {
+  Group.findOneAndUpdate(
+    { join_code: req.body.join_code }, // Find the group by join_code
+    { $push: { users: req.body.userId } }, // Add userId to users array (avoids duplicates)
+    { new: true } // Return the updated group
+  ).then((group) => {
+    res.send(group);
+  });
+});
+
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);
