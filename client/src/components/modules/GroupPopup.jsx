@@ -11,16 +11,6 @@ const GroupPopup = (props) => {
   const [groupName, setGroupName] = useState("");
   const [inputGroupCode, setInputGroupCode] = useState("");
 
-  function generateRandomGroupCode() {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let code = "";
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      code += characters[randomIndex];
-    }
-    return code;
-  }
-
   const handleCreateSubmit = (event) => {
     event.preventDefault();
 
@@ -58,10 +48,26 @@ const GroupPopup = (props) => {
     }
   };
 
+  async function fetchGroupCode() {
+    try {
+      const response = await fetch("/api/code");
+      if (response.ok) {
+        const data = await response.json();
+        return data.groupCode;
+      } else {
+        throw new Error("Failed to fetch group code");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   const handleCreate = () => {
     setSelected(true);
     setCreate(true);
-    setGroupCode(generateRandomGroupCode());
+    fetchGroupCode().then((code) => {
+      setGroupCode(code);
+    });
   };
 
   const handleJoin = () => {
