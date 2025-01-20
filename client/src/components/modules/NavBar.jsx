@@ -5,6 +5,7 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import "./NavBar.css";
 import { UserContext } from "../App";
 import gearIcon from "../assets/gear.png";
+import "../../utilities.css";
 
 
 const NavBar = (props) => {
@@ -46,7 +47,7 @@ const NavBar = (props) => {
             Badges
           </Link>
         </div>
-        <div className="popup" onClick={togglePopup}>
+        {/* <div className="popup" onClick={togglePopup}>
           <button className="setting">
             <img src={gearIcon} alt="Gear Icon" />
             {isPopupVisible && (
@@ -66,7 +67,7 @@ const NavBar = (props) => {
               </span>
             )}
           </button>
-        </div>
+        </div> */}
       </nav>
     );
 }
