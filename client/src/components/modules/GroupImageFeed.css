@@ -1,0 +1,23 @@
+.GroupImageFeed {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: pink;
+  margin-top: 0;
+}
+
+.feed-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  margin-left: 30%;
+}
+
+@media (max-width: 768px) {
+  .feed-content {
+    width: 100%;
+    margin-left: 0;
+  }
+}

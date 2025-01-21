@@ -5,22 +5,22 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import "./NavBar.css";
 import { UserContext } from "../App";
 import gearIcon from "../assets/gear.png";
-
+import "../../utilities.css";
 
 const NavBar = (props) => {
-    const location = useLocation();
-    const [isPopupVisible, setPopupVisible] = useState(false);
-    const { userId, handleLogin, handleLogout } = useContext(UserContext);
+  const location = useLocation();
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
-    const togglePopup = () => {
-        setPopupVisible(!isPopupVisible)
-    };
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
 
     return (
       <nav className="NavBar-container">
         <div className="NavBar-linkContainer u-inlineBlock">
           <Link
-            to="/home"
+            to="/"
             className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
           >
             Home
@@ -40,13 +40,13 @@ const NavBar = (props) => {
             Friends
           </Link>
           <Link
-            to="/badges/"
+            to={`/profile/${props.userId}`}
             className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
           >
-            Badges
+            Profile
           </Link>
         </div>
-        <div className="popup" onClick={togglePopup}>
+        {/* <div className="popup" onClick={togglePopup}>
           <button className="setting">
             <img src={gearIcon} alt="Gear Icon" />
             {isPopupVisible && (
@@ -66,9 +66,9 @@ const NavBar = (props) => {
               </span>
             )}
           </button>
-        </div>
-      </nav>
-    );
-}
+        </div> */}
+    </nav>
+  );
+};
 
 export default NavBar;

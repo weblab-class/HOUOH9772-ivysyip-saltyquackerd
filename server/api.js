@@ -9,6 +9,10 @@
 const Group = require("./models/group");
 
 const express = require("express");
+const AWS = require("aws-sdk");
+const cors = require("cors");
+const multer = require("multer");
+const bodyParser = require("body-parser");
 
 // import models so we can interact with the database
 const User = require("./models/user");
@@ -22,6 +26,24 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+
+// Middleware
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(cors());
+
+// AWS S3 Configuration
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID, // Replace with your actual AWS access key
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // Replace with your actual AWS secret key
+  region: process.env.AWS_REGION, // Replace with your AWS bucket region
+});
+
+const bucketName = process.env.AWS_BUCKET_NAME; // Replace with your actual S3 bucket name
+
+// File Upload Setup with Multer
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -63,6 +85,46 @@ router.get("/pictures", (req, res) => {
   // empty selector means get all documents
   Picture.find({}).then((pictures) => res.send(pictures));
 });
+           
+router.post("/upload", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const fileContent = req.file.buffer;
+    const fileName = `uploads/${Date.now()}_${req.file.originalname}`;
+
+    const params = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: fileContent,
+      ContentType: req.file.mimetype,
+    };
+
+    // Upload to S3
+    const uploadResult = await s3.upload(params).promise();
+    res.status(200).json({
+      message: "File uploaded successfully",
+      fileUrl: uploadResult.Location, // Public URL of the uploaded file
+    });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
+// const bodyParser = require("body-parser");
+
+let userBio = "This is the default bio."; // Store bio in memory (use database in production)
+
+router.use(bodyParser.urlencoded({ extended: true }));
+
+// Route for the Edit Profile Page (Form submission)
+router.post("/update-bio", (req, res) => {
+  userBio = req.body.bio; // Save new bio
+  res.redirect("/profile"); // Redirect to profile page
+});
 
 // router.post("/picture", auth.ensureLoggedIn, (req, res) => {
 //   const newStory = new Story({
@@ -74,12 +136,14 @@ router.get("/pictures", (req, res) => {
 //   newStory.save().then((story) => res.send(story));
 // });
 
+// geting a user information based on id
 router.get("/user", (req, res) => {
   User.find(req.query.userId).then((user) => {
     res.send(user);
   });
 });
 
+// creating new group
 router.post("/newgroup", (req, res) => {
   const newGroup = new Group({
     join_code: req.body.join_code,
@@ -90,10 +154,57 @@ router.post("/newgroup", (req, res) => {
   newGroup.save().then((group) => res.send(group));
 });
 
+// geting groups based on userid
 router.get("/group", (req, res) => {
   Group.find({ users: { $in: [req.query.userid] } }).then((groups) => {
     res.send(groups);
   });
+});
+
+// joining a group
+router.post("/join", (req, res) => {
+  Group.findOneAndUpdate(
+    { join_code: req.body.join_code },
+    { $push: { users: req.body.userId } },
+    { new: true }
+  ).then((group) => {
+    res.send(group);
+  });
+});
+
+// generate code
+const generateRandomGroupCode = () => {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters[randomIndex];
+  }
+  return code;
+};
+
+router.get("/code", async (req, res) => {
+  try {
+    let isUnique = false;
+    let groupCode;
+    while (!isUnique) {
+      groupCode = generateRandomGroupCode();
+      const existingCode = await Group.findOne({ join_code: groupCode });
+      if (!existingCode) {
+        isUnique = true;
+      }
+    }
+    res.json({ groupCode });
+  } catch (error) {
+    console.error("Error generating group code:", error);
+    res.status(500).json({ error: "Failed to generate group code" });
+  }
+});
+
+router.post("/upload", (req, res) => {
+  const newPhoto = req.body;
+  newPhoto.save().then((photo) => res.send(photo));
+  //FIX THIS => new photo must be sent to aws before being resent back to frontend
 });
 
 // anything else falls to this "not found" case
