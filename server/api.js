@@ -9,6 +9,10 @@
 const Group = require("./models/group");
 
 const express = require("express");
+const AWS = require("aws-sdk");
+const cors = require("cors");
+const multer = require("multer");
+const bodyParser = require("body-parser");
 
 // import models so we can interact with the database
 const User = require("./models/user");
@@ -21,6 +25,24 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+
+// Middleware
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(cors());
+
+// AWS S3 Configuration
+const s3 = new AWS.S3({
+  accessKeyId: package.env.AWS_ACCESS_KEY_ID, // Replace with your actual AWS access key
+  secretAccessKey: package.env.AWS_SECRET_ACCESS_KEY, // Replace with your actual AWS secret key
+  region: package.env.AWS_REGION, // Replace with your AWS bucket region
+});
+
+const bucketName = package.env.AWS_BUCKET_NAME; // Replace with your actual S3 bucket name
+
+// File Upload Setup with Multer
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -56,6 +78,36 @@ router.get("/user", (req, res) => {
     .catch((err) => {
       res.status(500).send("User Not");
     });
+});
+
+router.post("/upload", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const fileContent = req.file.buffer;
+    const fileName = `uploads/${Date.now()}_${req.file.originalname}`;
+
+    const params = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: fileContent,
+      ContentType: req.file.mimetype,
+      ACL: "public-read", // Make file publicly readable
+    };
+
+    // Upload to S3
+    const uploadResult = await s3.upload(params).promise();
+
+    res.status(200).json({
+      message: "File uploaded successfully",
+      fileUrl: uploadResult.Location, // Public URL of the uploaded file
+    });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).json({ error: "Failed to upload file" });
+  }
 });
 
 const bodyParser = require("body-parser");
