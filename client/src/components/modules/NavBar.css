@@ -1,6 +1,10 @@
 .NavBar-container {
     padding: var(--m) var(--s);
-    background-color: var(--pink)
+    background-color: var(--pink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    width: 100%;
 }
 
 .NavBar-title {
@@ -41,7 +45,6 @@
   position: relative;
   display: inline-block;
   cursor: pointer;
-  float: right;
   margin-right: 20px;
 }
 
@@ -103,5 +106,4 @@
 .setting img {
   width: 35px;
   height: 30px;
-  margin-top: -3px;
 }

@@ -6,14 +6,26 @@
     opacity: 1;
     height: 100vh;
     width: 100vw;
-    padding-top: 50px;
+    padding-top: 0px;
     overflow: scroll;
 
 }
 
+.feed {
+  width: 100vw;
+  height: 10vh;
+  background-color: var(--grey);
+  position: relative;
+  overflow: scroll;
+}
+
+h1 {
+  margin: 0;
+}
+
 .home-title {
     position: relative;
-    top: 50px;
+    top: 100px;
     margin: 0px auto 50px auto;
     font-size: x-large;
     text-align: center;
@@ -29,7 +41,7 @@
     background-color: var(--mint);
     height: 40vh;
     width: 40vw;
-    margin: 60px auto 2px auto;
+    margin: 120px auto 2px auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,11 +81,4 @@ form {
 
 .button_group label{
     background-color: #89CFF0;
-}
-
-.feed {
-  width: 100vw;
-  height: 50vh;
-  margin-top: 200px; 
-  background-color: var(--mint);
 }
