@@ -32,12 +32,12 @@ router.use(cors());
 
 // AWS S3 Configuration
 const s3 = new AWS.S3({
-  accessKeyId: package.env.AWS_ACCESS_KEY_ID, // Replace with your actual AWS access key
-  secretAccessKey: package.env.AWS_SECRET_ACCESS_KEY, // Replace with your actual AWS secret key
-  region: package.env.AWS_REGION, // Replace with your AWS bucket region
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID, // Replace with your actual AWS access key
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // Replace with your actual AWS secret key
+  region: process.env.AWS_REGION, // Replace with your AWS bucket region
 });
 
-const bucketName = package.env.AWS_BUCKET_NAME; // Replace with your actual S3 bucket name
+const bucketName = process.env.AWS_BUCKET_NAME; // Replace with your actual S3 bucket name
 
 // File Upload Setup with Multer
 const upload = multer({
@@ -94,12 +94,10 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       Key: fileName,
       Body: fileContent,
       ContentType: req.file.mimetype,
-      ACL: "public-read", // Make file publicly readable
     };
 
     // Upload to S3
     const uploadResult = await s3.upload(params).promise();
-
     res.status(200).json({
       message: "File uploaded successfully",
       fileUrl: uploadResult.Location, // Public URL of the uploaded file
@@ -110,7 +108,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 
 let userBio = "This is the default bio."; // Store bio in memory (use database in production)
 
@@ -208,7 +206,6 @@ router.post("/upload", (req, res) => {
   newPhoto.save().then((photo) => res.send(photo));
   //FIX THIS => new photo must be sent to aws before being resent back to frontend
 });
-
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
