@@ -12,5 +12,7 @@ const Home = () => {
         <h1 className="home-title">Today's Challenge</h1>
       </div>
     </>
-  )};
+  );
+};
+
 export default Home;

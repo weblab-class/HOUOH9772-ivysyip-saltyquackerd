@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import NavBar from "./modules/NavBar";
+import Welcome from "./pages/Welcome";
 
 import jwt_decode from "jwt-decode";
 
@@ -18,7 +19,6 @@ export const UserContext = createContext(null);
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
-  const navigate = useNavigate();
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
@@ -55,8 +55,14 @@ const App = () => {
   return (
     <>
       <UserContext.Provider value={authContextValue}>
-        <NavBar userId={userId} />
-        <Outlet />
+        {userId ? (
+          <>
+            <NavBar userId={userId} />
+            <Outlet />
+          </>
+        ) : (
+          <Welcome /> // Show Welcome page when not logged in
+        )}
       </UserContext.Provider>
     </>
   );

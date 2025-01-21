@@ -1,0 +1,58 @@
+.Profile-avatarContainer {
+  padding: 10 35%;
+}
+
+.Profile-avatar {
+  /* make it responsive */
+  max-width: 15%;
+  width: 15%;
+  height: 0;
+  padding-bottom: 15%; /* This maintains the aspect ratio */
+  display: block;
+  /* make it a circle */
+  border-radius: 50%;
+  /* Centering on image's center */
+  background-position-y: center;
+  background-position-x: center;
+  background-repeat: no-repeat;
+  /* it makes the clue thing, takes smaller dimension to fill div */
+  background-size: cover;
+  /* it is optional, for making this div centered in parent */
+  margin: 0 auto;
+  margin-top: 20px; /* Adds space above the profile picture */
+  position: relative; /* Allows for top positioning */
+  background-image: url("../assets/picVenture.jpg");
+}
+
+.Profile-name {
+  font-size: 40px;
+  font-weight: 300;
+}
+
+.Profile-bio {
+  font-size: 15px;
+  font-weight: 100;
+}
+
+.Profile-edit-button {
+  background-color: rgba(255, 255, 255, 0.694);
+  border: none;
+}
+.Profile-line {
+  border-color: var(--grey);
+}
+
+.Profile-subContainer {
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.Profile-subContainer + .Profile-subContainer {
+  margin-left: var(--m);
+}
+
+.Profile-subTitle {
+  font-weight: 300;
+  font-size: 24px;
+  margin: var(--m) var(--s);
+}

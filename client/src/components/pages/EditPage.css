@@ -1,0 +1,45 @@
+.EditPage-maintitle {
+  margin-top: 20px;
+  margin-left: 100px;
+  font-weight: 1000;
+  font-size: 20px;
+}
+
+.EditPage-title {
+  margin-top: 20px;
+  margin-left: 100px;
+  font-weight: 1000;
+  font-size: 15px;
+}
+
+.EditPage-profilepicture {
+  background-color: #f8f8f8;
+  width: 50%;
+  height: 100px;
+  /* padding: 12px 20px; */
+  margin-top: 20px;
+  margin-left: 100px;
+  box-sizing: border-box;
+  border: 2px solid #cccccc00;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+}
+
+.EditPage-profilename {
+  margin-left: 20px;
+}
+
+.EditPage-bio {
+  width: 50%;
+  height: 100px;
+  /* padding: 12px 20px; */
+  margin-top: 20px;
+  margin-left: 100px;
+  box-sizing: border-box;
+  border: 2px solid #cccccc00;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  resize: none;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+}
