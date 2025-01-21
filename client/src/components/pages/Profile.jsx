@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { get } from "../../utilities";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import "../../utilities.css";
 import "./Profile.css";
 
 const Profile = () => {
-  let props = useParams();
+  let props = useParams(); // Retrieve userId from URL parameters
   const [user, setUser] = useState();
 
-  //   userid = useParams().userId;
   useEffect(() => {
     document.title = "Profile Page";
     get(`/api/user`, { userid: props.userId }).then((userObj) => setUser(userObj));
   }, []);
+
+  const [editing, setEditing] = useState(false);
+
+  const [text, setText] = useState("Bio");
 
   if (!user) {
     return <div> Loading!</div>;
