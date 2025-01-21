@@ -16,6 +16,7 @@ const bodyParser = require("body-parser");
 
 // import models so we can interact with the database
 const User = require("./models/user");
+const Picture = require("./models/picture");
 
 // import authentication library
 const auth = require("./auth");
@@ -80,6 +81,11 @@ router.get("/user", (req, res) => {
     });
 });
 
+router.get("/pictures", (req, res) => {
+  // empty selector means get all documents
+  Picture.find({}).then((pictures) => res.send(pictures));
+});
+           
 router.post("/upload", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
@@ -120,21 +126,15 @@ router.post("/update-bio", (req, res) => {
   res.redirect("/profile"); // Redirect to profile page
 });
 
-// Route for the Profile Page
-router.get("/profile", (req, res) => {
-  res.send(`<h1>Your Profile</h1><p>${userBio}</p><a href="/edit-profile">Edit Bio</a>`);
-});
+// router.post("/picture", auth.ensureLoggedIn, (req, res) => {
+//   const newStory = new Story({
+//     creator_id: req.user._id,
+//     creator_name: req.user.name,
+//     content: req.body.content,
+//   });
 
-// Route for the Edit Profile Page
-router.get("/accounts/edit/:user", (req, res) => {
-  res.send(`
-    <h1>Edit Your Bio</h1>
-    <form action="/update-bio" method="POST">
-      <textarea name="bio">${userBio}</textarea>
-      <button type="submit">Save</button>
-    </form>
-  `);
-});
+//   newStory.save().then((story) => res.send(story));
+// });
 
 // geting a user information based on id
 router.get("/user", (req, res) => {
