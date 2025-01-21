@@ -1,51 +1,29 @@
-# How to code a webapp with this skeleton
+# picVenture
 
-## Initial setup
+## Overview
 
-All teammates will need (explained in weblab.is/hw0)
+A website created by Ivy Yip, Hailey Lin, and Carol Li
 
-- A bash console (on Mac or Linux, this is Terminal. On Windows, we recommend Git Bash)
-- NodeJS version 18. If it is installed correctly, typing "node --version" should give v18.13.0 and "npm --version" should give 8.19.3, or higher.
-- Visual Studio Code (or another code editor)
-- the Prettier VSCode extension
+## API endpoint documentation
 
-Also, all of you will need to go through the MongoDB Atlas setup (https://bit.ly/mongo-setup).
+Existing endpoints:
+Get:
 
-Additionally for authentication, one of you will need to obtain a CLIENT_ID, instructions are at https://bit.ly/gauth-mit.
+```
+/user: get user information by user_id, expects query {userid: {insert_userid}}
+/picturesbyuser: get all pictures uploaded by the user based on user_id, expects query {userid: {insert_userid}}
+/group: get all groups user is in based on user_id, expects query {userid: {insert_userid}}
+/code: generates a unique group code, does not expect any query
+```
 
-## Downloading these files
+Post:
 
-First, you probably have a team repository somewhere (the link looks like: https://github.com/weblab-class/teammate1-teammate2-teammate3). You each should clone this (empty) repository by navigating to where you want your folder to be (**NOT in catbook**) and typing: git clone https://github.com/weblab-class/teammate1-teammate2-teammate3.git <-- with the correct link.
-
-Then, one of your team members will need to do the following:
-
-First on GitHub, download the skeleton (this repository) as a zip file, by clicking Code -> Download as ZIP. (Do not clone it, since this will download extra files, like .git, which will lead to GitHub being confused).
-
-Then, drag over all of the files in this skeleton into your team's folder. **Make sure to also drag over the hidden files!** To see these hidden files, navigate to the skeleton in Finder/File Explorer and press command+shift+period (mac) or View > Show > Hidden items (windows).
-
-The files/folders you must drag over are:
-
-- .gitignore (hidden)
-- .npmrc (hidden)
-- .prettierrc (hidden)
-- client (folder)
-- package-lock.json
-- package.json
-- README.md
-- server (folder)
-- vite.config.js
-
-Additionally, you must create a .env file in the root directory. See .env.example for an example of what this file should look like.
-
-Then, in terminal, navigate to your teams folder and push all of the files to your team's GitHub repository as usual:
-
-- git add -A
-- git commit -m "Skeleton code"
-- git push
-
-Now the rest of your teammates can pull all these files with a 'git pull'!
-
-Post on Piazza if you run into any issues
+```
+/upload: upload photo to AWS and mongoDB, expects FormData, advise not to change handleSubmit in Home.jsx
+/update-bio: unsure (HAILEY PLZ ADVISE)
+/newgroup: creating a new group, expects body containing {join_code: string, group_name: string, users: array}
+/join: adding the new joining user to the existing group, expects body containing {join_code: string, userId: string}
+```
 
 ## What you need to change in the skeleton
 
@@ -63,6 +41,7 @@ Post on Piazza if you run into any issues
 First, 'npm install'
 Then open two separate terminals, and 'npm run dev' in the first, and 'npm start' in the second.
 Then open http://localhost:5173
+Ask Ivy for the most recent .env file
 
 <!-- ## How to go from this skeleton to your actual app
 
@@ -89,5 +68,3 @@ server/server-socket.js
 package-lock.json
 vite.config.js
 ```
-
-## Good luck on your project :)
