@@ -6,7 +6,6 @@ import "./GroupList.css";
 const GroupList = (props) => {
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    console.log(props);
     setUsers([]);
     if (props.group) {
       props.group.users.forEach((user) => {

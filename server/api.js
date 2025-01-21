@@ -86,12 +86,14 @@ router.get("/accounts/edit/:user", (req, res) => {
   `);
 });
 
+// geting a user information based on id
 router.get("/user", (req, res) => {
   User.find(req.query.userId).then((user) => {
     res.send(user);
   });
 });
 
+// creating new group
 router.post("/newgroup", (req, res) => {
   const newGroup = new Group({
     join_code: req.body.join_code,
@@ -102,22 +104,25 @@ router.post("/newgroup", (req, res) => {
   newGroup.save().then((group) => res.send(group));
 });
 
+// geting groups based on userid
 router.get("/group", (req, res) => {
   Group.find({ users: { $in: [req.query.userid] } }).then((groups) => {
     res.send(groups);
   });
 });
 
+// joining a group
 router.post("/join", (req, res) => {
   Group.findOneAndUpdate(
-    { join_code: req.body.join_code }, // Find the group by join_code
-    { $push: { users: req.body.userId } }, // Add userId to users array (avoids duplicates)
-    { new: true } // Return the updated group
+    { join_code: req.body.join_code },
+    { $push: { users: req.body.userId } },
+    { new: true }
   ).then((group) => {
     res.send(group);
   });
 });
 
+// generate code
 const generateRandomGroupCode = () => {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
