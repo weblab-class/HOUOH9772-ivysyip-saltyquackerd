@@ -4,8 +4,6 @@ import App from "./components/App";
 import Home from "./components/pages/Home";
 import Friends from "./components/pages/Friends";
 import NotFound from "./components/pages/NotFound";
-// import Profile from "./components/pages/Profile";
-// import Friends from "./components/pages/Friends";
 // import Badges from "/components/pages/Badges";
 import Welcome from "./components/pages/Welcome";
 import Profile from "./components/pages/Profile";

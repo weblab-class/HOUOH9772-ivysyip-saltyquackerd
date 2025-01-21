@@ -34,10 +34,6 @@
   font-weight: 100;
 }
 
-.Profile-edit-button {
-  background-color: rgba(255, 255, 255, 0.694);
-  border: none;
-}
 .Profile-line {
   border-color: var(--grey);
 }
