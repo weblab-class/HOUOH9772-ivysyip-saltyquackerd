@@ -7,15 +7,14 @@ import { UserContext } from "../App";
 import gearIcon from "../assets/gear.png";
 import "../../utilities.css";
 
-
 const NavBar = (props) => {
-    const location = useLocation();
-    const [isPopupVisible, setPopupVisible] = useState(false);
-    const { userId, handleLogin, handleLogout } = useContext(UserContext);
+  const location = useLocation();
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
-    const togglePopup = () => {
-        setPopupVisible(!isPopupVisible)
-    };
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
 
     return (
       <nav className="NavBar-container">
@@ -41,10 +40,10 @@ const NavBar = (props) => {
             Friends
           </Link>
           <Link
-            to="/badges/"
+            to={`/profile/${props.userId}`}
             className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
           >
-            Badges
+            Profile
           </Link>
         </div>
         {/* <div className="popup" onClick={togglePopup}>
@@ -68,8 +67,8 @@ const NavBar = (props) => {
             )}
           </button>
         </div> */}
-      </nav>
-    );
-}
+    </nav>
+  );
+};
 
 export default NavBar;
