@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const PictureSchema = new mongoose.Schema({
   creator_id: String,
-  creator_name: String,
   date: String,
   link: String,
   challenge: String,

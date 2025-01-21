@@ -68,12 +68,12 @@ const Profile = () => {
   useEffect(() => {
     document.title = "Profile Page";
     get(`/api/user`, { userid: props.userId }).then((userObj) => setUser(userObj));
-    get("api/pictures").then((pictures) => {
+    get("/api/picturesbyuser", { userid: props.userId }).then((pictures) => {
       // const filteredImages = pictures.filter((image) => image.creator_id === props.userId);
       // console.log(image.creator_id === props.userId);
-      // setImages(filteredImages);
+      setImages(pictures);
     });
-    setImages(picturesList);
+    // setImages(picturesList);
   }, []);
 
   if (!user) {
@@ -81,7 +81,7 @@ const Profile = () => {
   }
   //     <div className="picture-grid" key={`picture_${index}`}>
 
-  console.log(images);
+  // console.log(images);
   if (images && images.length !== 0) {
     picturesList = (
       <div className="picture-grid">
@@ -92,7 +92,7 @@ const Profile = () => {
             // className="picture-item"
             key={`Picture_${index}`} // Add a unique key to each item
             creator_name={image.creator_name}
-            creator_id={image.creator_id}
+            // creator_id={image.creator_id}
             date={image.date}
             challenge={image.challenge}
             link={image.link}
