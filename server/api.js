@@ -108,6 +108,44 @@ router.get("/group", (req, res) => {
   });
 });
 
+router.post("/join", (req, res) => {
+  Group.findOneAndUpdate(
+    { join_code: req.body.join_code }, // Find the group by join_code
+    { $push: { users: req.body.userId } }, // Add userId to users array (avoids duplicates)
+    { new: true } // Return the updated group
+  ).then((group) => {
+    res.send(group);
+  });
+});
+
+const generateRandomGroupCode = () => {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters[randomIndex];
+  }
+  return code;
+};
+
+router.get("/code", async (req, res) => {
+  try {
+    let isUnique = false;
+    let groupCode;
+    while (!isUnique) {
+      groupCode = generateRandomGroupCode();
+      const existingCode = await Group.findOne({ join_code: groupCode });
+      if (!existingCode) {
+        isUnique = true;
+      }
+    }
+    res.json({ groupCode });
+  } catch (error) {
+    console.error("Error generating group code:", error);
+    res.status(500).json({ error: "Failed to generate group code" });
+  }
+});
+
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);
