@@ -19,7 +19,9 @@ const GroupList = (props) => {
     <div className="group-list-container">
       {props.group ? (
         <>
-          <h1 className="group-name">{props.group.group_name}</h1>
+          <h1 className="group-name">
+            {props.group.group_name} ({props.group.join_code})
+          </h1>
           {users.map((user) => (
             <Link className="profile-links" to={`/profile/${user._id}`}>
               {user.name}
