@@ -28,7 +28,7 @@ const Home = () => {
     get("/api/group", { userid: userId }).then((groups) => setGroups(groups));
   };
 
-  let friendsList = [<p key="groupA">Group A</p>];
+  let friendsList = [];
   if(groups !== null) {
     for (let i = 0; i < groups.length; i++) {
       for (let j = 0; j < groups[i].users.length; j++) {
@@ -78,6 +78,8 @@ const Home = () => {
         alert(`Error submitting file: ${response.statusText}`);
       }
   } };
+
+
   return (
     <div className="u-homepage">
       {/* Insert below the challenge */}

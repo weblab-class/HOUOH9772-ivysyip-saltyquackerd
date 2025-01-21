@@ -146,6 +146,12 @@ router.get("/code", async (req, res) => {
   }
 });
 
+router.post("/upload", (req, res) => {
+  const newPhoto = req.body;
+  newPhoto.save().then((photo) => res.send(photo));
+  //FIX THIS => new photo must be sent to aws before being resent back to frontend
+});
+
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
