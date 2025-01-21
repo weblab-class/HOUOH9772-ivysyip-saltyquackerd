@@ -20,6 +20,12 @@
   text-underline-offset: 5px;
 }
 
+.NavBar-link--active {
+  text-decoration: underline; /* Add underline to the active link */
+  text-underline-offset: 5px; /* Adjust distance of underline */
+  font-weight: bold;
+}
+
 .NavBar-link:hover {
   opacity: 1.0;
   text-decoration: underline;
@@ -28,4 +34,74 @@
 
 .NavBar-link + .NavBar-link {
   margin-left: var(--xxl);
+}
+
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  float: right;
+  margin-right: 20px;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #F2C9D5;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  left: 0%;
+  top: 100%;
+  margin-top: 5px;
+  margin-left: -100px;
+  box-shadow: 5px 5px 5px #AA336A;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 72%;
+  margin-left: 5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #F2C9D5 transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popuptext.show {
+  visibility: visible;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+} 
+
+.setting {
+  position: relative;
+  display: inline-block;
+  background-color: var(--pink); 
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.setting img {
+  width: 35px;
+  height: 30px;
+  margin-top: -3px;
 }

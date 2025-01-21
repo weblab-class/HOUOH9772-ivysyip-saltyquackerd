@@ -11,6 +11,7 @@ import { socket } from "../client-socket";
 
 import { get, post } from "../utilities";
 
+
 export const UserContext = createContext(null);
 
 /**
@@ -25,6 +26,7 @@ const App = () => {
         // they are registed in the database, and currently logged in.
         setUserId(user._id);
       }
+
     });
   }, []);
 
@@ -41,6 +43,7 @@ const App = () => {
   const handleLogout = () => {
     setUserId(undefined);
     post("/api/logout");
+
   };
 
   const authContextValue = {
