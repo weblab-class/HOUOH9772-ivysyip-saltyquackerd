@@ -27,14 +27,14 @@ const Home = () => {
     get("/api/group", { userid: userId }).then((groups) => setGroups(groups));
   };
 
-  let friendsList = [<p>Group A</p>];
+  let friendsList = [<p key="groupA">Group A</p>];
   if(groups !== null) {
     for (let i = 0; i < groups.length; i++) {
       for (let j = 0; j < groups[i].users.length; j++) {
-        if (friendsList.includes(<p> {groups[i].users[j]} </p>)) {
+        if (friendsList.some((friend) => friend.props.children.trim() === groups[i].users[j])) {
           continue;
         } else {
-          friendsList = groups[i].users.map((user) => <p> {user} </p>);
+          friendsList.push(<p key={`${i}-${j}`}>{groups[i].users[j]}</p>);
         }
       }
     }
@@ -45,7 +45,7 @@ const Home = () => {
       {/* Insert below the challenge */}
       <h1 className="feed">
         {!user? (
-          <>Please login</>
+          <></>
         ) : (
           <div>
             <button onClick={() => setSeen(true)}></button>
