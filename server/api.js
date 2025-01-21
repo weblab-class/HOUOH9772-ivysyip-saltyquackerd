@@ -6,7 +6,6 @@
 | This file defines the routes for your server.
 |
 */
-const Group = require("./models/group");
 
 const express = require("express");
 const AWS = require("aws-sdk");
@@ -16,6 +15,7 @@ const bodyParser = require("body-parser");
 
 // import models so we can interact with the database
 const User = require("./models/user");
+const Group = require("./models/group");
 const Picture = require("./models/picture");
 
 // import authentication library
@@ -33,12 +33,12 @@ router.use(cors());
 
 // AWS S3 Configuration
 const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID, // Replace with your actual AWS access key
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, // Replace with your actual AWS secret key
-  region: process.env.AWS_REGION, // Replace with your AWS bucket region
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
 });
 
-const bucketName = process.env.AWS_BUCKET_NAME; // Replace with your actual S3 bucket name
+const bucketName = process.env.AWS_BUCKET_NAME;
 
 // File Upload Setup with Multer
 const upload = multer({
@@ -63,11 +63,6 @@ router.post("/initsocket", (req, res) => {
   res.send({});
 });
 
-router.get("/user", (req, res) => {
-  User.findById(req.query.userid).then((user) => {
-    res.send(user);
-  });
-});
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
@@ -77,23 +72,27 @@ router.get("/user", (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      res.status(500).send("User Not");
+      res.status(500).send("User Not Found");
     });
 });
 
-router.get("/pictures", (req, res) => {
-  // empty selector means get all documents
-  Picture.find({}).then((pictures) => res.send(pictures));
+router.get("/picturesbyuser", (req, res) => {
+  Picture.find({ creator_id: req.query.userid }).then((pictures) => {
+    res.send(pictures);
+  });
 });
-           
+
 router.post("/upload", upload.single("file"), async (req, res) => {
   try {
+    const { user_id, challenge } = req.body;
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-
+    if (!user_id) {
+      return res.status(400).json({ error: "User ID is required." });
+    }
     const fileContent = req.file.buffer;
-    const fileName = `uploads/${Date.now()}_${req.file.originalname}`;
+    const fileName = `uploads/${user_id}/${Date.now()}_${req.file.originalname}`;
 
     const params = {
       Bucket: bucketName,
@@ -102,19 +101,30 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       ContentType: req.file.mimetype,
     };
 
-    // Upload to S3
     const uploadResult = await s3.upload(params).promise();
+
+    const date_full = new Date().toISOString();
+    const day = date_full.split("T")[0];
+
+    const newPicture = new Picture({
+      creator_id: user_id,
+      date: day,
+      link: uploadResult.Location,
+      challenge: challenge || "default",
+    });
+
+    await newPicture.save();
+
     res.status(200).json({
       message: "File uploaded successfully",
-      fileUrl: uploadResult.Location, // Public URL of the uploaded file
+      fileUrl: uploadResult.Location,
+      pictureId: newPicture._id,
     });
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });
   }
 });
-
-// const bodyParser = require("body-parser");
 
 let userBio = "This is the default bio."; // Store bio in memory (use database in production)
 
@@ -124,23 +134,6 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.post("/update-bio", (req, res) => {
   userBio = req.body.bio; // Save new bio
   res.redirect("/profile"); // Redirect to profile page
-});
-
-// router.post("/picture", auth.ensureLoggedIn, (req, res) => {
-//   const newStory = new Story({
-//     creator_id: req.user._id,
-//     creator_name: req.user.name,
-//     content: req.body.content,
-//   });
-
-//   newStory.save().then((story) => res.send(story));
-// });
-
-// geting a user information based on id
-router.get("/user", (req, res) => {
-  User.find(req.query.userId).then((user) => {
-    res.send(user);
-  });
 });
 
 // creating new group
@@ -199,12 +192,6 @@ router.get("/code", async (req, res) => {
     console.error("Error generating group code:", error);
     res.status(500).json({ error: "Failed to generate group code" });
   }
-});
-
-router.post("/upload", (req, res) => {
-  const newPhoto = req.body;
-  newPhoto.save().then((photo) => res.send(photo));
-  //FIX THIS => new photo must be sent to aws before being resent back to frontend
 });
 
 // anything else falls to this "not found" case

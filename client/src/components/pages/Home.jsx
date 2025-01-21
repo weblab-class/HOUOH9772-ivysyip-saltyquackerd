@@ -13,6 +13,7 @@ const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadMessage, setUploadMessage] = useState("");
   const [uploadedFileUrl, setUploadedFileUrl] = useState("");
+  const [challenge, setChallenge] = useState("wear something blue");
 
   useEffect(() => {
     if (userId) {
@@ -63,6 +64,8 @@ const Home = () => {
 
     const formData = new FormData();
     formData.append("file", selectedFile);
+    formData.append("user_id", userId);
+    formData.append("challenge", challenge);
 
     try {
       const response = await fetch("/api/upload", {
