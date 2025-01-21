@@ -10,6 +10,7 @@ const Home = () => {
   const [user, setUser] = useState(null);
   const [seen, setSeen] = useState(false);
   const [groups, setGroups] = useState([]);
+  const[uploaded, setUploaded] = useState(null);
 
   useEffect(() => {
     if (userId) {
@@ -40,11 +41,48 @@ const Home = () => {
     }
   }
 
+  const handleUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setUploaded(file.name);
+    } else {
+      setUploaded(null);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (uploaded) {
+      const formData = new FormData();
+      formData.append("file", uploaded);
+      try {
+        const response = await fetch("/api/upload", {
+          method: "POST", 
+          body: formData, 
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        alert(`Error submitting file: ${error.message}`);
+      } finally {
+        setUploaded(null);
+      }
+      if (response.ok) {
+        const data = await response.json();
+        if (data.error) {
+          alert(data.error);
+        } else {
+          console.log(data);
+        }
+      } else {
+        console.error("Error:", response.statusText);
+        alert(`Error submitting file: ${response.statusText}`);
+      }
+  } };
   return (
     <div className="u-homepage">
       {/* Insert below the challenge */}
       <h1 className="feed">
-        {!user? (
+        {!user ? (
           <></>
         ) : (
           <div>
@@ -57,12 +95,17 @@ const Home = () => {
       <div className="challenge-upload">
         <div className="upload">
           <div className="button_group">
-            <form action="/action_page.php">
+            <form onSubmit={handleSubmit}>
               <label htmlFor="input1">Upload Photo Here</label>
-              <input type="file" id="input1" name="filename" />
-              <input type="submit" />
+              <input type="file" id="input1" name="filename" onChange={handleUpload} />
+              <input type="submit" value="Submit"/>
             </form>
           </div>
+          {uploaded && (
+            <p style={{ marginTop: "10px", color: "green" }}>
+              Uploaded File: {uploaded}
+            </p>
+          )}
         </div>
       </div>
 

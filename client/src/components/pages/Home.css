@@ -82,10 +82,3 @@ form {
 .button_group label{
     background-color: #89CFF0;
 }
-
-.feed {
-  width: 100vw;
-  height: 50vh;
-  margin-top: 200px; 
-  background-color: var(--mint);
-}
