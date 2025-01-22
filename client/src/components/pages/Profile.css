@@ -35,8 +35,40 @@
 }
 
 .Profile-edit-button {
-  background-color: rgba(255, 255, 255, 0.694);
-  border: none;
+  position: absolute;
+  top: 52%;
+  left: 58%;
+  /* transform: translate(-50%, -50%);  */
+  background-color: #0095f6; /* Instagram's blue color */
+  color: white; /* White text */
+  font-size: 14px; /* Text size */
+  font-weight: bold; /* Bold text */
+  padding: 10px 20px; /* Top and bottom padding, left and right padding */
+  border-radius: 5px; /* Rounded corners */
+  border: none; /* Remove border */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+.Profile-edit-button:hover {
+  background-color: #0078d4; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+.Profile-edit-button:focus {
+  outline: none; /* Remove outline when clicked */
+}
+
+.Profile-popup-button {
+  background-color: #0095f6; /* Instagram's blue color */
+  color: white; /* White text */
+  font-size: 14px; /* Text size */
+  font-weight: bold; /* Bold text */
+  padding: 10px 20px; /* Top and bottom padding, left and right padding */
+  border-radius: 5px; /* Rounded corners */
+  border: none; /* Remove border */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
 }
 
 .Profile-line {

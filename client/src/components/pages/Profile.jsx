@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { get } from "../../utilities";
+import { get, post } from "../../utilities";
 import { Link, useParams } from "react-router-dom";
 import Picture from "../modules/Picture";
 import "../../utilities.css";
@@ -19,76 +19,42 @@ const Profile = () => {
     setIsOpen(!isOpen);
   };
 
-  const picture1 = {
-    creator_id: "678994f04058370c73cb3f55",
-    creator_name: "Hailey",
-    date: "1/18/2025",
-    challenge: "take a picture of a dog",
-    link: "https://www.photos-public-domain.com/wp-content/uploads/2012/05/small-dog-with-tongue-sticking-out.jpg",
-  };
-
-  const picture2 = {
-    creator_id: "678994f04058370c73cb3f55",
-    creator_name: "Hailey",
-    date: "1/18/2025",
-    challenge: "Take a picture of a cat",
-    link: "https://www.photos-public-domain.com/wp-content/uploads/2012/05/small-dog-with-tongue-sticking-out.jpg",
-  };
-
-  const picture3 = {
-    creator_id: "678994f04058370c73cb3f55",
-    creator_name: "Hailey",
-    date: "1/18/2025",
-    challenge: "Take a picture of a bird",
-    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
-  };
-
-  const picture4 = {
-    creator_id: "678994f04058370c73cb3f55",
-    creator_name: "Hailey",
-    date: "1/18/2025",
-    challenge: "Take a picture of a tree",
-    link: "https://www.photos-public-domain.com/wp-content/uploads/2012/05/small-dog-with-tongue-sticking-out.jpg",
-  };
-
-  const picture5 = {
-    creator_id: "678994f04058370c73cb3f55",
-    creator_name: "Hailey",
-    date: "1/18/2025",
-    challenge: "Take a picture of a bird",
-    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
-  };
-  const picture6 = {
-    creator_id: "678994f04058370c73cb3f55",
-    creator_name: "Hailey",
-    date: "1/18/2025",
-    challenge: "Take a picture of a bird",
-    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
-  };
-  const picture7 = {
-    creator_id: "678994f04058370c73cb3f55",
-    creator_name: "Hailey",
-    date: "1/18/2025",
-    challenge: "Take a picture of a bird",
-    link: "https://cdn12.picryl.com/photo/2016/12/31/tree-landscape-nature-nature-landscapes-3915df-1024.jpg",
-  };
-
-  let picturesList = [picture1, picture2, picture3, picture4, picture5, picture6, picture7];
   useEffect(() => {
     document.title = "Profile Page";
-    get(`/api/user`, { userid: props.userId }).then((userObj) => setUser(userObj));
+    get(`/api/user`, { userid: props.userId }).then((userObj) => {
+      setUser(userObj);
+      setBio(userObj.bio);
+    });
     get("/api/picturesbyuser", { userid: props.userId }).then((pictures) => {
       // const filteredImages = pictures.filter((image) => image.creator_id === props.userId);
       // console.log(image.creator_id === props.userId);
       setImages(pictures);
     });
-    // setImages(picturesList);
   }, []);
+
+  // async function fetchBio() {
+  //   try {
+  //     const response = await fetch("/api/bio");
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       return data.groupCode;
+  //     } else {
+  //       throw new Error("Failed to fetch bio");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // }
+
+  const updateBio = () => {
+    post("/api/bio", { userId: props.userId, bio: bio }).then(() => {});
+  };
 
   if (!user) {
     return <div> Loading!</div>;
   }
 
+  let picturesList = [];
   // console.log(images);
   if (images && images.length !== 0) {
     picturesList = (
@@ -117,14 +83,20 @@ const Profile = () => {
       </div>
       <h1 className="Profile-name u-textCenter">{user.name}</h1>
       <h4 className="Profile-bio u-textCenter">{bio}</h4>
-      <button onClick={togglePopup}>Open Popup</button>
+      <button className="Profile-edit-button" onClick={togglePopup}>
+        Edit Profile
+      </button>
 
       <Popup open={isOpen} isOpen={togglePopup}>
         <div>
-          <h2>Popup Content</h2>
+          <h2>Update Profile</h2>
           <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} />
-          {/* <button onClick={updateBio}>Save</button> */}
-          <button onClick={togglePopup}>Close</button>
+          <button className="Profile-popup-button" onClick={updateBio}>
+            Save
+          </button>
+          <button className="Profile-popup-button" onClick={togglePopup}>
+            Close
+          </button>
         </div>
       </Popup>
       <div>

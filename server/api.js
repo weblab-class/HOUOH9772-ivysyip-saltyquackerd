@@ -126,14 +126,14 @@ router.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-let userBio = "This is the default bio."; // Store bio in memory (use database in production)
-
 router.use(bodyParser.urlencoded({ extended: true }));
 
-// Route for the Edit Profile Page (Form submission)
-router.post("/update-bio", (req, res) => {
-  userBio = req.body.bio; // Save new bio
-  res.redirect("/profile"); // Redirect to profile page
+router.post("/bio", (req, res) => {
+  User.findOneAndUpdate({ _id: req.body.userId }, { bio: req.body.bio }, { new: true }).then(
+    (bio) => {
+      res.send(bio);
+    }
+  );
 });
 
 // creating new group
