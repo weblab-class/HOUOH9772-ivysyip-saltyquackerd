@@ -26,15 +26,22 @@
 }
 
 .challenge-upload {
+    position: relative;
     background-color: var(--mint);
-    height: 40vh;
-    width: 40vw;
+    height: auto;
+    width: 400px;
     margin: 120px auto 2px auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 10px;
+}
+
+#photo {
+    position: relative;
+    z-index: 2;
+    height: auto;
 }
 
 form {
@@ -49,7 +56,7 @@ form {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 20px;
+    padding: 50px;
     align-items: center;
 }
 

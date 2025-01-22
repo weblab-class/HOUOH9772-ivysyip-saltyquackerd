@@ -8,12 +8,8 @@ import DailyFeed from "../modules/DailyFeed";
 
 const Home = () => {
   const { userId } = useContext(UserContext);
-  const [user, setUser] = useState(null);
-  const [seen, setSeen] = useState(false);
-  const [groups, setGroups] = useState([]);
   const [uploaded, setUploaded] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadMessage, setUploadMessage] = useState("");
   const [uploadedFileUrl, setUploadedFileUrl] = useState("");
   const [challenge, setChallenge] = useState("wear something blue");
 
@@ -74,27 +70,39 @@ const Home = () => {
       <h1 className="home-title">Today's Challenge</h1>
       <div className="challenge-upload">
         <div className="upload">
-          <div className="button_group">
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="input1">Upload Photo Here</label>
-              <input type="file" id="input1" name="filename" onChange={handleUpload} />
-              <button type="submit" value="Submit">
-                Upload!
-              </button>
-            </form>
-          </div>
-          {uploaded && (
-            <p style={{ marginTop: "10px", color: "green" }}>Uploaded File: {uploaded}</p>
-          )}
-          {uploadedFileUrl && (
-            <div>
-              <p>Uploaded File:</p>
-              <img src={uploadedFileUrl} alt="Uploaded file" style={{ width: "300px" }} />
+          {uploaded ? (
+            <>
+              <div className="button_group">
+                <form onSubmit={handleSubmit}>
+                  <input type="file" id="input1" name="filename" onChange={handleUpload} />
+                  {uploadedFileUrl ? null : (
+                    <button type="submit" value="Submit">
+                      Upload!
+                    </button>
+                  )}
+                </form>
+              </div>
+              {uploadedFileUrl && (
+                <div>
+                  <img
+                    id="photo"
+                    src={uploadedFileUrl}
+                    alt="Uploaded file"
+                    style={{ width: "300px" }}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="button_group">
+              <form onSubmit={handleSubmit}>
+                <label htmlFor="input1">Upload Photo Here</label>
+                <input type="file" id="input1" name="filename" onChange={handleUpload} />
+              </form>
             </div>
           )}
         </div>
       </div>
-
       <h1 className="challenge">wear something blue</h1>
     </div>
   );
