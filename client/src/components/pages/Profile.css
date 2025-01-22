@@ -60,12 +60,6 @@
   color: gray;
 }
 
-.Profile-line {
-  color: gray;
-  background-color: gray;
-  width: 90%;
-  height: 1px;
-}
 .Profile-uploads-container {
   margin-left: 60px;
   color: gray;
@@ -75,14 +69,16 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Auto-adjust columns */
   gap: 5px; /* Spacing between items */
   padding: 10px; /* Padding around the grid */
-  margin-left: 60px;
-  margin-right: 60px;
+  margin-left: 80px;
+  margin-right: 80px;
   justify-content: center; /* Center the grid items */
 }
 
 @media (max-width: 768px) {
   .picture-grid {
     grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }
 

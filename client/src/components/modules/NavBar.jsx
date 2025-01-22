@@ -11,7 +11,13 @@ const NavBar = (props) => {
   const location = useLocation();
   const [isPopupVisible, setPopupVisible] = useState(false);
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
+  const location = useLocation();
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
   };
@@ -70,5 +76,10 @@ const NavBar = (props) => {
     </nav>
   );
 };
+        </div> */}
+    </nav>
+  );
+};
 
 export default NavBar;
+
