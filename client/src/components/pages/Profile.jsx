@@ -123,7 +123,7 @@ const Profile = () => {
         <div>
           <h2>Popup Content</h2>
           <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} />
-          <button onClick={updateBio}>Save</button>
+          {/* <button onClick={updateBio}>Save</button> */}
           <button onClick={togglePopup}>Close</button>
         </div>
       </Popup>
