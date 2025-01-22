@@ -44,7 +44,7 @@ const NavBar = (props) => {
           >
             Badges
           </Link>
-        </div>
+        )}
         {userId ? (
           <button
             onClick={() => {
@@ -57,16 +57,9 @@ const NavBar = (props) => {
         ) : (
           <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
         )}
-   
       </div>
-      {/* <div className="popup" onClick={togglePopup}>
-          <button className="setting">
-            <img src={gearIcon} alt="Gear Icon" />
-            {isPopupVisible && <span className="popuptext show" id="myPopup"></span>}
-          </button>
-        </div> */}
-      </nav>
-    );
+    </nav>
+  );
 };
 
 export default NavBar;
