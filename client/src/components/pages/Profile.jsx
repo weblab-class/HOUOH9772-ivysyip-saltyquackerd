@@ -36,6 +36,11 @@ const Profile = () => {
     post("/api/bio", { userId: props.userId, bio: bio }).then(() => {});
   };
 
+  const handleSave = () => {
+    updateBio();
+    togglePopup();
+  };
+
   if (!user) {
     return <div> Loading!</div>;
   }
@@ -63,34 +68,33 @@ const Profile = () => {
   }
   return (
     <>
-      <div>
+      <div class="Profile-avatarContainer">
         <div className="Profile-avatar" />
-      </div>
-      <h1 className="Profile-name u-textCenter">{user.name}</h1>
-      <h4 className="Profile-bio u-textCenter">{bio}</h4>
-      <button className="Profile-edit-button" onClick={togglePopup}>
-        Edit Profile
-      </button>
-
-      <Popup open={isOpen} isOpen={togglePopup}>
-        <div className="Profile-popup-content">
-          <h2 className="Profile-popup-header">Update Profile</h2>
-          <textarea
-            id="bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            placeholder="Write a short bio..."
-            maxLength={150}
-            className="Profile-textarea"
-          />
-          <div className="Profile-popup-counter">{bio.length}/150</div>
-          <button className="Profile-popup-button-save" onClick={updateBio}>
-            Save
-          </button>
-          <button className="Profile-popup-button-close" onClick={togglePopup}>
-            Close
+        <h1 className="Profile-name u-textCenter">{user.name}</h1>
+        <h4 className="Profile-bio u-textCenter">{bio}</h4>
+        <div className="Profile-edit">
+          <button className="Profile-edit-button" onClick={togglePopup}>
+            Edit Profile
           </button>
         </div>
+      </div>
+      <Popup open={isOpen} isOpen={togglePopup} className="Profile-popup">
+        <h2 className="Profile-popup-header">Update Profile</h2>
+        <textarea
+          id="bio"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          placeholder="Write a short bio..."
+          maxLength={150}
+          className="Profile-textarea"
+        />
+        <div className="Profile-popup-counter">{bio ? bio.length : 0} / 150</div>
+        <button className="Profile-popup-button-save" onClick={handleSave}>
+          Save
+        </button>
+        <button className="Profile-popup-button-close" onClick={togglePopup}>
+          Close
+        </button>
       </Popup>
       <div>
         <div>
