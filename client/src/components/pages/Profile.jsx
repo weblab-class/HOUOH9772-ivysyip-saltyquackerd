@@ -32,20 +32,6 @@ const Profile = () => {
     });
   }, []);
 
-  // async function fetchBio() {
-  //   try {
-  //     const response = await fetch("/api/bio");
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       return data.groupCode;
-  //     } else {
-  //       throw new Error("Failed to fetch bio");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // }
-
   const updateBio = () => {
     post("/api/bio", { userId: props.userId, bio: bio }).then(() => {});
   };
@@ -55,7 +41,6 @@ const Profile = () => {
   }
 
   let picturesList = [];
-  // console.log(images);
   if (images && images.length !== 0) {
     picturesList = (
       <div className="picture-grid">
@@ -88,13 +73,21 @@ const Profile = () => {
       </button>
 
       <Popup open={isOpen} isOpen={togglePopup}>
-        <div>
-          <h2>Update Profile</h2>
-          <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} />
-          <button className="Profile-popup-button" onClick={updateBio}>
+        <div className="Profile-popup-content">
+          <h2 className="Profile-popup-header">Update Profile</h2>
+          <textarea
+            id="bio"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            placeholder="Write a short bio..."
+            maxLength={150}
+            className="Profile-textarea"
+          />
+          <div className="Profile-popup-counter">{bio.length}/150</div>
+          <button className="Profile-popup-button-save" onClick={updateBio}>
             Save
           </button>
-          <button className="Profile-popup-button" onClick={togglePopup}>
+          <button className="Profile-popup-button-close" onClick={togglePopup}>
             Close
           </button>
         </div>

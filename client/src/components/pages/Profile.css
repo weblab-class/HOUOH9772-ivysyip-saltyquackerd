@@ -32,6 +32,7 @@
 .Profile-bio {
   font-size: 15px;
   font-weight: 100;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .Profile-edit-button {
@@ -59,18 +60,83 @@
   outline: none; /* Remove outline when clicked */
 }
 
-.Profile-popup-button {
-  background-color: #0095f6; /* Instagram's blue color */
-  color: white; /* White text */
-  font-size: 14px; /* Text size */
-  font-weight: bold; /* Bold text */
-  padding: 10px 20px; /* Top and bottom padding, left and right padding */
-  border-radius: 5px; /* Rounded corners */
-  border: none; /* Remove border */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+.Profile-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
+.Profile-popup-content {
+  width: 590px; /* Adjust to the desired width */
+  max-width: 100%; /* Make it responsive */
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.Profile-popup-header {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dbdbdb;
+  padding-bottom: 8px;
+}
+
+.Profile-textarea {
+  width: 100%; /* Ensure it fills the parent container */
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  background-color: #fafafa;
+  color: #262626;
+  resize: none;
+  outline: none;
+  height: 120px; /* Adjust height as needed */
+  box-sizing: border-box; /* Include padding/borders in width */
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.Profile-popup-counter {
+  font-size: 12px;
+  color: #8e8e8e;
+  text-align: right;
+}
+
+.Profile-popup-button-save {
+  background-color: #0095f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.Profile-popup-button-close {
+  background-color: #ffffff;
+  color: #262626;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
 .Profile-line {
   border-color: var(--grey);
 }
