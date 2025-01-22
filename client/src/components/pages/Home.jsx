@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
 import { get } from "../../utilities";
 
-import "../../utilities.css";
 import "./Home.css";
 
 import DailyFeed from "../modules/DailyFeed";
@@ -12,7 +11,11 @@ const Home = () => {
   const [user, setUser] = useState(null);
   const [seen, setSeen] = useState(false);
   const [groups, setGroups] = useState([]);
-  const[uploaded, setUploaded] = useState(null);
+  const [uploaded, setUploaded] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [uploadedFileUrl, setUploadedFileUrl] = useState("");
+  const [challenge, setChallenge] = useState("wear something blue");
 
   useEffect(() => {
     if (userId) {
@@ -25,6 +28,7 @@ const Home = () => {
     const file = event.target.files[0];
     if (file) {
       setUploaded(file.name);
+      setSelectedFile(event.target.files[0]);
     } else {
       setUploaded(null);
     }
@@ -32,33 +36,36 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (uploaded) {
-      const formData = new FormData();
-      formData.append("file", uploaded);
-      try {
-        const response = await fetch("/api/upload", {
-          method: "POST", 
-          body: formData, 
-        });
-      } catch (error) {
-        console.error("Error:", error);
-        alert(`Error submitting file: ${error.message}`);
-      } finally {
-        setUploaded(null);
-      }
+
+    if (!selectedFile) {
+      setUploadMessage("Please select a file to upload.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("user_id", userId);
+    formData.append("challenge", challenge);
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
       if (response.ok) {
         const data = await response.json();
-        if (data.error) {
-          alert(data.error);
-        } else {
-          console.log(data);
-        }
+        setUploadedFileUrl(data.fileUrl);
+        setUploadMessage("File uploaded successfully!");
       } else {
-        console.error("Error:", response.statusText);
-        alert(`Error submitting file: ${response.statusText}`);
+        const error = await response.json();
+        setUploadMessage(`Upload failed: ${error.error}`);
       }
-  } };
-
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setUploadMessage("An error occurred during upload.");
+    }
+  };
 
   return (
     <div className="u-homepage">
@@ -71,18 +78,25 @@ const Home = () => {
             <form onSubmit={handleSubmit}>
               <label htmlFor="input1">Upload Photo Here</label>
               <input type="file" id="input1" name="filename" onChange={handleUpload} />
-              <input type="submit" value="Submit"/>
+              <button type="submit" value="Submit">
+                Upload!
+              </button>
             </form>
           </div>
           {uploaded && (
-            <p style={{ marginTop: "10px", color: "green" }}>
-              Uploaded File: {uploaded}
-            </p>
+            <p style={{ marginTop: "10px", color: "green" }}>Uploaded File: {uploaded}</p>
+          )}
+          {uploadedFileUrl && (
+            <div>
+              <p>Uploaded File:</p>
+              <img src={uploadedFileUrl} alt="Uploaded file" style={{ width: "300px" }} />
+            </div>
           )}
         </div>
       </div>
 
       <h1 className="challenge">wear something blue</h1>
     </div>
-  );};
+  );
+};
 export default Home;
