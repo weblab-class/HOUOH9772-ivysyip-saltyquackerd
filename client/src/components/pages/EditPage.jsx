@@ -1,56 +1,31 @@
-import React, { useState, useEffect, useContext } from "react";
-import { get } from "../../utilities";
-import { Link, useParams } from "react-router-dom";
-
-import "../../utilities.css";
+import { React, useState, useContext } from "react";
+import { get, post } from "../../utilities";
+import { UserContext } from "../App";
 import "./EditPage.css";
 
-const EditPage = () => {
-  let props = useParams(); // Retrieve userId from URL parameters
-  const [user, setUser] = useState();
+const EditPage = (props) => {
+  const { userId } = useContext(UserContext);
+  const [selected, setSelected] = useState(false);
+  const [bio, setBio] = useState("");
 
-  useEffect(() => {
-    document.title = "Edit Page";
-    get(`/api/user`, { userid: props.userId }).then((userObj) => setUser(userObj));
-  }, []);
-
-  const [value, setValue] = useState("");
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
+  const handleEdit = () => {
+    setSelected(true);
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      console.log(value);
-    }
+  const handleClose = () => {
+    setSelected(false);
+    props.setEditing(false);
   };
 
-  if (!user) {
-    return <div> Loading!</div>;
-  }
   return (
-    <>
-      <div className="EditPage-maintitle">Edit Profile</div>
-      <div className="EditPage-profilepicture">
-        <h4 className="EditPage-profilename">{user.name}</h4>
+    <div className="popup">
+      <div className="popup-inner">
+        <button className="close-btn" onClick={handleClose}>
+          x
+        </button>
+        <button onClick={handleEdit}>Edit Bio</button>
       </div>
-      <div className="EditPage-title">Bio</div>
-      <div>
-        <textarea
-          className="EditPage-bio"
-          type="text"
-          value={value}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Edit your bio"
-          maxLength={150}
-          name="Text1"
-          cols="20"
-          rows="3"
-        ></textarea>
-      </div>
-    </>
+    </div>
   );
 };
 

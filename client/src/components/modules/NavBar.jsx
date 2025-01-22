@@ -16,29 +16,28 @@ const NavBar = (props) => {
     setPopupVisible(!isPopupVisible);
   };
 
-    return (
-      <nav className="NavBar-container">
-        <div className="NavBar-linkContainer u-inlineBlock">
-          <Link
-            to="/"
-            className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
-          >
-            Home
-          </Link>
-          {props.userId && (
-            <Link
-              to={`/profile/${props.userId}`}
-              className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
-            >
-              Profile
-            </Link>
-          )}
-          <Link
-            to="/friends/"
-            className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
-          >
-            Friends
-          </Link>
+  return (
+    <nav className="NavBar-container">
+      <div className="NavBar-linkContainer u-inlineBlock">
+        <Link
+          to="/"
+          className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
+        >
+          Home
+        </Link>
+        <Link
+          to="/friends/"
+          className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
+        >
+          Friends
+        </Link>
+        <Link
+          to={`/profile/${props.userId}`}
+          className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
+        >
+          Profile
+        </Link>
+        {props.userId && (
           <Link
             to={`/badges/${props.userId}`}
             className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
@@ -58,7 +57,9 @@ const NavBar = (props) => {
         ) : (
           <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
         )}
-        {/* <div className="popup" onClick={togglePopup}>
+   
+      </div>
+      {/* <div className="popup" onClick={togglePopup}>
           <button className="setting">
             <img src={gearIcon} alt="Gear Icon" />
             {isPopupVisible && <span className="popuptext show" id="myPopup"></span>}
