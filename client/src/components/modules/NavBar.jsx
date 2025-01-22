@@ -40,35 +40,32 @@ const NavBar = (props) => {
             Friends
           </Link>
           <Link
-            to={`/profile/${props.userId}`}
+            to={`/badges/${props.userId}`}
             className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
           >
-            Profile
+            Badges
           </Link>
         </div>
+        {userId ? (
+          <button
+            onClick={() => {
+              googleLogout();
+              handleLogout();
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
+        )}
         {/* <div className="popup" onClick={togglePopup}>
           <button className="setting">
             <img src={gearIcon} alt="Gear Icon" />
-            {isPopupVisible && (
-              <span className="popuptext show" id="myPopup">
-                {userId ? (
-                  <button
-                    onClick={() => {
-                      googleLogout();
-                      handleLogout();
-                    }}
-                  >
-                    Logout
-                  </button>
-                ) : (
-                  <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-                )}
-              </span>
-            )}
+            {isPopupVisible && <span className="popuptext show" id="myPopup"></span>}
           </button>
         </div> */}
-    </nav>
-  );
+      </nav>
+    );
 };
 
 export default NavBar;

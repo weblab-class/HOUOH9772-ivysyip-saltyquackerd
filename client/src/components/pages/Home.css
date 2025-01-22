@@ -11,18 +11,6 @@
 
 }
 
-.feed {
-  width: 100vw;
-  height: 10vh;
-  background-color: var(--grey);
-  position: relative;
-  overflow: scroll;
-}
-
-h1 {
-  margin: 0;
-}
-
 .home-title {
     position: relative;
     top: 100px;

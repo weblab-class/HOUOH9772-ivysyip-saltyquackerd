@@ -3,7 +3,6 @@
     background-color: var(--pink);
     display: flex;
     justify-content: space-between;
-    align-items: center; 
     width: 100%;
 }
 
@@ -94,13 +93,13 @@
   to {opacity:1 ;}
 } 
 
+
 .setting {
   position: relative;
   display: inline-block;
   background-color: var(--pink); 
   border: none;
   cursor: pointer;
-  text-align: center;
 }
 
 .setting img {

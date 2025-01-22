@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
-import { get, post } from "../../utilities";
+import { get } from "../../utilities";
 
 import "../../utilities.css";
 import "./Home.css";
+
+import DailyFeed from "../modules/DailyFeed";
 
 const Home = () => {
   const { userId } = useContext(UserContext);
@@ -19,28 +21,6 @@ const Home = () => {
       });
     }
   }, []);
-
-  useEffect(() => {
-    refreshGroups();
-  }, []);
-
-  const refreshGroups = () => {
-    get("/api/group", { userid: userId }).then((groups) => setGroups(groups));
-  };
-
-  let friendsList = [];
-  if(groups !== null) {
-    for (let i = 0; i < groups.length; i++) {
-      for (let j = 0; j < groups[i].users.length; j++) {
-        if (friendsList.some((friend) => friend.props.children.trim() === groups[i].users[j])) {
-          continue;
-        } else {
-          friendsList.push(<p key={`${i}-${j}`}>{groups[i].users[j]}</p>);
-        }
-      }
-    }
-  }
-
   const handleUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -83,16 +63,7 @@ const Home = () => {
   return (
     <div className="u-homepage">
       {/* Insert below the challenge */}
-      <h1 className="feed">
-        {!user ? (
-          <></>
-        ) : (
-          <div>
-            <button onClick={() => setSeen(true)}></button>
-          </div>
-        )}
-        {friendsList}
-      </h1>
+      <DailyFeed />
       <h1 className="home-title">Today's Challenge</h1>
       <div className="challenge-upload">
         <div className="upload">
