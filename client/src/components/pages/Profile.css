@@ -64,9 +64,10 @@
   margin-left: 60px;
   color: gray;
 }
+
 .picture-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Auto-adjust columns */
+  grid-template-columns: repeat(3, 1fr);
   gap: 5px; /* Spacing between items */
   padding: 10px; /* Padding around the grid */
   margin-left: 80px;
