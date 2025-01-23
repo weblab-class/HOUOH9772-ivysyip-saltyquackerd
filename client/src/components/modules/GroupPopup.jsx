@@ -132,7 +132,7 @@ const GroupPopup = (props) => {
                   id="codeInput"
                   className="text-input"
                   value={inputGroupCode}
-                  onChange={(e) => setInputGroupCode(e.target.value)}
+                  onChange={(e) => setInputGroupCode(e.target.value.toUpperCase())}
                   placeholder="Your group code"
                   required
                 />

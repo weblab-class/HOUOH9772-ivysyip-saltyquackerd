@@ -20,7 +20,6 @@ Post:
 
 ```
 /upload: upload photo to AWS and mongoDB, expects FormData, advise not to change handleSubmit in Home.jsx
-/update-bio: unsure (HAILEY PLZ ADVISE)
 /newgroup: creating a new group, expects body containing {join_code: string, group_name: string, users: array}
 /join: adding the new joining user to the existing group, expects body containing {join_code: string, userId: string}
 ```
