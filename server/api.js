@@ -168,15 +168,28 @@ router.get("/group", (req, res) => {
   });
 });
 
-// joining a group
-router.post("/join", (req, res) => {
-  Group.findOneAndUpdate(
-    { join_code: req.body.join_code },
-    { $push: { users: req.body.userId } },
-    { new: true }
-  ).then((group) => {
-    res.send(group);
-  });
+router.post("/join", async (req, res) => {
+  try {
+    const existingGroup = await Group.findOne({ join_code: req.body.join_code });
+
+    if (!existingGroup) {
+      return res.status(404).json({ error: "Group not found." });
+    }
+
+    const existingGroupUsers = existingGroup.users;
+
+    if (existingGroupUsers.includes(req.body.userId)) {
+      return res.status(400).json({ error: "User is already in the group." });
+    }
+
+    existingGroup.users.push(req.body.userId);
+    await existingGroup.save();
+
+    res.status(200).json({ message: "User successfully added to the group." });
+  } catch (error) {
+    console.error("Error adding user to group:", error);
+    res.status(500).json({ error: "An error occurred while joining the group." });
+  }
 });
 
 // generate code
