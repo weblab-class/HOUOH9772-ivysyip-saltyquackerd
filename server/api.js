@@ -106,20 +106,34 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     const date_full = new Date().toISOString();
     const day = date_full.split("T")[0];
 
-    const newPicture = new Picture({
-      creator_id: user_id,
-      date: day,
-      link: uploadResult.Location,
-      challenge: challenge || "default",
-    });
+    const existingPicture = await Picture.findOne({ creator_id: user_id, date: day });
 
-    await newPicture.save();
+    if (existingPicture) {
+      existingPicture.link = uploadResult.Location;
 
-    res.status(200).json({
-      message: "File uploaded successfully",
-      fileUrl: uploadResult.Location,
-      pictureId: newPicture._id,
-    });
+      await existingPicture.save();
+
+      res.status(200).json({
+        message: "File uploaded successfully",
+        fileUrl: uploadResult.Location,
+        pictureId: existingPicture._id,
+      });
+    } else {
+      const newPicture = new Picture({
+        creator_id: user_id,
+        date: day,
+        link: uploadResult.Location,
+        challenge: challenge || "default",
+      });
+
+      await newPicture.save();
+
+      res.status(200).json({
+        message: "File uploaded successfully",
+        fileUrl: uploadResult.Location,
+        pictureId: newPicture._id,
+      });
+    }
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });
