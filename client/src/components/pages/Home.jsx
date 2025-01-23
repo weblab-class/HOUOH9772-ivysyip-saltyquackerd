@@ -74,7 +74,13 @@ const Home = () => {
             <>
               <div className="button_group">
                 <form onSubmit={handleSubmit}>
-                  <input type="file" id="input1" name="filename" onChange={handleUpload} />
+                  {/* <input
+                    type="file"
+                    id="input1"
+                    name="filename"
+                    accept="image/*"
+                    onChange={handleUpload}
+                  /> */}
                   {uploadedFileUrl ? null : (
                     <button type="submit" value="Submit">
                       Upload!
@@ -97,7 +103,13 @@ const Home = () => {
             <div className="button_group">
               <form onSubmit={handleSubmit}>
                 <label htmlFor="input1">Upload Photo Here</label>
-                <input type="file" id="input1" name="filename" onChange={handleUpload} />
+                <input
+                  type="file"
+                  id="input1"
+                  name="filename"
+                  accept="image/*"
+                  onChange={handleUpload}
+                />
               </form>
             </div>
           )}
