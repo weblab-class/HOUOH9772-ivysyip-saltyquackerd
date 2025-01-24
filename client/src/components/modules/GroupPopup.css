@@ -97,7 +97,16 @@
   margin-bottom: 8px;
 }
 
-.text-input {
+.create-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.join-input {
   width: 100%;
   padding: 8px 12px;
   font-size: 16px;
@@ -105,6 +114,10 @@
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   text-transform: uppercase;
+}
+
+.join-input::placeholder {
+  text-transform: none;
 }
 
 .text-input:focus {

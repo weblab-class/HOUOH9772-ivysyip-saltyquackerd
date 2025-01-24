@@ -121,7 +121,7 @@ const GroupPopup = (props) => {
                 <input
                   type="text"
                   id="nameInput"
-                  className="text-input"
+                  className="create-input"
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
                   placeholder="Your Group Name"
@@ -144,7 +144,7 @@ const GroupPopup = (props) => {
                 <input
                   type="text"
                   id="codeInput"
-                  className="text-input"
+                  className="join-input"
                   value={inputGroupCode}
                   onChange={(e) => setInputGroupCode(e.target.value.toUpperCase())}
                   placeholder="Your group code"
