@@ -16,6 +16,10 @@ const NavBar = (props) => {
     setPopupVisible(!isPopupVisible);
   };
 
+  const handleClose = () => {
+    setPopupVisible(false);
+  };
+
   return (
     <nav className="NavBar-container">
       <div className="NavBar-linkContainer u-inlineBlock">
@@ -52,21 +56,35 @@ const NavBar = (props) => {
           </Link>
         )}
       </div>
-
-      <div>
-        {userId ? (
-          <button
-            onClick={() => {
-              googleLogout();
-              handleLogout();
-            }}
-            className="logout"
-          >
-            Logout
-          </button>
-        ) : (
-          <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-        )}
+      <div className="popup-container">
+        <button className="setting" onClick={togglePopup}>
+          <img src={gearIcon} alt="Gear Icon" />
+        </button>
+        <div className="popup" style={{ display: isPopupVisible ? "block" : "none" }}>
+          <div className="popuptext">
+            <button className="close-btn" onClick={handleClose}>
+              x
+            </button>
+            {userId ? (
+              <button
+                className="popup-option"
+                onClick={() => {
+                  googleLogout();
+                  handleLogout();
+                }}
+              >
+                Logout
+              </button>
+            ) : (
+              <GoogleLogin
+                key="google-login"
+                onSuccess={handleLogin}
+                onError={(err) => console.log(err)}
+              />
+            )}
+            <button className="popup-option">Color Change</button>
+          </div>
+        </div>
       </div>
     </nav>
   );

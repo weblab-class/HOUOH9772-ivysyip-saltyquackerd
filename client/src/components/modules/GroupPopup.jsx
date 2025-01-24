@@ -62,6 +62,7 @@ const GroupPopup = (props) => {
     }
   };
 
+
   async function fetchGroupCode() {
     try {
       const response = await fetch("/api/code");
