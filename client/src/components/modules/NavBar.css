@@ -5,7 +5,6 @@
     justify-content: space-between;
     width: 100%;
     align-items: center;
-    max-width: 1200px;
     margin: 0 auto;
     box-sizing: border-box; 
 }
@@ -156,4 +155,13 @@
   width: 28px; /* Set a visible width */
   height: 24px; /* Set a visible height */
   display: block; /* Ensure it's displayed */
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
