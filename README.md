@@ -3,6 +3,7 @@
 ## Overview
 
 A website created by Ivy Yip, Hailey Lin, and Carol Li
+https://picventure.onrender.com
 
 ## API endpoint documentation
 
@@ -12,8 +13,10 @@ Get:
 ```
 /user: get user information by user_id, expects query {userid: {insert_userid}}
 /picturesbyuser: get all pictures uploaded by the user based on user_id, expects query {userid: {insert_userid}}
+/picturesByUserAndDate: get all pictures uploaded by the user based on user_id and date, expects query {userid: string, date: string}
 /group: get all groups user is in based on user_id, expects query {userid: {insert_userid}}
 /code: generates a unique group code, does not expect any query
+/challege: get the challenge for the day, expects query {date: string}
 ```
 
 Post:

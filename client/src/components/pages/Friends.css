@@ -1,3 +1,10 @@
 .container {
   height: 100%;
 }
+
+.calender-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}

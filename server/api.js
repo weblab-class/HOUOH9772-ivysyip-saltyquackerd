@@ -83,6 +83,12 @@ router.get("/picturesbyuser", (req, res) => {
   });
 });
 
+router.get("/picturesByUserAndDate", (req, res) => {
+  Picture.find({ creator_id: req.query.userid, date: req.query.date }).then((pictures) => {
+    res.send(pictures);
+  });
+});
+
 router.post("/upload", upload.single("file"), async (req, res) => {
   try {
     const { user_id, challenge } = req.body;
@@ -143,7 +149,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
 router.get("/challenge", async (req, res) => {
   try {
-    // const today = new Date().toISOString().split("T")[0];
     const challenge = await Challenge.findOne({ date: req.query.date });
 
     if (challenge) {

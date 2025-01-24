@@ -4,24 +4,31 @@ import "./GroupImages.css";
 
 const GroupImages = (props) => {
   const [photos, setPhotos] = useState([]);
-  //   const [filteredPhotos, setFilteredPhotos] = useState([]);
 
   useEffect(() => {
     setPhotos([]);
     if (props.group) {
       props.group.users.forEach((user) => {
-        get("/api/picturesbyuser", { userid: user }).then((pictures) => {
-          setPhotos((prevPhotos) => [...prevPhotos, ...pictures]);
-        });
+        get("/api/picturesByUserAndDate", { userid: user, date: props.filteredDate }).then(
+          (pictures) => {
+            setPhotos((prevPhotos) => [...prevPhotos, ...pictures]);
+          }
+        );
       });
     }
-  }, [props.group]);
+  }, [props.group, props.filteredDate]);
 
   return (
     <>
-      {props.group
-        ? photos.map((photo, index) => <img key={index} src={photo.link} alt="Image" />)
-        : ""}
+      {props.group ? (
+        <>
+          {photos.length !== 0
+            ? photos.map((photo, index) => <img key={index} src={photo.link} alt="Image" />)
+            : "No photos for this day"}
+        </>
+      ) : (
+        "Loading..."
+      )}
     </>
   );
 };

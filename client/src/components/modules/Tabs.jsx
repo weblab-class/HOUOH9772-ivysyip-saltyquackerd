@@ -5,7 +5,7 @@ import GroupPopup from "../modules/GroupPopup";
 import GroupImageFeed from "../modules/GroupImageFeed";
 import "./Tabs.css";
 
-const Tabs = () => {
+const Tabs = (props) => {
   const { userId } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
   const [createGroup, setCreateGroup] = useState(false);
@@ -47,7 +47,7 @@ const Tabs = () => {
           </li>
         </ul>
       </nav>
-      <GroupImageFeed group={activeTab} />
+      <GroupImageFeed group={activeTab} filteredDate={props.filteredDate} />
       <GroupPopup trigger={createGroup} setTrigger={setCreateGroup} refreshGroups={refreshGroups} />
     </div>
   );

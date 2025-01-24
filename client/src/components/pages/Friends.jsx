@@ -2,11 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
 import { get, post } from "../../utilities";
 import Tabs from "../modules/Tabs";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import "./Friends.css";
 
 const Friends = () => {
   const { userId } = useContext(UserContext);
   const [user, setUser] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date(Date.now()));
+  const [filteredDate, setFilteredDate] = useState("");
 
   useEffect(() => {
     if (userId) {
@@ -14,15 +18,16 @@ const Friends = () => {
         setUser(user);
       });
     }
+    setFilteredDate(selectedDate.toISOString().split("T")[0]);
   }, []);
 
-  // let groupsList = null;
-  // const hasGroups = groups.length !== 0;
-  // if (hasGroups) {
-  //   groupsList = groups.map((groupObj) => <p>{groupObj.group_name}</p>);
-  // } else {
-  //   groupsList = <div>No groups! Create a group!</div>;
-  // }
+  useEffect(() => {
+    setFilteredDate(selectedDate.toISOString().split("T")[0]);
+  }, [selectedDate]);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   return (
     <>
@@ -30,10 +35,10 @@ const Friends = () => {
         <>Please login</>
       ) : (
         <div className="container">
-          {/* <button onClick={() => setCreateGroup(true)}>Create/Join Group</button> */}
-
-          {/* {groupsList} */}
-          <Tabs />
+          <div className="calender-container">
+            <Calendar onChange={handleDateChange} value={selectedDate} />
+          </div>
+          <Tabs filteredDate={filteredDate} />
         </div>
       )}
     </>
