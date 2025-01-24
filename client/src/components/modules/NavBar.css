@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    align-items: center;
 }
 
 .NavBar-title {
@@ -40,69 +41,116 @@
 }
 
 /* Popup container */
+.popup-container {
+  position: relative;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  z-index: 5;
+  display: none;
+  justify-content: center;
+}
+
+.popup-overlay.show {
+  display: block; /* Show the overlay when popup is visible */
+}
+
+/* Popup Box */
 .popup {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  margin-right: 20px;
-}
-
-/* The actual popup (appears on top) */
-.popup .popuptext {
-  visibility: hidden;
-  width: 160px;
-  background-color: #F2C9D5;
-  color: black;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
   position: absolute;
-  z-index: 1;
-  left: 0%;
-  top: 100%;
-  margin-top: 5px;
-  margin-left: -100px;
-  box-shadow: 5px 5px 5px #AA336A;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
-/* Popup arrow */
-.popup .popuptext::after {
-  content: "";
+.popup .close-btn {
   position: absolute;
-  bottom: 100%;
-  left: 72%;
-  margin-left: 5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent #F2C9D5 transparent;
-}
-
-/* Toggle this class when clicking on the popup container (hide and show the popup) */
-.popuptext.show {
-  visibility: visible;
-}
-
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
-} 
-
-
-.setting {
-  position: relative;
-  display: inline-block;
-  background-color: var(--pink); 
+  top: 0px;
+  right: 0px;
+  background: transparent;
   border: none;
+  font-size: 18px;
   cursor: pointer;
+  color: black; /* Close button color */
+  font-weight: bold;
+  transition: transform 0.2s ease; /* Animate on hover */
+}
+
+.popuptext {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 10px; /* Add spacing between buttons */
+  position: fixed; /* Position it near the trigger */
+  top: 30%; /* Adjust the position relative to the gear icon */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffe4e6; /* Light pink background */
+  padding: 20px; /* Add space around the buttons */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
+  border: 1px solid #ccc; /* Optional border */
+  z-index: 10; /* Ensure it is on top of other elements */
+  width: 250px;
+  position: relative;
+}
+
+/* Popup Option Button */
+.popup-option {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid black;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #ffe0d8; /* Light pink */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.popup-option:hover {
+  background-color: #ffccd2; /* Slightly darker pink */
+}
+
+.popup-option:active {
+  background-color: #ffb3b8; /* Even darker pink */
+}
+
+/* Optional for small screen adjustment */
+@media (max-width: 600px) {
+  .popup {
+    width: 90%;
+  }
+
+  .popup-option {
+    font-size: 14px;
+  }
+}
+.setting {
+  background: none;
+  border: none;
+  position: absolute;
+  top: -10px;
+  right: 30px;
+  cursor: pointer;
+  z-index: 10;
 }
 
 .setting img {
-  width: 35px;
-  height: 30px;
+  width: 28px; /* Set a visible width */
+  height: 24px; /* Set a visible height */
+  display: block; /* Ensure it's displayed */
 }
