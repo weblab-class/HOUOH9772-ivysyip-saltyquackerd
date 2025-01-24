@@ -13,7 +13,7 @@ const GroupImageFeed = (props) => {
             <GroupList group={props.group} />
           </div>
           <div className="feed-content">
-            <GroupImages group={props.group} />
+            <GroupImages group={props.group} filteredDate={props.filteredDate} />
           </div>
         </>
       ) : (

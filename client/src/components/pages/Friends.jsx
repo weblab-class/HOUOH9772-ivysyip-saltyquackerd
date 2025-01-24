@@ -38,7 +38,7 @@ const Friends = () => {
           <div className="calender-container">
             <Calendar onChange={handleDateChange} value={selectedDate} />
           </div>
-          <Tabs />
+          <Tabs filteredDate={filteredDate} />
         </div>
       )}
     </>
