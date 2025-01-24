@@ -2,11 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
 import { get, post } from "../../utilities";
 import Tabs from "../modules/Tabs";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import "./Friends.css";
 
 const Friends = () => {
   const { userId } = useContext(UserContext);
   const [user, setUser] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     if (userId) {
@@ -15,6 +18,10 @@ const Friends = () => {
       });
     }
   }, []);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   // let groupsList = null;
   // const hasGroups = groups.length !== 0;
@@ -31,7 +38,7 @@ const Friends = () => {
       ) : (
         <div className="container">
           {/* <button onClick={() => setCreateGroup(true)}>Create/Join Group</button> */}
-
+          <Calendar onChange={handleDateChange} value={selectedDate} />
           {/* {groupsList} */}
           <Tabs />
         </div>
