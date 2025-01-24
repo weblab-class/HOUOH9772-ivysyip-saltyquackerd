@@ -6,12 +6,18 @@
 | This file defines the routes for your server.
 |
 */
-const Group = require("./models/group");
 
 const express = require("express");
+const AWS = require("aws-sdk");
+const cors = require("cors");
+const multer = require("multer");
+const bodyParser = require("body-parser");
 
 // import models so we can interact with the database
 const User = require("./models/user");
+const Group = require("./models/group");
+const Picture = require("./models/picture");
+const Challenge = require("./models/challenge");
 
 // import authentication library
 const auth = require("./auth");
@@ -21,6 +27,24 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+
+// Middleware
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(cors());
+
+// AWS S3 Configuration
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
+const bucketName = process.env.AWS_BUCKET_NAME;
+
+// File Upload Setup with Multer
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -40,11 +64,6 @@ router.post("/initsocket", (req, res) => {
   res.send({});
 });
 
-router.get("/user", (req, res) => {
-  User.findById(req.query.userid).then((user) => {
-    res.send(user);
-  });
-});
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
@@ -54,43 +73,98 @@ router.get("/user", (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      res.status(500).send("User Not");
+      res.status(500).send("User Not Found");
     });
 });
 
-const bodyParser = require("body-parser");
+router.get("/picturesbyuser", (req, res) => {
+  Picture.find({ creator_id: req.query.userid }).then((pictures) => {
+    res.send(pictures);
+  });
+});
 
-let userBio = "This is the default bio."; // Store bio in memory (use database in production)
+router.post("/upload", upload.single("file"), async (req, res) => {
+  try {
+    const { user_id, challenge } = req.body;
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    if (!user_id) {
+      return res.status(400).json({ error: "User ID is required." });
+    }
+    const fileContent = req.file.buffer;
+    const fileName = `uploads/${user_id}/${Date.now()}_${req.file.originalname}`;
+
+    const params = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: fileContent,
+      ContentType: req.file.mimetype,
+    };
+
+    const uploadResult = await s3.upload(params).promise();
+
+    const date_full = new Date().toISOString();
+    const day = date_full.split("T")[0];
+
+    const existingPicture = await Picture.findOne({ creator_id: user_id, date: day });
+
+    if (existingPicture) {
+      existingPicture.link = uploadResult.Location;
+
+      await existingPicture.save();
+
+      res.status(200).json({
+        message: "File uploaded successfully",
+        fileUrl: uploadResult.Location,
+        pictureId: existingPicture._id,
+      });
+    } else {
+      const newPicture = new Picture({
+        creator_id: user_id,
+        date: day,
+        link: uploadResult.Location,
+        challenge: challenge || "default",
+      });
+
+      await newPicture.save();
+
+      res.status(200).json({
+        message: "File uploaded successfully",
+        fileUrl: uploadResult.Location,
+        pictureId: newPicture._id,
+      });
+    }
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
+router.get("/challenge", async (req, res) => {
+  try {
+    // const today = new Date().toISOString().split("T")[0];
+    const challenge = await Challenge.findOne({ date: req.query.date });
+
+    if (challenge) {
+      res.send(challenge);
+    } else {
+      res.status(404).json({ error: "No challenge found for today." });
+    }
+  } catch (err) {
+    console.error("Error in /challenge route:", err);
+    res.status(500).json({ error: "Error fetching daily challenge." });
+  }
+});
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
-// Route for the Edit Profile Page (Form submission)
-router.post("/update-bio", (req, res) => {
-  userBio = req.body.bio; // Save new bio
-  res.redirect("/profile"); // Redirect to profile page
-});
-
-// Route for the Profile Page
-router.get("/profile", (req, res) => {
-  res.send(`<h1>Your Profile</h1><p>${userBio}</p><a href="/edit-profile">Edit Bio</a>`);
-});
-
-// Route for the Edit Profile Page
-router.get("/accounts/edit/:user", (req, res) => {
-  res.send(`
-    <h1>Edit Your Bio</h1>
-    <form action="/update-bio" method="POST">
-      <textarea name="bio">${userBio}</textarea>
-      <button type="submit">Save</button>
-    </form>
-  `);
-});
-
-// geting a user information based on id
-router.get("/user", (req, res) => {
-  User.find(req.query.userId).then((user) => {
-    res.send(user);
-  });
+router.post("/bio", (req, res) => {
+  User.findOneAndUpdate({ _id: req.body.userId }, { bio: req.body.bio }, { new: true }).then(
+    (bio) => {
+      res.send(bio);
+    }
+  );
 });
 
 // creating new group
@@ -111,15 +185,28 @@ router.get("/group", (req, res) => {
   });
 });
 
-// joining a group
-router.post("/join", (req, res) => {
-  Group.findOneAndUpdate(
-    { join_code: req.body.join_code },
-    { $push: { users: req.body.userId } },
-    { new: true }
-  ).then((group) => {
-    res.send(group);
-  });
+router.post("/join", async (req, res) => {
+  try {
+    const existingGroup = await Group.findOne({ join_code: req.body.join_code });
+
+    if (!existingGroup) {
+      return res.status(404).json({ error: "Group not found." });
+    }
+
+    const existingGroupUsers = existingGroup.users;
+
+    if (existingGroupUsers.includes(req.body.userId)) {
+      return res.status(400).json({ error: "User is already in the group." });
+    }
+
+    existingGroup.users.push(req.body.userId);
+    await existingGroup.save();
+
+    res.status(200).json({ message: "User successfully added to the group." });
+  } catch (error) {
+    console.error("Error adding user to group:", error);
+    res.status(500).json({ error: "An error occurred while joining the group." });
+  }
 });
 
 // generate code

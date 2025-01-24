@@ -1,0 +1,5 @@
+.PhotoPopup-container {
+    display: flex;
+    padding: var(--m) var(--s);
+    
+}

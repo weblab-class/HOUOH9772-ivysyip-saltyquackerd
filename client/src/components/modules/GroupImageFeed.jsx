@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from "react";
 import { get, post } from "../../utilities";
-import { Link } from "react-router-dom";
 import "./GroupImageFeed.css";
 import GroupList from "./GroupList";
 import GroupImages from "./GroupImages";

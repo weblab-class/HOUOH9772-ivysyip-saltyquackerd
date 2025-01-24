@@ -5,6 +5,7 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import "./NavBar.css";
 import { UserContext } from "../App";
 import gearIcon from "../assets/gear.png";
+import "../../utilities.css";
 
 const NavBar = (props) => {
   const location = useLocation();
@@ -24,14 +25,6 @@ const NavBar = (props) => {
         >
           Home
         </Link>
-        {props.userId && (
-          <Link
-            to={`/profile/${props.userId}`}
-            className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
-          >
-            Profile
-          </Link>
-        )}
         <Link
           to="/friends/"
           className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
@@ -39,33 +32,32 @@ const NavBar = (props) => {
           Friends
         </Link>
         <Link
-          to="/badges/"
+          to={`/profile/${props.userId}`}
           className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
         >
-          Badges
+          Profile
         </Link>
-      </div>
-      {/* <div className="popup" onClick={togglePopup}>
-          <button className="setting">
-            <img src={gearIcon} alt="Gear Icon" />
-            {isPopupVisible && (
-              <span className="popuptext show" id="myPopup">
-                {userId ? (
-                  <button
-                    onClick={() => {
-                      googleLogout();
-                      handleLogout();
-                    }}
-                  >
-                    Logout
-                  </button>
-                ) : (
-                  <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-                )}
-              </span>
-            )}
+        {props.userId && (
+          <Link
+            to={`/badges/${props.userId}`}
+            className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
+          >
+            Badges
+          </Link>
+        )}
+        {userId ? (
+          <button
+            onClick={() => {
+              googleLogout();
+              handleLogout();
+            }}
+          >
+            Logout
           </button>
-        </div> */}
+        ) : (
+          <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
+        )}
+      </div>
     </nav>
   );
 };

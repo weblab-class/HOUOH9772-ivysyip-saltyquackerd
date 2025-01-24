@@ -1,0 +1,19 @@
+.picture-item {
+  width: 100%; /* Fill the column */
+  height: 340px; /* Set a fixed height */
+  overflow: hidden; /* Hide overflow to crop the image */
+  background-color: #f9f9f9; /* Optional: placeholder color */
+}
+
+.picture-img {
+  width: 100%; /* Fill the container width */
+  height: 90%; /* Fill the container height */
+  object-fit: cover; /* Crop/zoom the image to fit */
+  display: block; /* Remove inline gaps */
+}
+
+.picture-info {
+  padding: 1px;
+  text-align: center;
+  font-size: 10px;
+}

@@ -28,23 +28,37 @@ const GroupPopup = (props) => {
     }
   };
 
-  const handleJoinSubmit = (event) => {
+  const handleJoinSubmit = async (event) => {
     event.preventDefault();
 
     if (inputGroupCode.trim()) {
-      post("/api/join", { join_code: inputGroupCode, userId: userId })
-        .then((group) => {
+      try {
+        const response = await fetch("/api/join", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            join_code: inputGroupCode,
+            userId: userId,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
           setInputGroupCode("");
           handleClose();
-
           props.refreshGroups();
-        })
-        .catch((error) => {
-          console.error("Error joining group:", error);
-          alert("Failed to join the group. Please check the group code and try again.");
-        });
+        } else {
+          alert(result.error || "Failed to join the group. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error during fetch:", error);
+        alert("An error occurred. Please try again.");
+      }
     } else {
-      alert("Please enter a valid name.");
+      alert("Please enter a valid group code.");
     }
   };
 
@@ -132,7 +146,7 @@ const GroupPopup = (props) => {
                   id="codeInput"
                   className="text-input"
                   value={inputGroupCode}
-                  onChange={(e) => setInputGroupCode(e.target.value)}
+                  onChange={(e) => setInputGroupCode(e.target.value.toUpperCase())}
                   placeholder="Your group code"
                   required
                 />

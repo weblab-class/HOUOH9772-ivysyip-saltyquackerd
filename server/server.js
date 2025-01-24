@@ -116,3 +116,23 @@ socketManager.init(server);
 server.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
+
+// generate challenge
+const { CronJob } = require("cron");
+const setDailyChallenge = require("./challengeGenerator");
+
+const job = new CronJob(
+  "0 0 * * *",
+  async () => {
+    console.log("Generating daily challenge at UTC midnight...");
+    await setDailyChallenge();
+  },
+  null,
+  true,
+  "UTC"
+);
+
+(async () => {
+  console.log("Generating daily challenge immediately after server starts...");
+  await setDailyChallenge();
+})();

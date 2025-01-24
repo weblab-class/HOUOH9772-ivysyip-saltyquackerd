@@ -1,0 +1,15 @@
+.feed-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns, equally spaced */
+  gap: 16px; /* Space between rows and columns */
+  width: 100%; /* Ensure it spans the container */
+  padding: 16px; /* Optional: Add some padding */
+  box-sizing: border-box; /* Include padding in width calculations */
+}
+
+.feed-content img {
+  width: 100%; /* Scale images to fit the grid cell */
+  height: auto; /* Maintain the aspect ratio */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  object-fit: cover; /* Crop the image if needed */
+}

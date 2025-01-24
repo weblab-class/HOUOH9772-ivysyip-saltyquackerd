@@ -6,14 +6,14 @@
     opacity: 1;
     height: 100vh;
     width: 100vw;
-    padding-top: 50px;
+    padding-top: 0px;
     overflow: scroll;
 
 }
 
 .home-title {
     position: relative;
-    top: 50px;
+    top: 100px;
     margin: 0px auto 50px auto;
     font-size: x-large;
     text-align: center;
@@ -26,15 +26,22 @@
 }
 
 .challenge-upload {
+    position: relative;
     background-color: var(--mint);
-    height: 40vh;
-    width: 40vw;
-    margin: 60px auto 2px auto;
+    height: auto;
+    width: 400px;
+    margin: 120px auto 2px auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 10px;
+}
+
+#photo {
+    position: relative;
+    z-index: 2;
+    height: auto;
 }
 
 form {
@@ -49,7 +56,7 @@ form {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 20px;
+    padding: 50px;
     align-items: center;
 }
 
@@ -69,11 +76,4 @@ form {
 
 .button_group label{
     background-color: #89CFF0;
-}
-
-.feed {
-  width: 100vw;
-  height: 50vh;
-  margin-top: 200px; 
-  background-color: var(--mint);
 }
