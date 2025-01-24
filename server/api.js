@@ -17,6 +17,7 @@ const bodyParser = require("body-parser");
 const User = require("./models/user");
 const Group = require("./models/group");
 const Picture = require("./models/picture");
+const Challenge = require("./models/challenge");
 
 // import authentication library
 const auth = require("./auth");
@@ -137,6 +138,22 @@ router.post("/upload", upload.single("file"), async (req, res) => {
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
+router.get("/challenge", async (req, res) => {
+  try {
+    // const today = new Date().toISOString().split("T")[0];
+    const challenge = await Challenge.findOne({ date: req.query.date });
+
+    if (challenge) {
+      res.send(challenge);
+    } else {
+      res.status(404).json({ error: "No challenge found for today." });
+    }
+  } catch (err) {
+    console.error("Error in /challenge route:", err);
+    res.status(500).json({ error: "Error fetching daily challenge." });
   }
 });
 

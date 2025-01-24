@@ -5,12 +5,14 @@ import { get } from "../../utilities";
 import "./Home.css";
 
 import DailyFeed from "../modules/DailyFeed";
+import ChallengeTimer from "../modules/ChallengeTimer";
 
 const Home = () => {
   const { userId } = useContext(UserContext);
   const [uploaded, setUploaded] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedFileUrl, setUploadedFileUrl] = useState("");
+  const [user, setUser] = useState("");
   const [challenge, setChallenge] = useState("wear something blue");
 
   useEffect(() => {
@@ -115,7 +117,10 @@ const Home = () => {
           )}
         </div>
       </div>
-      <h1 className="challenge">wear something blue</h1>
+      {/* <h1 className="challenge">wear something blue</h1> */}
+      <div className="challenge">
+        <ChallengeTimer />
+      </div>
     </div>
   );
 };
