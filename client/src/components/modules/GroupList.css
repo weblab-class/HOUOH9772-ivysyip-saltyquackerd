@@ -1,6 +1,4 @@
 .group-list-container {
-  width: 250px; /* Set the desired width */
-  flex-shrink: 0; /* Prevent it from shrinking when space is tight */
   padding: 16px; /* Optional: Add some padding */
   background-color: #f5f5ff; /* Optional: Background color */
   border-right: 1px solid #dbdcfb; /* Optional: Add a right border */

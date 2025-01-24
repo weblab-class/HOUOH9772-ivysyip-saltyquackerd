@@ -31,20 +31,26 @@ const NavBar = (props) => {
         </Link>
         <Link
           to="/friends/"
-          className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
+          className={`NavBar-link ${
+            location.pathname === "/friends/" ? "NavBar-link--active" : ""
+          }`}
         >
           Friends
         </Link>
         <Link
           to={`/profile/${props.userId}`}
-          className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
+          className={`NavBar-link ${
+            location.pathname.startsWith("/profile/") ? "NavBar-link--active" : ""
+          }`}
         >
           Profile
         </Link>
         {props.userId && (
           <Link
             to={`/badges/${props.userId}`}
-            className={`NavBar-link ${location.pathname === "/" ? "NavBar-link--active" : ""}`}
+            className={`NavBar-link ${
+              location.pathname === "/badges" ? "NavBar-link--active" : ""
+            }`}
           >
             Badges
           </Link>

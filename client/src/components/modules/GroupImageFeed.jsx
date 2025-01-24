@@ -9,7 +9,7 @@ const GroupImageFeed = (props) => {
     <div className="GroupImageFeed">
       {props.group ? (
         <>
-          <div>
+          <div className="group-content">
             <GroupList group={props.group} />
           </div>
           <div className="feed-content">
