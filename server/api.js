@@ -67,7 +67,7 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
-router.get("/user", (req, res) => {
+router.get("/user", async (req, res) => {
   User.findById(req.query.userid)
     .then((user) => {
       res.send(user);
