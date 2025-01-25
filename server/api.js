@@ -214,6 +214,26 @@ router.post("/join", async (req, res) => {
   }
 });
 
+router.post("/leavegroup", async (req, res) => {
+  try {
+    const existingGroup = await Group.findOne({ _id: req.body.groupId });
+
+    if (!existingGroup) {
+      return res.status(404).json({ error: "Group not found." });
+    }
+
+    const userIdToRemove = req.body.userId;
+    existingGroup.users = existingGroup.users.filter((userId) => userId !== userIdToRemove);
+
+    await existingGroup.save();
+
+    res.status(200).json({ message: "User successfully removed from the group." });
+  } catch (error) {
+    console.error("Error removing user from group:", error);
+    res.status(500).json({ error: "An error occurred while leaving the group." });
+  }
+});
+
 // generate code
 const generateRandomGroupCode = () => {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

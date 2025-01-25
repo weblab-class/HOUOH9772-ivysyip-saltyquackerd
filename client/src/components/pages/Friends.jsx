@@ -2,15 +2,35 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
 import { get, post } from "../../utilities";
 import Tabs from "../modules/Tabs";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import "./Friends.css";
+
+import Calendar from "react-calendar";
+// import "react-calendar/dist/Calendar.css";
 
 const Friends = () => {
   const { userId } = useContext(UserContext);
   const [user, setUser] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date(Date.now()));
+
+  const getUTCDate = () => {
+    const now = new Date();
+    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  };
+
+  const [value, setValue] = useState(getUTCDate());
   const [filteredDate, setFilteredDate] = useState("");
+
+  const tileClassName = ({ date, view }) => {
+    const utcDate = getUTCDate();
+    if (
+      view === "month" &&
+      date.getUTCFullYear() === utcDate.getUTCFullYear() &&
+      date.getUTCMonth() === utcDate.getUTCMonth() &&
+      date.getUTCDate() === utcDate.getUTCDate()
+    ) {
+      return "react-calendar__tile--utc-now";
+    }
+    return null;
+  };
 
   useEffect(() => {
     if (userId) {
@@ -18,16 +38,12 @@ const Friends = () => {
         setUser(user);
       });
     }
-    setFilteredDate(selectedDate.toISOString().split("T")[0]);
+    setFilteredDate(value.toISOString().split("T")[0]);
   }, []);
 
   useEffect(() => {
-    setFilteredDate(selectedDate.toISOString().split("T")[0]);
-  }, [selectedDate]);
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+    setFilteredDate(value.toISOString().split("T")[0]);
+  }, [value]);
 
   return (
     <>
@@ -36,7 +52,11 @@ const Friends = () => {
       ) : (
         <div className="container">
           <div className="calender-container">
-            <Calendar onChange={handleDateChange} value={selectedDate} />
+            <Calendar
+              value={value}
+              onChange={setValue}
+              tileClassName={tileClassName} // Add custom class logic
+            />
           </div>
           <Tabs filteredDate={filteredDate} />
         </div>
