@@ -47,7 +47,11 @@ const Tabs = (props) => {
           </li>
         </ul>
       </nav>
-      <GroupImageFeed group={activeTab} filteredDate={props.filteredDate} />
+      <GroupImageFeed
+        group={activeTab}
+        filteredDate={props.filteredDate}
+        refreshGroups={refreshGroups}
+      />
       <GroupPopup trigger={createGroup} setTrigger={setCreateGroup} refreshGroups={refreshGroups} />
     </div>
   );
