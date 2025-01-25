@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { get, post } from "../../utilities";
 import { Link, useParams } from "react-router-dom";
 import Picture from "../modules/Picture";
@@ -7,9 +7,11 @@ import "./Profile.css";
 import EditPage from "./EditPage.jsx";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import { UserContext } from "../App.jsx";
 
 const Profile = () => {
   let props = useParams();
+  const { userId } = useContext(UserContext);
   const [user, setUser] = useState();
   const [images, setImages] = useState([]);
   const [bio, setBio] = useState("");
@@ -21,16 +23,18 @@ const Profile = () => {
 
   useEffect(() => {
     document.title = "Profile Page";
-    get(`/api/user`, { userid: props.userId }).then((userObj) => {
-      setUser(userObj);
-      setBio(userObj.bio);
-    });
-    get("/api/picturesbyuser", { userid: props.userId }).then((pictures) => {
-      // const filteredImages = pictures.filter((image) => image.creator_id === props.userId);
-      // console.log(image.creator_id === props.userId);
-      setImages(pictures);
-    });
-  }, []);
+    if (props.userId !== user?.id) {
+      get(`/api/user`, { userid: props.userId }).then((userObj) => {
+        setUser(userObj);
+        setBio(userObj.bio);
+      });
+      get("/api/picturesbyuser", { userid: props.userId }).then((pictures) => {
+        setImages(pictures);
+      });
+    }
+  }, [props.userId]);
+
+  const showEditButton = useMemo(() => String(userId) === props.userId, [userId, props.userId]);
 
   const updateBio = () => {
     post("/api/bio", { userId: props.userId, bio: bio }).then(() => {});
@@ -72,11 +76,13 @@ const Profile = () => {
         <div className="Profile-avatar" />
         <h1 className="Profile-name u-textCenter">{user.name}</h1>
         <h4 className="Profile-bio u-textCenter">{bio}</h4>
-        <div className="Profile-edit">
-          <button className="Profile-edit-button" onClick={togglePopup}>
-            Edit Profile
-          </button>
-        </div>
+        {showEditButton && (
+          <div className="Profile-edit">
+            <button className="Profile-edit-button" onClick={togglePopup}>
+              Edit Profile
+            </button>
+          </div>
+        )}
       </div>
       <Popup open={isOpen} isOpen={togglePopup} className="Profile-popup">
         <h2 className="Profile-popup-header">Update Profile</h2>

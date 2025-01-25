@@ -174,7 +174,7 @@
 .Profile-subTitle {
   font-weight: 100;
   font-size: 12x;
-  margin: var(--m) var(--s);
+  margin: var(--s) var(--s);
   margin-left: 80px;
   color: gray;
 }
