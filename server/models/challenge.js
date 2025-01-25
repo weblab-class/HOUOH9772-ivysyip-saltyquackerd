@@ -5,6 +5,7 @@ const ChallengeSchema = new mongoose.Schema({
   category: String,
   seen: Boolean,
   date: String,
+  isReady: Boolean,
 });
 
 module.exports = mongoose.model("challenge", ChallengeSchema);

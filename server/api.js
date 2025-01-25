@@ -152,8 +152,17 @@ router.get("/challenge", async (req, res) => {
     const challenge = await Challenge.findOne({ date: req.query.date });
 
     if (challenge) {
-      res.send(challenge);
+      if (challenge.isReady) {
+        // Send the challenge if it's ready
+        res.send(challenge);
+      } else {
+        // If the challenge exists but isn't ready yet
+        res.status(202).json({
+          message: "Challenge not ready yet. Please try again later.",
+        });
+      }
     } else {
+      // If no challenge is found for the date
       res.status(404).json({ error: "No challenge found for today." });
     }
   } catch (err) {
