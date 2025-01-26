@@ -1,6 +1,4 @@
 import { React, useEffect, useState } from "react";
-import { get, post } from "../../utilities";
-import { Link } from "react-router-dom";
 import "./PhotoPopup.css";
 
 const PhotoPopup = (props) => {
@@ -10,3 +8,4 @@ const PhotoPopup = (props) => {
         </div>
     );
 };
+export default PhotoPopup;

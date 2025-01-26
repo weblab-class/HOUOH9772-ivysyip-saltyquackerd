@@ -1,11 +1,17 @@
 import "./DailyFeed.css";
 import React, { useState, useEffect } from "react";
 import { get } from "../../utilities";
+import PhotoPopup from "../modules/PhotoPopup.jsx";
 
 
 const DailyFeed = (props) => {
   const [groups, setGroups] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  }
 
   useEffect(() => {
     if (props.userId) {
@@ -38,12 +44,6 @@ const DailyFeed = (props) => {
   }
   friendsList = friendsList.filter((friend) => friend !== props.userId);
 
-//   function getUserName(userId) {
-//    get(`/api/user`, {userid: userId}).then((friend) => {
-//     setFriends([...friends, friend.name]);
-//    })
-//   }
-
   async function getUserNames() {
     try {
       const responses = await Promise.all(
@@ -58,23 +58,24 @@ const DailyFeed = (props) => {
   useEffect(() => {
     getUserNames();
   }, [friendsList])
-//  let friendsUser = [];
-//   for (let i = 0; i < friendsList.length; i++) {
-//     const userId = friendsList[i];
-//     getUserName(userId);
-
-//     // if (userName) {
-//     //   friendsUser.push({userName});
-//     // }
-//   }
 
   return (
     <div className="daily-feed-container">
-      <>
+      <div className="feed-inner">
         {friends.map((friend, index) => (
-          <p key={friendsList[index]}>{friend}</p>
+          <button className="popup-option" onClick={togglePopup} key={friendsList[index]}>
+            {friend}
+          </button>
         ))}
-      </>
+        <div className="popup" style={{ display: isPopupVisible ? "block" : "none" }}>
+          <div className="popup-inner">
+            <button className="close-btn" onClick={togglePopup}>
+              x
+            </button>
+            <PhotoPopup photo={friendsList[0]} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 
