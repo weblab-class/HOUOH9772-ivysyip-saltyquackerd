@@ -18,6 +18,7 @@ const User = require("./models/user");
 const Group = require("./models/group");
 const Picture = require("./models/picture");
 const Challenge = require("./models/challenge");
+const Comment = require("./models/comment");
 
 // import authentication library
 const auth = require("./auth");
@@ -241,6 +242,23 @@ router.get("/code", async (req, res) => {
     console.error("Error generating group code:", error);
     res.status(500).json({ error: "Failed to generate group code" });
   }
+});
+
+router.get("/comment", (req, res) => {
+  Comment.find({ parent: req.query.parent }).then((comments) => {
+    res.send(comments);
+  });
+});
+
+router.post("/comment", auth.ensureLoggedIn, (req, res) => {
+  const newComment = new Comment({
+    creator_id: req.user._id,
+    creator_name: req.user.name,
+    parent: req.body.parent,
+    content: req.body.content,
+  });
+
+  newComment.save().then((comment) => res.send(comment));
 });
 
 // anything else falls to this "not found" case

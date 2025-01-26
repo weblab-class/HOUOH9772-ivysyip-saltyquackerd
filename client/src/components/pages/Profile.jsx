@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import Picture from "../modules/Picture";
 import "../../utilities.css";
 import "./Profile.css";
-import EditPage from "./EditPage.jsx";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { UserContext } from "../App.jsx";
@@ -58,8 +57,8 @@ const Profile = () => {
         {images.map((image, index) => (
           <Picture
             key={`Picture_${index}`}
-            creator_name={image.creator_name}
-            // creator_id={image.creator_id}
+            // creator_name={image.creator_name}
+            creator_id={image.creator_id}
             date={image.date}
             challenge={image.challenge}
             link={image.link}
@@ -72,7 +71,7 @@ const Profile = () => {
   }
   return (
     <>
-      <div class="Profile-avatarContainer">
+      <div className="Profile-avatarContainer">
         <div className="Profile-avatar" />
         <h1 className="Profile-name u-textCenter">{user.name}</h1>
         <h4 className="Profile-bio u-textCenter">{bio}</h4>
