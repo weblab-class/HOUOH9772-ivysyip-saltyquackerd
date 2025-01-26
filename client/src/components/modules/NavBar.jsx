@@ -56,33 +56,38 @@ const NavBar = (props) => {
           </Link>
         )}
       </div>
-      <div className="popup-container">
+      <div className="navbar-popup-container">
         <button className="setting" onClick={togglePopup}>
           <img src={gearIcon} alt="Gear Icon" />
         </button>
-        <div className="popup" style={{ display: isPopupVisible ? "block" : "none" }}>
-          <div className="popuptext">
-            <button className="close-btn" onClick={handleClose}>
-              x
-            </button>
-            {userId ? (
-              <button
-                className="popup-option"
-                onClick={() => {
-                  googleLogout();
-                  handleLogout();
-                }}
-              >
-                Logout
+        <div
+          className="navbar-popup-overlay"
+          style={{ display: isPopupVisible ? "block" : "none" }}
+        >
+          <div className="navbar-popup">
+            <div className="navbar-popuptext">
+              <button className="close-btn" onClick={handleClose}>
+                x
               </button>
-            ) : (
-              <GoogleLogin
-                key="google-login"
-                onSuccess={handleLogin}
-                onError={(err) => console.log(err)}
-              />
-            )}
-            <button className="popup-option">Color Change</button>
+              {userId ? (
+                <button
+                  className="navbar-popup-option"
+                  onClick={() => {
+                    googleLogout();
+                    handleLogout();
+                  }}
+                >
+                  Logout
+                </button>
+              ) : (
+                <GoogleLogin
+                  key="google-login"
+                  onSuccess={handleLogin}
+                  onError={(err) => console.log(err)}
+                />
+              )}
+              <button className="navbar-popup-option">Color Change</button>
+            </div>
           </div>
         </div>
       </div>
