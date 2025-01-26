@@ -13,7 +13,7 @@ const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedFileUrl, setUploadedFileUrl] = useState("");
   const [user, setUser] = useState("");
-  const [challenge, setChallenge] = useState("wear something blue");
+  const [photoChallenge, setPhotoChallenge] = useState(null);
 
   useEffect(() => {
     if (userId) {
@@ -43,7 +43,7 @@ const Home = () => {
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("user_id", userId);
-    formData.append("challenge", challenge);
+    formData.append("challenge", photoChallenge);
 
     try {
       const response = await fetch("/api/upload", {
@@ -119,7 +119,7 @@ const Home = () => {
       </div>
       {/* <h1 className="challenge">wear something blue</h1> */}
       <div className="challenge">
-        <ChallengeTimer />
+        <ChallengeTimer setPhotoChallenge={setPhotoChallenge} />
       </div>
     </div>
   );
