@@ -2,6 +2,7 @@ import "./DailyFeed.css";
 import React, { useState, useEffect } from "react";
 import { get } from "../../utilities";
 import PhotoPopup from "../modules/PhotoPopup.jsx";
+import defaultImage from "../../assets/Default_pfp.jpg"; //CHANGE THIS
 
 
 const DailyFeed = (props) => {
@@ -59,20 +60,34 @@ const DailyFeed = (props) => {
     getUserNames();
   }, [friendsList])
 
+
   return (
     <div className="daily-feed-container">
       <div className="feed-inner">
         {friends.map((friend, index) => (
-          <button className="popup-option" onClick={togglePopup} key={friendsList[index]}>
-            {friend}
-          </button>
-        ))}
-        <div className="popup" style={{ display: isPopupVisible ? "block" : "none" }}>
-          <div className="popup-inner">
-            <button className="close-btn" onClick={togglePopup}>
-              x
+          <div className="feed-friend-container">
+            <button className="feed-profile-pic" onClick={togglePopup} key={friendsList[index]}>
+              <img src={defaultImage} alt={friend} />
             </button>
-            <PhotoPopup photo={friendsList[0]} />
+            <div className="feed-profile-name">{friend}</div>
+          </div>
+        ))}
+        <div
+          className="feed-popup-overlay"
+          style={{ display: isPopupVisible ? "block" : "none" }}
+          onClick={togglePopup}
+        >
+          <div
+            className="feed-popup-container"
+          >
+            <div className="feed-popup">
+              <div className="feed-popup-inner">
+                <button className="close-btn" onClick={togglePopup}>
+                  x
+                </button>
+                <PhotoPopup photo={friendsList[0]} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
