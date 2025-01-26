@@ -1,6 +1,4 @@
 import { React, useEffect, useState } from "react";
-import { get, post } from "../../utilities";
-import { Link } from "react-router-dom";
 import "./PhotoPopup.css";
 import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";

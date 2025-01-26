@@ -43,7 +43,7 @@
 }
 
 /* Popup container */
-.popup-container {
+.navbar-popup-container {
   position: relative;
   justify-content: center;
   width: 100%;
@@ -52,33 +52,36 @@
   align-items: center;
 }
 
-.popup-overlay {
+.navbar-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
-  z-index: 5;
-  display: none;
-  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+  z-index: 5; /* Ensure it appears below the popup but above everything else */
+  display: none; /* Initially hidden */
 }
 
-.popup-overlay.show {
-  display: block; /* Show the overlay when popup is visible */
+.navbar-popup-overlay.show {
+  display: block; /* Show the overlay when active */
 }
 
 /* Popup Box */
-.popup {
-  position: absolute;
-  background-color: white;
+.navbar-popup {
+  position: fixed; /* Center relative to the viewport */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for true center */
+  background-color: var(--pink);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
 
-.popup .close-btn {
+
+.navbar-popup .close-btn {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -91,26 +94,24 @@
   transition: transform 0.2s ease; /* Animate on hover */
 }
 
-.popuptext {
+.navbar-popuptext {
   display: flex;
-  flex-direction: column; /* Stack buttons vertically */
-  gap: 10px; /* Add spacing between buttons */
-  position: fixed; /* Position it near the trigger */
-  top: 30%; /* Adjust the position relative to the gear icon */
-  left: 50%;
-  transform: translate(-50%, -50%);
+  flex-direction: column;
+  gap: 20px;
+  position: fixed; /* Fixed positioning for global centering */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Offset for exact centering */
   background-color: #ffe4e6; /* Light pink background */
-  padding: 20px; /* Add space around the buttons */
-  border-radius: 10px; /* Rounded corners */
+  padding: 20px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
   border: 1px solid #ccc; /* Optional border */
-  z-index: 10; /* Ensure it is on top of other elements */
+  z-index: 10;
   width: 250px;
-  position: relative;
 }
-
 /* Popup Option Button */
-.popup-option {
+.navbar-popup-option {
   width: 100%;
   padding: 15px;
   border: 2px solid black;
@@ -123,21 +124,21 @@
   transition: all 0.3s ease;
 }
 
-.popup-option:hover {
+.navbar-popup-option:hover {
   background-color: #ffccd2; /* Slightly darker pink */
 }
 
-.popup-option:active {
+.navbar-popup-option:active {
   background-color: #ffb3b8; /* Even darker pink */
 }
 
 /* Optional for small screen adjustment */
 @media (max-width: 600px) {
-  .popup {
+  .navbar-popup {
     width: 90%;
   }
 
-  .popup-option {
+  .navbar-popup-option {
     font-size: 14px;
   }
 }

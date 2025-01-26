@@ -1,9 +1,131 @@
-.daily-feed-container {
+.daily-feed-container { /* Problem: what if the name is really really long? */
   width: 100vw;
-  height: 10vh;
+  height: 17vh;
   background-color: var(--grey);
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+
+.feed-inner {
+    display: flex;
+    flex-direction: row;
+    margin-left: var(--l);
+    gap: 30px;
+    margin-top: var(--l);
+}
+
+
+.feed-profile-pic {
+  width: 60px; /* Equal width and height for a perfect circle */
+  height: 60px;
+  border: 2px solid black;
+  border-radius: 50%; /* Make it a circle */
+  background-image: url("../assets/Default_pfp.jpg"); /* Path to your image */
+  background-size: cover; /* Cover the entire circle */
+  background-position: center; /* Center the image */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0; /* Remove padding */
+  overflow: hidden;
+}
+
+.feed-profile-pic img {
+  width: 100%; /* Make the image fill the circle */
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the entire circle */
+}
+
+.feed-profile-name {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.feed-friend-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feed-popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.feed-popup-option {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: 2px solid black;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #ffe0d8; /* Light pink */
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.feed-popup {
+  position: relative; /* Leave as relative since .popup-container is already centered */
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center; 
+}
+
+.feed-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  z-index: 5;
+  display: none;
+  justify-content: center;
+}
+
+.feed-popup-overlay.show {
+  display: block; /* Show the overlay when popup is visible */
+}
+
+.feed-popup-inner {
   position: relative;
-  overflow: scroll;
+  height: auto;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feed-popup .close-btn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: black; /* Close button color */
+  font-weight: bold;
+  transition: transform 0.2s ease; /* Animate on hover */
 }
 
 
