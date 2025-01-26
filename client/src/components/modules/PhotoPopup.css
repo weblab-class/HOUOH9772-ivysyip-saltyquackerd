@@ -1,5 +1,69 @@
-.PhotoPopup-container {
-    display: flex;
-    padding: var(--m) var(--s);
-    
+/* Modal styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal content styling */
+.modal-content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%; /* Ensure consistent width */
+  height: 90vh; /* Use a fixed height (90% of viewport height) */
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.modal-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%; /* Fixed width for the image container */
+  height: 100%; /* Fixed height for the image container */
+  max-width: 100%; /* Don't let the container overflow the modal */
+  max-height: 100%; /* Prevent the image from exceeding modal height */
+}
+
+/* Full image styles */
+.full-image {
+  width: 100%; /* Image will fill the container */
+  height: 100%; /* Image will fill the container */
+  object-fit: contain; /* Preserve aspect ratio */
+  max-width: 100%; /* Prevent overflow */
+  max-height: 100%; /* Prevent overflow */
+  border: 2px solid #fff;
+}
+
+/* Close button styling */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  border: black;
+  font-size: 20px;
+  padding: 4px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  font-family: monospace;
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
 }

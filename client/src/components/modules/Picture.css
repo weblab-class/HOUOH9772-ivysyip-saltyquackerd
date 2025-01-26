@@ -1,3 +1,8 @@
+.Picture-container {
+  position: relative;
+  display: inline-block;
+}
+
 .picture-item {
   width: 100%; /* Fill the column */
   height: 340px; /* Set a fixed height */
@@ -10,6 +15,12 @@
   height: 90%; /* Fill the container height */
   object-fit: cover; /* Crop/zoom the image to fit */
   display: block; /* Remove inline gaps */
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.picture-img:hover {
+  filter: brightness(50%);
 }
 
 .picture-info {

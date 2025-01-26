@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./modules/NavBar";
 import Welcome from "./pages/Welcome";
+import Profile from "./pages/Profile";
 
 import jwt_decode from "jwt-decode";
 
@@ -10,7 +11,6 @@ import "../utilities.css";
 import { socket } from "../client-socket";
 
 import { get, post } from "../utilities";
-
 
 export const UserContext = createContext(null);
 
@@ -26,7 +26,6 @@ const App = () => {
         // they are registed in the database, and currently logged in.
         setUserId(user._id);
       }
-
     });
   }, []);
 
@@ -43,7 +42,6 @@ const App = () => {
   const handleLogout = () => {
     setUserId(undefined);
     post("/api/logout");
-
   };
 
   const authContextValue = {

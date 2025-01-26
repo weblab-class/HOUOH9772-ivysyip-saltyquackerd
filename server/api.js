@@ -18,6 +18,7 @@ const User = require("./models/user");
 const Group = require("./models/group");
 const Picture = require("./models/picture");
 const Challenge = require("./models/challenge");
+const Comment = require("./models/comment");
 
 // import authentication library
 const auth = require("./auth");
@@ -152,8 +153,17 @@ router.get("/challenge", async (req, res) => {
     const challenge = await Challenge.findOne({ date: req.query.date });
 
     if (challenge) {
-      res.send(challenge);
+      if (challenge.isReady) {
+        // Send the challenge if it's ready
+        res.send(challenge);
+      } else {
+        // If the challenge exists but isn't ready yet
+        res.status(202).json({
+          message: "Challenge not ready yet. Please try again later.",
+        });
+      }
     } else {
+      // If no challenge is found for the date
       res.status(404).json({ error: "No challenge found for today." });
     }
   } catch (err) {
@@ -214,6 +224,26 @@ router.post("/join", async (req, res) => {
   }
 });
 
+router.post("/leavegroup", async (req, res) => {
+  try {
+    const existingGroup = await Group.findOne({ _id: req.body.groupId });
+
+    if (!existingGroup) {
+      return res.status(404).json({ error: "Group not found." });
+    }
+
+    const userIdToRemove = req.body.userId;
+    existingGroup.users = existingGroup.users.filter((userId) => userId !== userIdToRemove);
+
+    await existingGroup.save();
+
+    res.status(200).json({ message: "User successfully removed from the group." });
+  } catch (error) {
+    console.error("Error removing user from group:", error);
+    res.status(500).json({ error: "An error occurred while leaving the group." });
+  }
+});
+
 // generate code
 const generateRandomGroupCode = () => {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -241,6 +271,23 @@ router.get("/code", async (req, res) => {
     console.error("Error generating group code:", error);
     res.status(500).json({ error: "Failed to generate group code" });
   }
+});
+
+router.get("/comment", (req, res) => {
+  Comment.find({ parent: req.query.parent }).then((comments) => {
+    res.send(comments);
+  });
+});
+
+router.post("/comment", auth.ensureLoggedIn, (req, res) => {
+  const newComment = new Comment({
+    creator_id: req.user._id,
+    creator_name: req.user.name,
+    parent: req.body.parent,
+    content: req.body.content,
+  });
+
+  newComment.save().then((comment) => res.send(comment));
 });
 
 // anything else falls to this "not found" case

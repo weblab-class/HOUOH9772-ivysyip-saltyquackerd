@@ -1,6 +1,7 @@
-import React from "react";
+import { React, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Picture.css";
+import PhotoPopup from "./PhotoPopup.jsx";
 
 /**
  * Picture is a component that renders the challenge, date and picture
@@ -14,14 +15,35 @@ import "./Picture.css";
  * @param {string} challenge associated with the picture
  */
 const Picture = (props) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleImageClick = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
-    <div className="picture-item">
-      <img src={props.link} alt={props.challenge} className="picture-img" />
-      <div className="picture-info">
-        <p>
-          {props.challenge} {props.date}
-        </p>
+    <div className="Picture-container">
+      <div className="picture-item" onClick={handleImageClick}>
+        <img src={props.link} alt={props.challenge} className="picture-img" />
+        <div className="picture-info">
+          <p>
+            {props.challenge} {props.date}
+          </p>
+        </div>
       </div>
+      {isModalOpen && (
+        <PhotoPopup
+          closeModal={closeModal}
+          link={props.link}
+          _id={props._id}
+          creator_id={props.creator_id}
+          userId={props.userId}
+        />
+      )}
     </div>
   );
 };
