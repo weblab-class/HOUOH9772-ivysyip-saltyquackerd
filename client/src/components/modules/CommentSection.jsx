@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import "./PhotoPopup.css";
 import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";
-import CommentSection from "./CommentSection.jsx";
+import "./CommentSection.css";
 
-const PhotoPopup = (props) => {
+const CommentSection = (props) => {
   const [comments, setComments] = useState([]);
 
   const comment1 = {
@@ -26,21 +26,21 @@ const PhotoPopup = (props) => {
   };
 
   return (
-    <>
-      <div className="modal" onClick={props.closeModal}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <button className="close-btn" onClick={props.closeModal}>
-            x
-          </button>
-          <div className="modal-image-container">
-            <img src={props.link} className="full-image" />
-          </div>
-          <CommentSection props={props} />
-        </div>
+    <div className="instagram-comments-container">
+      <div className="comments-section">
+        <CommentsBlock
+          picture={props.picture}
+          comments={comments}
+          creator_id={props.creator_id}
+          userId={props.userId}
+          addNewComment={addNewComment}
+        />
       </div>
-      <div>{console.log("Comments:", comments)}</div>
-    </>
+      <div className="new-comment-section">
+        <NewComment addNewComment={addNewComment} />
+      </div>
+    </div>
   );
 };
 
-export default PhotoPopup;
+export default CommentSection;

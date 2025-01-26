@@ -1,31 +1,47 @@
-.NewPostInput-input,
-.NewPostInput-button {
-  font-family: "Open Sans";
-  font-size: 14px;
-  padding: var(--s) var(--m);
+.NewPostInput {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #dbdbdb;
 }
 
 .NewPostInput-input {
   flex-grow: 1;
-  border: var(--darkgrey) 1px solid;
-  border-radius: var(--xs) 0 0 var(--xs);
-  transition: box-shadow 0.1s;
+  border: none;
+  border-radius: 20px;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.NewPostInput-input:focus-within {
-  border-color: var(--primary--dim);
-  box-shadow: 0 0 0 var(--xs) rgba(0, 123, 255, 0.25);
+.NewPostInput-input::placeholder {
+  color: #8e8e8e;
+}
+
+.NewPostInput-input:focus {
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .NewPostInput-button {
-  color: var(--primary);
-  border: var(--primary) 1px solid;
-  border-radius: 0 var(--xs) var(--xs) 0;
+  margin-left: 10px;
   background: none;
-  /* transition: color 0.1s, background 0.1s; */
+  border: none;
+  color: #0095f6;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
 }
 
-.NewPostInput-button:hover {
-  color: var(--white);
-  background-color: var(--primary);
+.NewPostInput-button:disabled {
+  color: #b2dffc;
+  cursor: default;
+}
+
+.NewPostInput-button:hover:not(:disabled) {
+  color: #007bb5;
 }
