@@ -5,30 +5,34 @@ const ChallengeTimer = () => {
   const [utcDate, setUTCDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [countdown, setCountdown] = useState("");
   const [challenge, setChallenge] = useState("");
-  const categories = [
-    "social",
-    "fashion",
-    "academic",
-    "creative",
-    "professional",
-    "culture",
-    "physical",
-  ];
 
   useEffect(() => {
-    const fetchChallenge = () => {
+    const fetchChallenge = async () => {
       const todayUTC = new Date().toISOString().split("T")[0];
       setUTCDate(todayUTC);
 
-      get("/api/challenge", { date: todayUTC })
-        .then((challenge) => {
-          console.log(challenge.challenge_text);
-          setChallenge(challenge.challenge_text);
-        })
-        .catch((err) => {
-          console.error("Error fetching challenge:", err);
-          setChallenge("Failed to load challenge.");
-        });
+      const pollForChallenge = async () => {
+        try {
+          const response = await get("/api/challenge", { date: todayUTC });
+
+          if (response.isReady) {
+            setChallenge(response.challenge_text);
+          } else {
+            console.log("Challenge not ready, retrying...");
+            setTimeout(pollChallenge, 5000); // Retry every 5 seconds
+          }
+        } catch (err) {
+          if (err.response && err.response.status === 202) {
+            console.log("Challenge not ready, retrying...");
+            setTimeout(pollChallenge, 5000); // Retry every 5 seconds
+          } else {
+            console.error("Error fetching challenge:", err);
+            setChallenge("Failed to load challenge.");
+          }
+        }
+      };
+
+      pollForChallenge();
     };
 
     const calculateCountdown = () => {
