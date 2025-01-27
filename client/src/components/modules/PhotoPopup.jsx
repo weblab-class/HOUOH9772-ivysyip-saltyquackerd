@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 import "./PhotoPopup.css";
 import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";
+import { get } from "../../utilities";
 
 const PhotoPopup = (props) => {
   const [comments, setComments] = useState([]);
