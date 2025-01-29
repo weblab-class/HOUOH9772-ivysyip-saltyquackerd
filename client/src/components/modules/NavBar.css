@@ -1,12 +1,16 @@
 .NavBar-container {
-    padding: var(--m) var(--s);
-    background-color: var(--pink);
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-    margin: 0 auto;
-    box-sizing: border-box; 
+  padding: var(--m) var(--s); /* Keep your current padding */
+  /* position: fixed; Keeps the navbar fixed while scrolling */
+  top: 0; /* Aligns the navbar to the very top */
+  left: 0; /* Ensures alignment to the left of the page */
+  background-color: var(--pink); /* Keeps your background color */
+  display: flex; /* Keeps flexbox layout */
+  justify-content: space-between; /* Distributes children evenly */
+  width: 100%; /* Spans the full width of the viewport */
+  align-items: center; /* Vertically centers items */
+  margin: 0; /* Removes any margin */
+  box-sizing: border-box; /* Ensures padding does not affect width */
+  z-index: 999; /* Keeps the navbar above other elements */
 }
 
 .NavBar-title {
@@ -79,7 +83,6 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
-
 
 .navbar-popup .close-btn {
   position: absolute;
@@ -162,7 +165,7 @@
   opacity: 0;
   pointer-events: none; /* Prevent clicking */
   display: none;
-} 
+}
 
 html,
 body {

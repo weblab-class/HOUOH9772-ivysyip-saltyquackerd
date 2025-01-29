@@ -1,4 +1,5 @@
-.daily-feed-container { /* Problem: what if the name is really really long? */
+.daily-feed-container {
+  /* Problem: what if the name is really really long? */
   width: 100vw;
   height: 17vh;
   background-color: var(--grey);
@@ -6,15 +7,13 @@
   overflow-y: hidden;
 }
 
-
 .feed-inner {
-    display: flex;
-    flex-direction: row;
-    margin-left: var(--l);
-    gap: 30px;
-    margin-top: var(--l);
+  display: flex;
+  flex-direction: row;
+  margin-left: var(--l);
+  gap: 30px;
+  margin-top: var(--l);
 }
-
 
 .feed-profile-pic {
   width: 60px; /* Equal width and height for a perfect circle */
@@ -85,7 +84,7 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center; 
+  text-align: center;
 }
 
 .feed-popup-overlay {
@@ -115,11 +114,9 @@
   gap: 10px;
 }
 
-
 form {
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    gap: 10px; 
-    
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }

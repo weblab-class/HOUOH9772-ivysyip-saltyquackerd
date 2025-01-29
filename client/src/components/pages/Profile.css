@@ -1,11 +1,19 @@
 /* Container for the entire profile layout */
 .Profile-container {
-  margin-top: 20px;
-  margin-left: 20px;
+  margin-top: 160px;
+  top: 100px;
   display: flex; /* Layout the profile picture and content side by side */
   align-items: flex-start; /* Align the items at the top of the container */
   gap: 10px; /* Space between the profile picture and content */
   margin: 20px;
+}
+
+.Profile-left-container {
+  left: 60px;
+  width: 250px;
+  padding: 20px;
+  background-color: #fff;
+  z-index: 1000;
 }
 
 .Profile-avatar-container {
@@ -24,6 +32,7 @@
   display: flex;
   flex-direction: column; /* Stack the name and bio vertically */
   gap: 5px; /* Space between name and bio */
+  /* max-width: 15%; */
 }
 
 .Profile-name-container {
@@ -63,6 +72,10 @@
   color: #000000; /* Bio text color */
   line-height: 1; /* Add some space between lines of text */
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit the number of lines (adjust the value as needed) */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .u-textCenter {
@@ -219,7 +232,7 @@
   font-weight: 100;
   font-size: 12x;
   margin: var(--s) var(--s);
-  margin-left: 80px;
+  margin-left: 30px;
   color: gray;
 }
 
@@ -233,12 +246,23 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 5px; /* Spacing between items */
   padding: 10px; /* Padding around the grid */
-  margin-left: 80px;
-  margin-right: 80px;
+  margin-left: 60px;
+  margin-right: 60px;
   justify-content: center; /* Center the grid items */
+  overflow-y: auto;
 }
 
 @media (max-width: 768px) {
+  .Profile-left-container {
+    top: 80px; /* Initial position */
+    left: 20px;
+    width: 250px;
+    padding: 20px;
+    background-color: #fff;
+    z-index: 1000;
+    transition: top 0.3s ease-in-out; /* Smooth transition */
+  }
+
   .picture-grid {
     grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
     margin-left: 20px;

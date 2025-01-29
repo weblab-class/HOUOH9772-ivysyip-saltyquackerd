@@ -5,7 +5,6 @@ import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";
 
 const PhotoPopup = (props) => {
-  
   const [comments, setComments] = useState([]);
   const [upvotes, setUpvotes] = useState(props.upvotes);
   const [photoId, setPhotoId] = useState("");
@@ -30,7 +29,7 @@ const PhotoPopup = (props) => {
       setLiked(!liked); // Toggle the like state
 
       const response = await post("/api/upvote", {
-        pictureId: props._id,
+        pictureId: photoId,
         userId: props.userId,
       });
 
@@ -53,7 +52,7 @@ const PhotoPopup = (props) => {
       setLiked(!liked); // Toggle the like state
 
       const response = await post("/api/un-upvote", {
-        pictureId: props._id,
+        pictureId: photoId,
         userId: props.userId,
       });
 
@@ -97,21 +96,20 @@ const PhotoPopup = (props) => {
             <div className="upvote">
               {props.userId && (
                 <>
-                  <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
                     <span
                       className={`material-icons heart-icon ${liked ? "liked" : ""}`}
+                      style={{ fontSize: "20px", cursor: "pointer" }} /* Adjust font size */
                       onClick={!liked ? handleLikeClick : handleUnlikeClick}
                     >
                       {liked ? "favorite" : "favorite_border"}
                     </span>
+                    <span style={{ fontSize: "16px" }}>{upvotes}</span>
                   </div>
-                  {console.log(upvotes)}
-                  <div>{upvotes}</div>
                 </>
               )}
             </div>
             {console.log(comments)}
-
           </div>
         </div>
       </div>
