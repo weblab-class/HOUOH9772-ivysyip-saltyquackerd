@@ -1,16 +1,27 @@
 .badge-feed-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  width: 100%;
+  max-width: 100%; /* Ensures the container spans full width */
   padding: 20px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
-  .badge-feed-container {
-    gap: 15px;
-  }
+.badges-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centers the badges horizontally */
+  gap: 15px;
+  margin-top: 20px;
+  width: 100%; /* Ensures the list spans the full width */
+}
+
+.single-badge {
+  width: 150px; /* Adjust the size of individual badges */
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.streaks-section {
+  margin-bottom: 20px;
 }

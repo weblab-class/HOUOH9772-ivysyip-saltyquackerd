@@ -2,25 +2,31 @@ import { React, useState, useEffect } from "react";
 import { get, post } from "../../utilities";
 import SingleBadge from "./SingleBadge";
 import Streaks from "./Streaks";
-import "./BadgeUserFeed.css";
 
-const BadgeUserFeed = (props) => {
+const BadgeGroupFeed = (props) => {
   const [badges, setBadges] = useState([]);
-  const [completedBadges, setCompletedBadges] = useState(props.user.badges);
+  const [group, setGroup] = useState(null);
+  const [completedBadges, setCompletedBadges] = useState([]);
+
   useEffect(() => {
-    get("/api/allUserBadges").then((badgeStored) => {
+    get("/api/allGroupBadges").then((badgeStored) => {
       setBadges(badgeStored);
     });
-  }, []);
+    get("/api/groupById", { groupId: props.group }).then((group) => {
+      setGroup(group);
+      setCompletedBadges(group.badges);
+    });
+  }, [props.group]);
 
   return (
     <div className="badge-feed-container">
-      <Streaks
-        currentStreak={props.user.currentStreak}
-        longestStreak={props.user.highestStreak}
-        completedDaily={props.user.completedDaily}
-      />
-
+      {group && (
+        <Streaks
+          currentStreak={group.currentStreak}
+          longestStreak={group.longestStreak}
+          completedDaily={group.completedDaily}
+        />
+      )}
       <div className="badges-list">
         {badges.map((badge) => {
           const isCompleted = completedBadges.includes(badge._id);
@@ -31,4 +37,4 @@ const BadgeUserFeed = (props) => {
   );
 };
 
-export default BadgeUserFeed;
+export default BadgeGroupFeed;
