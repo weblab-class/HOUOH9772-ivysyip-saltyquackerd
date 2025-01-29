@@ -19,9 +19,9 @@ const DailyFeed = (props) => {
   //   return () => setPopupOpen(false); // Reset when closed
   // }, [setPopupOpen]);
 
-  const togglePopup = () => {
-    setPopupVisible(!isPopupVisible);
-  };
+  // const togglePopup = () => {
+  //   setPopupVisible(!isPopupVisible);
+  // };
 
   useEffect(() => {
     if (props.userId) {
@@ -91,11 +91,17 @@ const DailyFeed = (props) => {
       if (friendsToFetch.length > 0) {
         Promise.all(
           friendsToFetch.map((friend) =>
-            get(`/api/userDailyPicture`, { userid: friend }).then((friendObj) => ({
-              [friend]: friendObj.dailyPicture || "",
+            Promise.all([
+              get(`/api/userDailyPicture`, { userid: friend }),
+              get(`/api/user`, { userid: friend }),
+            ]).then(([dailyPicObj, userObj]) => ({
+              [friend]: {
+                dailyPicture: dailyPicObj.dailyPicture || "",
+                profilePicture: userObj.profilePicture || defaultImage,
+              },
             }))
+            )
           )
-        )
           .then((results) => {
             const updatedPictures = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
             setFriendPictures((prevState) => ({
@@ -116,10 +122,10 @@ const DailyFeed = (props) => {
         {friendsList.map((friend, index) => (
           <div key={friend}>
             {/* Only render if the picture exists for the friend */}
-            {friendPictures[friend] && (
+            {friendPictures[friend]?.dailyPicture && (
               <div className="feed-friend-container">
                 <button className="feed-profile-pic" onClick={() => setSelectedFriend(friend)}>
-                  <img src={defaultImage} alt={friend} />
+                  <img src={friendPictures[friend]?.profilePicture || defaultImage} alt={friend} />
                 </button>
                 <div className="feed-profile-name">{friends[index]}</div>
               </div>
@@ -139,7 +145,7 @@ const DailyFeed = (props) => {
                       <PhotoPopup
                         _id={friend}
                         closeModal={() => setSelectedFriend(null)}
-                        link={friendPictures[friend]} // Correctly passing the link
+                        link={friendPictures[friend]?.dailyPicture} // Correctly passing the link
                         creator_id={props.creator_id} //CHECK THIS
                         userId={props.userId}
                       />
