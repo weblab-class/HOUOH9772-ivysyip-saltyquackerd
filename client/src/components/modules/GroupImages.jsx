@@ -60,7 +60,6 @@ const GroupImages = (props) => {
             <PhotoPopup
               closeModal={closeModal}
               link={selectedPhoto.link}
-              _id={selectedPhoto._id}
               creator_id={selectedPhoto.creator_id}
               userId={userId}
             />
