@@ -17,6 +17,9 @@ const PhotoPopup = (props) => {
     setComments(comments.concat([commentObj]));
   };
 
+  console.log("Friend Pictures from PhotoPopup: ", props.link);
+  console.log("Which friend", props.userId);
+
   return (
     <>
       <div className="modal" onClick={props.closeModal}>
