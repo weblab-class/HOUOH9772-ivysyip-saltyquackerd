@@ -147,12 +147,10 @@ const Profile = () => {
           </div>
           <div className="Profile-bio">{bio}</div>
         </div>
-        <div>
-          <div>
-            <h4 className="Profile-subTitle">Past Uploads</h4>
-          </div>
-          {picturesList}
-        </div>
+      </div>
+      <div>
+        <h4 className="Profile-subTitle">Past Uploads</h4>
+        {picturesList}
       </div>
       <Popup open={isOpen} className="Profile-popup">
         <h2 className="Profile-popup-header">Update Profile</h2>
@@ -191,10 +189,10 @@ const Profile = () => {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             placeholder="Write a short bio..."
-            maxLength={150}
+            maxLength={50}
             className="Profile-textarea"
           />
-          <div className="Profile-popup-counter">{bio ? bio.length : 0} / 150</div>
+          <div className="Profile-popup-counter">{bio ? bio.length : 0} / 50</div>
           <button className="Profile-popup-button-save" onClick={handleSave}>
             Save
           </button>

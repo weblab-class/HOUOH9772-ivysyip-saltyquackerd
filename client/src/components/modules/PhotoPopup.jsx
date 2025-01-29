@@ -93,13 +93,15 @@ const PhotoPopup = (props) => {
             <div className="upvote">
               {props.userId && (
                 <>
-                  <div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
                     <span
                       className={`material-icons heart-icon ${liked ? "liked" : ""}`}
+                      style={{ fontSize: "20px", cursor: "pointer" }} /* Adjust font size */
                       onClick={!liked ? handleLikeClick : handleUnlikeClick}
                     >
                       {liked ? "favorite" : "favorite_border"}
                     </span>
+                    <span style={{ fontSize: "16px" }}>{upvotes}</span>
                   </div>
                   <div>{upvotes}</div>
                 </>
