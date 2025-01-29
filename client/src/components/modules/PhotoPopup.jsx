@@ -5,14 +5,16 @@ import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";
 
 const PhotoPopup = (props) => {
-  
   const [comments, setComments] = useState([]);
-  const [upvotes, setUpvotes] = useState(props.upvotes);
+  const [upvotes, setUpvotes] = useState(null);
   const [photoId, setPhotoId] = useState("");
+  const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     get("/api/pictureByLink", { link: props.link }).then((photo) => {
       setPhotoId(photo._id);
+      setUpvotes(photo.upvotes);
+      setLiked(photo.upvotedBy.includes(props.userId));
       get("/api/comment", { parent: photo._id }).then((comments) => {
         setComments(comments);
       });
@@ -23,14 +25,12 @@ const PhotoPopup = (props) => {
     setComments(comments.concat([commentObj]));
   };
 
-  const [liked, setLiked] = useState(false);
-
   const handleLikeClick = async () => {
     try {
       setLiked(!liked); // Toggle the like state
 
       const response = await post("/api/upvote", {
-        pictureId: props._id,
+        pictureId: photoId,
         userId: props.userId,
       });
 
@@ -40,8 +40,6 @@ const PhotoPopup = (props) => {
         return;
       }
 
-      // If the upvote was successful, log or display the updated upvote count
-      console.log("Upvote successful", response.upvotes);
       setUpvotes(response.upvotes);
     } catch (error) {
       console.error("Error occurred while making the upvote request:", error);
@@ -53,7 +51,7 @@ const PhotoPopup = (props) => {
       setLiked(!liked); // Toggle the like state
 
       const response = await post("/api/un-upvote", {
-        pictureId: props._id,
+        pictureId: photoId,
         userId: props.userId,
       });
 
@@ -63,8 +61,6 @@ const PhotoPopup = (props) => {
         return;
       }
 
-      // If the upvote was successful, log or display the updated upvote count
-      console.log("Upvote successful", response.upvotes);
       setUpvotes(response.upvotes);
     } catch (error) {
       console.error("Error occurred while making the upvote request:", error);
@@ -105,13 +101,10 @@ const PhotoPopup = (props) => {
                       {liked ? "favorite" : "favorite_border"}
                     </span>
                   </div>
-                  {console.log(upvotes)}
                   <div>{upvotes}</div>
                 </>
               )}
             </div>
-            {console.log(comments)}
-
           </div>
         </div>
       </div>
