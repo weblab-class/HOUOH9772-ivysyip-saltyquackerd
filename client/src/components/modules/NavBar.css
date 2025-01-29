@@ -7,6 +7,8 @@
     align-items: center;
     margin: 0 auto;
     box-sizing: border-box; 
+    overflow-x: scroll;
+    position: relative;
 }
 
 .NavBar-title {
@@ -73,7 +75,7 @@
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for true center */
-  background-color: var(--pink);
+  background-color: transparent;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -119,7 +121,7 @@
   font-size: 16px;
   font-weight: bold;
   text-align: center;
-  background-color: #ffe0d8; /* Light pink */
+  background-color: transparent; /* Light pink */
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -145,11 +147,12 @@
 .settings {
   background: none;
   border: none;
-  position: absolute;
   top: -10px;
   right: 30px;
   cursor: pointer;
   z-index: 10;
+  position: static;
+  margin-left: auto;
 }
 
 .settings img {
@@ -170,5 +173,4 @@ body {
   padding: 0;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
 }

@@ -75,6 +75,7 @@ const NavBar = (props) => {
                     onClick={() => {
                       googleLogout();
                       handleLogout();
+                      closeSettings();
                     }}
                   >
                     Logout
