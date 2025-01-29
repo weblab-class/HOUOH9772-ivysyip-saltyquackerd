@@ -8,17 +8,19 @@ import gearIcon from "../assets/gear.png";
 import "../../utilities.css";
 
 const NavBar = (props) => {
+
+  
   const location = useLocation();
-  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [isSettingsVisible, setSettingsVisible] = useState(false);
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
-  const togglePopup = () => {
-    setPopupVisible(!isPopupVisible);
-  };
+  // const togglePopup = () => {
+  //   setPopupVisible(!isPopupVisible);
+  // };
 
-  const handleClose = () => {
-    setPopupVisible(false);
-  };
+  // const handleClose = () => {
+  //   setPopupVisible(false);
+  // };
 
   return (
     <nav className="NavBar-container">
@@ -57,16 +59,13 @@ const NavBar = (props) => {
         )}
       </div>
       <div className="navbar-popup-container">
-        <button className="setting" onClick={togglePopup}>
+        <button className="setting" onClick={() => setSettingsVisible(true)}>
           <img src={gearIcon} alt="Gear Icon" />
         </button>
-        <div
-          className="navbar-popup-overlay"
-          style={{ display: isPopupVisible ? "block" : "none" }}
-        >
+        <div className="navbar-popup-overlay" style={{ display: isSettingsVisible ? "block" : "none" }}>
           <div className="navbar-popup">
             <div className="navbar-popuptext">
-              <button className="close-btn" onClick={handleClose}>
+              <button className="close-btn" onClick={() => setSettingsVisible(false)}>
                 x
               </button>
               {userId ? (

@@ -3,16 +3,25 @@ import React, { useState, useEffect, useMemo } from "react";
 import { get } from "../../utilities";
 import PhotoPopup from "../modules/PhotoPopup.jsx";
 import defaultImage from "../../assets/Default_pfp.jpg"; //CHANGE THIS
-
+import { usePopup } from "../../components/pages/PopupContext.jsx";
 
 const DailyFeed = (props) => {
   const [groups, setGroups] = useState([]);
   const [friends, setFriends] = useState([]);
-  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [user, setUser] = useState(null);
+  const [friendPictures, setFriendPictures] = useState({});
 
-  const togglePopup = () => {
-    setPopupVisible(!isPopupVisible);
-  }
+  // const { isIndexOpen, setIndexOpen } = usePopup();
+  
+  // React.useEffect(() => {
+  //   setPopupOpen(true);
+  //   return () => setPopupOpen(false); // Reset when closed
+  // }, [setPopupOpen]);
+
+  // const togglePopup = () => {
+  //   setPopupVisible(!isPopupVisible);
+  // };
 
   useEffect(() => {
     if (props.userId) {
@@ -25,15 +34,15 @@ const DailyFeed = (props) => {
   }, []);
 
   const refreshGroups = () => {
-  get("/api/group", { userid: props.userId })
+    get("/api/group", { userid: props.userId })
       .then((groups) => {
-      console.log("Fetched groups:", groups);
-      setGroups(groups);
+        console.log("Fetched groups:", groups);
+        setGroups(groups);
       })
       .catch((err) => console.error("Error fetching groups:", err));
   };
 
-  const friendsList = useMemo (() => {
+  const friendsList = useMemo(() => {
     let friendsList = [];
     if (groups.length > 0) {
       groups.forEach((group) => {
@@ -60,38 +69,98 @@ const DailyFeed = (props) => {
 
   useEffect(() => {
     getUserNames();
-  }, [friendsList])
+  }, [friendsList]);
 
+  useEffect(() => {
+    if (props.userId !== user?.id) {
+      get(`/api/user`, { userid: props.userId }).then((userObj) => {
+        setUser(userObj);
+        setFriendPictures((prevState) => ({
+          ...prevState,
+          [props.userId]: userObj.dailyPicture || defaultImage, // default picture if no picture is found
+        }));
+      });
+    }
+  }, [props.userId]);
+
+  useEffect(() => {
+    if (friendsList.length > 0) {
+      const friendsToFetch = friendsList.filter((friend) => !friendPictures[friend]);
+
+      // Use Promise.all to fetch all friend pictures concurrently
+      if (friendsToFetch.length > 0) {
+        Promise.all(
+          friendsToFetch.map((friend) =>
+            Promise.all([
+              get(`/api/userDailyPicture`, { userid: friend }),
+              get(`/api/user`, { userid: friend }),
+            ]).then(([dailyPicObj, userObj]) => ({
+              [friend]: {
+                dailyPicture: dailyPicObj.dailyPicture || "",
+                profilePicture: userObj.profilePicture || defaultImage,
+              },
+            }))
+            )
+          )
+          .then((results) => {
+            const updatedPictures = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+            setFriendPictures((prevState) => ({
+              ...prevState,
+              ...updatedPictures,
+            }));
+          })
+          .catch((error) => {
+            console.error("Failed to fetch daily pictures:", error);
+          });
+      }
+    }
+  }, [friendsList]);
 
   return (
     <div className="daily-feed-container">
       <div className="feed-inner">
-        {friends.map((friend, index) => (
-          <div className="feed-friend-container" key={friendsList[index].id}>
-            <button className="feed-profile-pic" onClick={togglePopup} key={friendsList[index]}>
-              <img src={defaultImage} alt={friend} />
-            </button>
-            <div className="feed-profile-name">{friend}</div>
+        {friendsList.map((friend, index) => (
+          <div key={friend}>
+            {/* Only render if the picture exists for the friend */}
+            {friendPictures[friend]?.dailyPicture && (
+              <div className="feed-friend-container">
+                <button className="feed-profile-pic" onClick={() => setSelectedFriend(friend)}>
+                  <img src={friendPictures[friend]?.profilePicture || defaultImage} alt={friend} />
+                </button>
+                <div className="feed-profile-name">{friends[index]}</div>
+              </div>
+            )}
+
+            {/* Popup Overlay */}
+            {selectedFriend === friend && (
+              <div
+                className="feed-popup-overlay"
+                style={{ display: selectedFriend ? "block" : "none" }}
+                onClick={() => setSelectedFriend(null)}
+              >
+                <div className="feed-popup-container">
+                  <div className="feed-popup">
+                    <div className="feed-popup-inner">
+                      {/* Passing the friend's picture directly */}
+                      <PhotoPopup
+                        _id={friend}
+                        closeModal={() => setSelectedFriend(null)}
+                        link={friendPictures[friend]?.dailyPicture} // Correctly passing the link
+                        creator_id={props.creator_id} //CHECK THIS
+                        userId={props.userId}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ))}
-        <div
-          className="feed-popup-overlay"
-          style={{ display: isPopupVisible ? "block" : "none" }}
-          onClick={togglePopup}
-        >
-          <div
-            className="feed-popup-container"
-          >
-            <div className="feed-popup">
-              <div className="feed-popup-inner">
-                <PhotoPopup photo={friendsList[0]} />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
 
+
 };
+
 export default DailyFeed;

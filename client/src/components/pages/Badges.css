@@ -1,0 +1,42 @@
+.badges-page {
+  width: 100%;
+  max-width: 100%; /* Make sure it takes the full width */
+  margin: 0;
+  text-align: center;
+}
+
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1; /* Makes tabs evenly spread */
+  padding: 15px;
+  border: none;
+  background: #ddd;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 0;
+  transition: background 0.3s ease-in-out;
+  font-weight: bold;
+}
+
+.active-tab {
+  background: #4caf50;
+  color: white;
+}
+
+.tab:hover {
+  background: #bbb;
+}
+
+.tab-content {
+  width: 100%;
+  background: #f9f9f9;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

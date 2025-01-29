@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import "./NewPostInput.css";
-import { post } from "../../utilities";
+import { get, post } from "../../utilities";
+import { UserContext } from "../App";
 
 /**
  * New Post is a parent component for all input components
@@ -54,8 +55,24 @@ const NewPostInput = (props) => {
  * @param {string} pictureId to add comment to
  */
 const NewComment = (props) => {
+  const { userId } = useContext(UserContext);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    if (userId) {
+      get(`/api/user`, { userid: userId }).then((user) => {
+        setUserName(user.name);
+      });
+    }
+  }, [userId]);
+
   const addComment = (value) => {
-    const body = { parent: props.pictureId, content: value };
+    const body = {
+      parent: props.pictureId,
+      content: value,
+      creator_id: userId,
+      creator_name: userName,
+    };
     post("/api/comment", body).then((comment) => {
       // display this comment on the screen
       props.addNewComment(comment);
