@@ -3,6 +3,7 @@ import "./PhotoPopup.css";
 import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";
 import { get } from "../../utilities";
+import { usePopup } from "../../components/pages/PopupContext.jsx";
 
 const PhotoPopup = (props) => {
   const [comments, setComments] = useState([]);
@@ -22,6 +23,9 @@ const PhotoPopup = (props) => {
   const addNewComment = (commentObj) => {
     setComments(comments.concat([commentObj]));
   };
+
+  console.log("Friend Pictures from PhotoPopup: ", props.link);
+  console.log("Which friend", props.userId);
 
   return (
     <>

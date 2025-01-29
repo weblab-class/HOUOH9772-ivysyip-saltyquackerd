@@ -78,6 +78,16 @@ router.get("/user", async (req, res) => {
     });
 });
 
+router.get("/userDailyPicture", async (req, res) => {
+  User.findById(req.query.userid)
+    .then((user) => {
+      res.send({dailyPicture: user.dailyPicture});
+    })
+    .catch((err) => {
+      res.status(500).send("User Not Found");
+    });
+});
+
 router.get("/picturesbyuser", (req, res) => {
   Picture.find({ creator_id: req.query.userid }).then((pictures) => {
     res.send(pictures);
@@ -115,6 +125,9 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     const day = date_full.split("T")[0];
 
     const existingPicture = await Picture.findOne({ creator_id: user_id, date: day });
+    const user = await User.findOne({ _id: user_id });
+
+    user.dailyPicture = uploadResult.Location;
 
     if (existingPicture) {
       existingPicture.link = uploadResult.Location;
@@ -134,6 +147,9 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         challenge: challenge || "default",
       });
 
+      user.currentStreak = user.currentStreak + 1;
+      user.highestStreak = Math.max(user.highestStreak, user.currentStreak);
+
       await newPicture.save();
 
       res.status(200).json({
@@ -142,6 +158,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         pictureId: newPicture._id,
       });
     }
+    user.save();
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });

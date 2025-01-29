@@ -7,6 +7,7 @@ import NotFound from "./components/pages/NotFound";
 // import Badges from "/components/pages/Badges";
 import Welcome from "./components/pages/Welcome";
 import Profile from "./components/pages/Profile";
+import { PopupProvider } from "./components/pages/PopupContext.jsx";
 
 import {
   createBrowserRouter,
@@ -33,7 +34,13 @@ const router = createBrowserRouter(
 
 // renders React Component "Root" into the DOM element with ID "root"
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-    <RouterProvider router={router} />
-  </GoogleOAuthProvider>
+  <React.StrictMode>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <PopupProvider>
+        {" "}
+        {/* ✅ Wrap your app here */}
+        <RouterProvider router={router} />
+      </PopupProvider>
+    </GoogleOAuthProvider>
+  </React.StrictMode>
 );

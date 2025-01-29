@@ -68,7 +68,8 @@ const Home = () => {
   return (
     <div className="u-homepage">
       {/* Insert below the challenge */}
-      <DailyFeed userId={userId}/>
+      <DailyFeed 
+        userId={userId}/>
       <h1 className="home-title">Today's Challenge</h1>
       <div className="challenge-upload">
         <div className="upload">
