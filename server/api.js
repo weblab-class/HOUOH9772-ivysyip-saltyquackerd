@@ -554,15 +554,40 @@ router.get("/comment", (req, res) => {
   });
 });
 
-router.post("/comment", auth.ensureLoggedIn, (req, res) => {
-  const newComment = new Comment({
-    creator_id: req.user._id,
-    creator_name: req.user.name,
-    parent: req.body.parent,
-    content: req.body.content,
-  });
+router.post("/comment", async (req, res) => {
+  try {
+    const newComment = new Comment({
+      creator_id: req.body.creator_id,
+      creator_name: req.body.creator_name,
+      parent: req.body.parent,
+      content: req.body.content,
+    });
 
-  newComment.save().then((comment) => res.send(comment));
+    const user = await User.findOne({ _id: req.body.creator_id });
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    user.comments += 1;
+
+    if (user.comments >= 3) {
+      const badge = await Badge.findOne({
+        badge_description: "Make 3 or more comments on posts",
+      });
+      if (badge && !user.badges.includes(badge._id)) {
+        user.badges.push(badge._id);
+      }
+    }
+
+    await user.save();
+
+    const savedComment = await newComment.save();
+
+    res.status(201).send(savedComment);
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).send({ error: "An error occurred while creating the comment" });
+  }
 });
 
 // anything else falls to this "not found" case
