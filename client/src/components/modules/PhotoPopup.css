@@ -41,7 +41,7 @@
 
 /* Full image styles */
 .full-image {
-  width: 100%; /* Image will fill the container */
+  width: 90%; /* Image will fill the container */
   height: 100%; /* Image will fill the container */
   object-fit: contain; /* Preserve aspect ratio */
   max-width: 100%; /* Prevent overflow */

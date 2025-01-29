@@ -18,15 +18,6 @@ const SingleComment = (props) => {
         {props.creator_name}
       </Link>
       <span className="SingleComment-content">{props.content}</span>
-      {/* <span className="SingleComment-timestamp">{props.timestamp}</span> */}
-      <div className="SingleComment-actions">
-        <button className="SingleComment-like-button" onClick={props.onLike}>
-          ❤️
-        </button>
-        {/* {props.likes > 0 && (
-        <span className="SingleComment-like-count">{props.likes}</span>
-      )} */}
-      </div>
     </div>
   );
 };
