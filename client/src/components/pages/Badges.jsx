@@ -21,7 +21,7 @@ const Badges = () => {
         <>Please login</>
       ) : (
         <>
-          <Streaks user={user} /> <BadgeUserFeed />
+          <Streaks user={user} /> <BadgeUserFeed user={user} />
         </>
       )}{" "}
     </>
