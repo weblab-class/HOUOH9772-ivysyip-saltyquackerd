@@ -1,32 +1,23 @@
-.Profile-avatarContainer {
+.Profile-avatarCenter {
+  margin-top: 20px;
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   padding: 0% 35%; /* Adjust the padding as needed */
   flex-direction: column; /* Stack elements vertically */
 }
+.Profile-avatarContainer {
+  width: 150px; /* Set the size of the circular container */
+  height: 150px; /* Ensure width and height are equal for a circle */
+  border-radius: 50%; /* Makes the wrapper circular */
+  overflow: hidden; /* Ensures the image is clipped to the circle */
+  border: 3px solid #fff; /* Optional: adds a border around the image */
+}
 
 .Profile-avatar {
-  /* make it responsive */
-  max-width: 50%;
-  width: 50%;
-  height: 0;
-  padding-bottom: 50%; /* This maintains the aspect ratio */
-  display: block;
-  /* make it a circle */
-  border-radius: 50%;
-  /* Centering on image's center */
-  background-position-y: center;
-  background-position-x: center;
-  background-repeat: no-repeat;
-  /* it makes the clue thing, takes smaller dimension to fill div */
-  background-size: cover;
-  /* it is optional, for making this div centered in parent */
-  margin: 0 auto;
-  margin-top: 40px;
-  position: relative; /* Allows for top positioning */
-  background-image: url("../assets/picVenture.jpg");
-  margin-bottom: 5px; /* Reduce space below name */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the circle without stretching */
 }
 
 .Profile-name {

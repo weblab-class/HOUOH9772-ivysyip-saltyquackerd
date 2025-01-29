@@ -165,6 +165,67 @@ router.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
+router.post("/uploadProfilePicture", upload.single("file"), async (req, res) => {
+  const { user_id, challenge } = req.body;
+
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  if (!user_id) {
+    return res.status(400).json({ error: "User ID is required." });
+  }
+
+  // Validate file type and size
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  if (!allowedTypes.includes(req.file.mimetype)) {
+    return res
+      .status(400)
+      .json({ error: "Invalid file type. Only JPEG, PNG, and GIF are allowed." });
+  }
+
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (req.file.size > maxSize) {
+    return res.status(400).json({ error: "File is too large. Max size is 5MB." });
+  }
+
+  const fileContent = req.file.buffer;
+  const fileName = `uploads/${user_id}/${Date.now()}_${req.file.originalname}`;
+
+  const params = {
+    Bucket: bucketName,
+    Key: fileName,
+    Body: fileContent,
+    ContentType: req.file.mimetype,
+  };
+
+  try {
+    const uploadResult = await s3.upload(params).promise();
+
+    const user = await User.findOne({ _id: user_id });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    user.profilePicture = uploadResult.Location;
+
+    try {
+      await user.save();
+      return res.status(200).json({
+        message: "Profile picture uploaded successfully",
+        fileUrl: uploadResult.Location,
+        pictureId: 0, // why is this needed?
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Failed to save user profile picture", details: error.message });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to upload image to S3", details: error.message });
+  }
+});
+
 router.get("/challenge", async (req, res) => {
   try {
     const challenge = await Challenge.findOne({ date: req.query.date });
