@@ -12,16 +12,6 @@ const DailyFeed = (props) => {
   const [user, setUser] = useState(null);
   const [friendPictures, setFriendPictures] = useState({});
 
-  // const { isIndexOpen, setIndexOpen } = usePopup();
-  
-  // React.useEffect(() => {
-  //   setPopupOpen(true);
-  //   return () => setPopupOpen(false); // Reset when closed
-  // }, [setPopupOpen]);
-
-  // const togglePopup = () => {
-  //   setPopupVisible(!isPopupVisible);
-  // };
 
   useEffect(() => {
     if (props.userId) {
@@ -36,7 +26,7 @@ const DailyFeed = (props) => {
   const refreshGroups = () => {
     get("/api/group", { userid: props.userId })
       .then((groups) => {
-        console.log("Fetched groups:", groups);
+        // console.log("Fetched groups:", groups);
         setGroups(groups);
       })
       .catch((err) => console.error("Error fetching groups:", err));
@@ -116,6 +106,7 @@ const DailyFeed = (props) => {
     }
   }, [friendsList]);
 
+
   return (
     <div className="daily-feed-container">
       <div className="feed-inner">
@@ -143,10 +134,10 @@ const DailyFeed = (props) => {
                     <div className="feed-popup-inner">
                       {/* Passing the friend's picture directly */}
                       <PhotoPopup
-                        _id={friend}
+                        _id={friendPictures[friend]?.dailyPicture._id}
                         closeModal={() => setSelectedFriend(null)}
                         link={friendPictures[friend]?.dailyPicture} // Correctly passing the link
-                        creator_id={props.creator_id} //CHECK THIS
+                        creator_id={friend}
                         userId={props.userId}
                       />
                     </div>

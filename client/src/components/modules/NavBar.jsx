@@ -14,14 +14,6 @@ const NavBar = (props) => {
   const [isSettingsVisible, setSettingsVisible] = useState(false);
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
-  // const togglePopup = () => {
-  //   setPopupVisible(!isPopupVisible);
-  // };
-
-  // const handleClose = () => {
-  //   setPopupVisible(false);
-  // };
-
   return (
     <nav className="NavBar-container">
       <div className="NavBar-linkContainer u-inlineBlock">
