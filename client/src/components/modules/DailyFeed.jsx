@@ -1,5 +1,5 @@
 import "./DailyFeed.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { get } from "../../utilities";
 import PhotoPopup from "../modules/PhotoPopup.jsx";
 import defaultImage from "../../assets/Default_pfp.jpg"; //CHANGE THIS
@@ -33,17 +33,19 @@ const DailyFeed = (props) => {
       .catch((err) => console.error("Error fetching groups:", err));
   };
 
-  let friendsList = [];
-  if (groups.length > 0) {
-    groups.forEach((group) => {
-      group.users.forEach((user) => {
-        if (!friendsList.some((friend) => friend === user)) {
-          friendsList.push(user);
-        }
+  const friendsList = useMemo (() => {
+    let friendsList = [];
+    if (groups.length > 0) {
+      groups.forEach((group) => {
+        group.users.forEach((user) => {
+          if (!friendsList.some((friend) => friend === user)) {
+            friendsList.push(user);
+          }
+        });
       });
-    });
-  }
-  friendsList = friendsList.filter((friend) => friend !== props.userId);
+    }
+    return friendsList.filter((friend) => friend !== props.userId);
+  }, [groups, props.userId]);
 
   async function getUserNames() {
     try {
@@ -65,7 +67,7 @@ const DailyFeed = (props) => {
     <div className="daily-feed-container">
       <div className="feed-inner">
         {friends.map((friend, index) => (
-          <div className="feed-friend-container">
+          <div className="feed-friend-container" key={friendsList[index].id}>
             <button className="feed-profile-pic" onClick={togglePopup} key={friendsList[index]}>
               <img src={defaultImage} alt={friend} />
             </button>
@@ -82,9 +84,6 @@ const DailyFeed = (props) => {
           >
             <div className="feed-popup">
               <div className="feed-popup-inner">
-                <button className="close-btn" onClick={togglePopup}>
-                  x
-                </button>
                 <PhotoPopup photo={friendsList[0]} />
               </div>
             </div>
