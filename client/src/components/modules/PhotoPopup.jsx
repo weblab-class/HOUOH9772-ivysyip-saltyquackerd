@@ -34,7 +34,7 @@ const PhotoPopup = (props) => {
           <div className="modal-image-container">
             <img src={props.link} className="full-image" />
           </div>
-          <CommentSection props={props} />
+          <CommentSection userId={props.userId} />
         </div>
       </div>
     </>
