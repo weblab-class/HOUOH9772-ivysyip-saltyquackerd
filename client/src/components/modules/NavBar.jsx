@@ -19,7 +19,6 @@ const NavBar = (props) => {
   const openSettings = () => setActivePopup("settings");
   const closeSettings = () => setActivePopup(null);
 
-  console.log(activePopup);
   return (
     <nav className="NavBar-container">
       <div className="NavBar-linkContainer u-inlineBlock">
@@ -76,6 +75,7 @@ const NavBar = (props) => {
                     onClick={() => {
                       googleLogout();
                       handleLogout();
+                      closeSettings();
                     }}
                   >
                     Logout

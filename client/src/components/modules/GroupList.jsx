@@ -41,9 +41,6 @@ const GroupList = (props) => {
     }
   }, [props.group]);
 
-  useEffect(() => {
-    console.log(isOpen);
-  }, [isOpen]);
   return (
     <div className="group-list-container">
       {props.group ? (

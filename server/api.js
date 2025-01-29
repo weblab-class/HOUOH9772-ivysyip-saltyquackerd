@@ -376,7 +376,6 @@ router.post("/newgroup", async (req, res) => {
 
     if (groups.length >= 3) {
       const user = await User.findOne({ _id: req.body.userId });
-      console.log(user);
 
       if (user) {
         const groupBadge = await Badge.findOne({
@@ -413,6 +412,7 @@ router.get("/groupById", (req, res) => {
 router.post("/join", async (req, res) => {
   try {
     const existingGroup = await Group.findOne({ join_code: req.body.join_code });
+    const user = await User.findOne({ _id: req.body.userId });
 
     if (!existingGroup) {
       return res.status(404).json({ error: "Group not found." });
@@ -444,6 +444,16 @@ router.post("/join", async (req, res) => {
       if (groupBadge && !existingGroup.badges.includes(groupBadge._id)) {
         existingGroup.badges.push(groupBadge._id);
       }
+    }
+
+    if (existingGroup.completedDaily) {
+      if (!user.completedDaily) {
+        if (existingGroup.currentStreak === existingGroup.longestStreak) {
+          existingGroup.longestStreak -= 1;
+        }
+        existingGroup.currentStreak -= 1;
+      }
+      existingGroup.completedDaily = user.completedDaily;
     }
 
     await existingGroup.save();
@@ -526,6 +536,33 @@ router.post("/upvote", async (req, res) => {
   // Find the picture by its ID
   const picture = await Picture.findById(pictureId);
 
+  const upvotingUser = await User.findById(userId);
+  upvotingUser.upvotesGiven += 1;
+
+  if (upvotingUser.upvotesGiven >= 50) {
+    const badge = await Badge.findOne({
+      badge_description: "Give out 50 upvotes to friends",
+    });
+    if (badge && !upvotingUser.badges.includes(badge._id)) {
+      upvotingUser.badges.push(badge._id);
+    }
+  }
+
+  const receivingUser = await User.findById(picture.creator_id);
+  receivingUser.upvotesReceived += 1;
+
+  if (receivingUser.upvotesReceived >= 30) {
+    const badge = await Badge.findOne({
+      badge_description: "Receive 30 upvotes from friends",
+    });
+    if (badge && !upvotingUser.badges.includes(badge._id)) {
+      upvotingUser.badges.push(badge._id);
+    }
+  }
+
+  upvotingUser.save();
+  receivingUser.save();
+
   if (!picture) {
     return res.status(404).json({ message: "Picture not found" });
   }
@@ -551,6 +588,35 @@ router.post("/un-upvote", async (req, res) => {
 
   // Find the picture by its ID
   const picture = await Picture.findById(pictureId);
+
+  const upvotingUser = await User.findById(userId);
+  upvotingUser.upvotesGiven -= 1;
+
+  // Remove badge if upvotesGiven drops below 50
+  const badge1 = await Badge.findOne({
+    badge_description: "Give out 50 upvotes to friends",
+  });
+  if (upvotingUser.upvotesGiven < 50 && badge1) {
+    upvotingUser.badges = upvotingUser.badges.filter(
+      (badgeId) => badgeId.toString() !== badge1._id.toString() // Convert both to string
+    );
+  }
+
+  const receivingUser = await User.findById(picture.creator_id);
+  receivingUser.upvotesReceived -= 1;
+
+  // Remove badge if upvotesReceived drops below 30
+  const badge2 = await Badge.findOne({
+    badge_description: "Receive 30 upvotes from friends",
+  });
+  if (receivingUser.upvotesReceived < 30 && badge2) {
+    receivingUser.badges = receivingUser.badges.filter(
+      (badgeId) => badgeId.toString() !== badge2._id.toString() // Convert both to string
+    );
+  }
+
+  await upvotingUser.save();
+  await receivingUser.save();
 
   if (!picture) {
     return res.status(404).json({ message: "Picture not found" });

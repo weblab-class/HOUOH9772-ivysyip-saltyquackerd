@@ -15,17 +15,14 @@ const ChallengeTimer = (props) => {
         try {
           const response = await get("/api/challenge", { date: todayUTC });
 
-          console.log(response);
           if (response.isReady) {
             setChallenge(response.challenge_text);
             props.setPhotoChallenge(response.challenge_text);
           } else {
-            console.log("Challenge not ready, retrying...");
             setTimeout(pollForChallenge, 5000); // Retry every 5 seconds
           }
         } catch (err) {
           if (err.response && err.response.status === 202) {
-            console.log("Challenge not ready, retrying...");
             setTimeout(pollForChallenge, 5000); // Retry every 5 seconds
           } else {
             console.error("Error fetching challenge:", err);

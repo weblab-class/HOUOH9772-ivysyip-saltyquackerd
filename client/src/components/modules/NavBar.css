@@ -1,16 +1,14 @@
 .NavBar-container {
-  padding: var(--m) var(--s); /* Keep your current padding */
-  /* position: fixed; Keeps the navbar fixed while scrolling */
-  top: 0; /* Aligns the navbar to the very top */
-  left: 0; /* Ensures alignment to the left of the page */
-  background-color: var(--pink); /* Keeps your background color */
-  display: flex; /* Keeps flexbox layout */
-  justify-content: space-between; /* Distributes children evenly */
-  width: 100%; /* Spans the full width of the viewport */
-  align-items: center; /* Vertically centers items */
-  margin: 0; /* Removes any margin */
-  box-sizing: border-box; /* Ensures padding does not affect width */
-  z-index: 999; /* Keeps the navbar above other elements */
+    padding: var(--m) var(--s);
+    background-color: var(--pink);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    margin: 0 auto;
+    box-sizing: border-box; 
+    overflow-x: scroll;
+    position: relative;
 }
 
 .NavBar-title {
@@ -77,7 +75,7 @@
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for true center */
-  background-color: var(--pink);
+  background-color: transparent;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -122,7 +120,7 @@
   font-size: 16px;
   font-weight: bold;
   text-align: center;
-  background-color: #ffe0d8; /* Light pink */
+  background-color: transparent; /* Light pink */
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -148,11 +146,12 @@
 .settings {
   background: none;
   border: none;
-  position: absolute;
   top: -10px;
   right: 30px;
   cursor: pointer;
   z-index: 10;
+  position: static;
+  margin-left: auto;
 }
 
 .settings img {
@@ -175,3 +174,4 @@ body {
   box-sizing: border-box;
   overflow-x: hidden; /* Prevent horizontal scrolling */
 }
+

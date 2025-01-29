@@ -6,12 +6,15 @@ import { NewComment } from "./NewPostInput.jsx";
 
 const PhotoPopup = (props) => {
   const [comments, setComments] = useState([]);
-  const [upvotes, setUpvotes] = useState(props.upvotes);
+  const [upvotes, setUpvotes] = useState(null);
   const [photoId, setPhotoId] = useState("");
+  const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     get("/api/pictureByLink", { link: props.link }).then((photo) => {
       setPhotoId(photo._id);
+      setUpvotes(photo.upvotes);
+      setLiked(photo.upvotedBy.includes(props.userId));
       get("/api/comment", { parent: photo._id }).then((comments) => {
         setComments(comments);
       });
@@ -21,8 +24,6 @@ const PhotoPopup = (props) => {
   const addNewComment = (commentObj) => {
     setComments(comments.concat([commentObj]));
   };
-
-  const [liked, setLiked] = useState(false);
 
   const handleLikeClick = async () => {
     try {
@@ -39,8 +40,6 @@ const PhotoPopup = (props) => {
         return;
       }
 
-      // If the upvote was successful, log or display the updated upvote count
-      console.log("Upvote successful", response.upvotes);
       setUpvotes(response.upvotes);
     } catch (error) {
       console.error("Error occurred while making the upvote request:", error);
@@ -62,8 +61,6 @@ const PhotoPopup = (props) => {
         return;
       }
 
-      // If the upvote was successful, log or display the updated upvote count
-      console.log("Upvote successful", response.upvotes);
       setUpvotes(response.upvotes);
     } catch (error) {
       console.error("Error occurred while making the upvote request:", error);
@@ -106,10 +103,10 @@ const PhotoPopup = (props) => {
                     </span>
                     <span style={{ fontSize: "16px" }}>{upvotes}</span>
                   </div>
+                  <div>{upvotes}</div>
                 </>
               )}
             </div>
-            {console.log(comments)}
           </div>
         </div>
       </div>
