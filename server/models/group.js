@@ -6,6 +6,7 @@ const GroupSchema = new mongoose.Schema({
   users: [],
   currentStreak: { type: Number, default: 0 },
   longestStreak: { type: Number, default: 0 },
+  completedDaily: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("group", GroupSchema);

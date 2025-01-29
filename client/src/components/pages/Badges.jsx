@@ -2,6 +2,7 @@ import { React, useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
 import { get, post } from "../../utilities";
 import Streaks from "../modules/Streaks";
+import BadgeUserFeed from "../modules/BadgeUserFeed";
 
 const Badges = () => {
   const { userId } = useContext(UserContext);
@@ -14,7 +15,17 @@ const Badges = () => {
       });
     }
   }, []);
-  return <>{!user ? <>Please login</> : <Streaks user={user} />} </>;
+  return (
+    <>
+      {!user ? (
+        <>Please login</>
+      ) : (
+        <>
+          <Streaks user={user} /> <BadgeUserFeed />
+        </>
+      )}{" "}
+    </>
+  );
 };
 
 export default Badges;
