@@ -1,46 +1,41 @@
-.Profile-avatarCenter {
+/* Container for the entire profile layout */
+.Profile-container {
   margin-top: 20px;
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  padding: 0% 35%; /* Adjust the padding as needed */
-  flex-direction: column; /* Stack elements vertically */
+  margin-left: 20px;
+  display: flex; /* Layout the profile picture and content side by side */
+  align-items: flex-start; /* Align the items at the top of the container */
+  gap: 10px; /* Space between the profile picture and content */
+  margin: 20px;
 }
-.Profile-avatarContainer {
-  width: 150px; /* Set the size of the circular container */
-  height: 150px; /* Ensure width and height are equal for a circle */
-  border-radius: 50%; /* Makes the wrapper circular */
-  overflow: hidden; /* Ensures the image is clipped to the circle */
-  border: 3px solid #fff; /* Optional: adds a border around the image */
+
+.Profile-avatar-container {
+  flex-shrink: 0; /* Prevent the avatar from shrinking */
 }
 
 .Profile-avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures the image covers the circle without stretching */
+  width: 120px; /* Adjust avatar size */
+  height: 120px; /* Adjust avatar size */
+  border-radius: 50%; /* Make the avatar circular */
+  object-fit: cover; /* Ensure the image covers the avatar space */
+  border: 3px solid #ddd; /* Border around the profile picture */
+}
+
+.Profile-info-container {
+  display: flex;
+  flex-direction: column; /* Stack the name and bio vertically */
+  gap: 5px; /* Space between name and bio */
+}
+
+.Profile-name-container {
+  display: flex; /* Align name and edit button horizontally */
+  /* align-items: center; Vertically center the name and button */
+  gap: 5px; /* Space between the name and edit button */
 }
 
 .Profile-name {
-  font-size: 30px;
-  font-weight: 50;
-  margin-top: 0px;
-  margin-bottom: 0px; /* Reduce space below name */
-}
-
-.Profile-bio {
-  font-size: 15px;
-  font-weight: 100;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  margin-top: 5px;
-  margin-bottom: 5px; /* Reduce space below name */
-}
-
-/* Container that holds both the name and the button */
-.Profile-name-container {
-  display: flex;
-  align-items: center; /* Vertically center both elements */
-  justify-content: center; /* Optional: Center them horizontally */
-  gap: 10px; /* Optional: Adjust the space between the name and button */
+  font-size: 1.5rem; /* Adjust font size of the name */
+  color: #333; /* Name color */
+  line-height: 25px;
 }
 
 .Profile-edit-button {
@@ -48,14 +43,14 @@
   border: none; /* No border */
   padding: 0; /* No padding */
   cursor: pointer; /* Pointer cursor on hover */
-  display: flex; /* Make sure the icon is centered in the button */
+  display: inline-flex; /* Align the icon */
   align-items: center; /* Center the icon vertically */
   justify-content: center; /* Center the icon horizontally */
 }
 
 .Profile-edit-button .material-icons {
-  font-size: 24px; /* Size of the icon */
-  color: black; /* Icon color */
+  font-size: 24px; /* Icon size */
+  color: black; /* Black icon */
   transition: color 0.3s ease; /* Smooth transition for hover effect */
 }
 
@@ -63,6 +58,16 @@
   color: #555; /* Slightly lighter shade on hover */
 }
 
+.Profile-bio {
+  font-size: 0.6rem; /* Adjust font size of the bio */
+  color: #000000; /* Bio text color */
+  line-height: 1; /* Add some space between lines of text */
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.u-textCenter {
+  text-align: center;
+}
 /* Popup container styling */
 .Profile-popup {
   position: fixed;
@@ -139,22 +144,16 @@
   border-bottom: 1px solid #dbdbdb;
   padding-bottom: 8px;
 }
-.Profile-popupAvatar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%; /* Adjust the width to make the container more flexible */
-  max-width: 600px; /* Optional: set max width */
-  margin-bottom: 20px; /* Adjust space between avatar and other content */
-  padding: 10px; /* Optional: add padding around the container */
-}
 
-.Profile-popup-avatar {
-  border-radius: 50%;
-  width: 10px; /* Adjusted size of the avatar */
-  height: 10px; /* Adjusted size of the avatar */
-  object-fit: cover; /* Ensures the image keeps its aspect ratio */
-  border: 3px solid #ddd; /* Light border around the avatar */
+.Profile-popup-upload {
+  background-color: #0095f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .Profile-textarea {

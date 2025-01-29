@@ -548,6 +548,12 @@ router.get("/code", async (req, res) => {
   }
 });
 
+router.get("/pictureByLink", (req, res) => {
+  Picture.findOne({ link: req.query.link }).then((photo) => {
+    res.send(photo);
+  });
+});
+
 router.get("/comment", (req, res) => {
   Comment.find({ parent: req.query.parent }).then((comments) => {
     res.send(comments);
