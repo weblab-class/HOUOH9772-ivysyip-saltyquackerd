@@ -44,6 +44,7 @@ const GroupImages = (props) => {
                 <img
                   key={index}
                   src={photo.link}
+                  className={"photo"}
                   onClick={() => handleImageClick(index)}
                   alt="Image"
                 />

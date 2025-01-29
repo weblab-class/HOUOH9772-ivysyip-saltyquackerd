@@ -1,15 +1,27 @@
 .feed-content {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Three columns, equally spaced */
-  gap: 16px; /* Space between rows and columns */
-  width: 100%; /* Ensure it spans the container */
-  padding: 16px; /* Optional: Add some padding */
-  box-sizing: border-box; /* Include padding in width calculations */
+  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
+  gap: 16px;
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-.feed-content img {
-  width: 100%; /* Scale images to fit the grid cell */
-  height: auto; /* Maintain the aspect ratio */
-  border-radius: 8px; /* Optional: Add rounded corners */
-  object-fit: cover; /* Crop the image if needed */
+.feed-content .photo {
+  width: 100%; /* Fill the grid cell */
+  aspect-ratio: 1 / 1; /* Ensures a perfect square */
+  border-radius: 8px;
+  object-fit: cover;
+  transition: filter 0.3s ease-in-out;
+}
+
+.feed-content .photo:hover {
+  filter: brightness(70%); /* Darkens image */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .feed-content {
+    grid-template-columns: repeat(1, 1fr); /* Switch to 1 column */
+  }
 }
