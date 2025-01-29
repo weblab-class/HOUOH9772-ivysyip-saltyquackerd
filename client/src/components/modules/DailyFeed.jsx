@@ -4,11 +4,12 @@ import { get } from "../../utilities";
 import PhotoPopup from "../modules/PhotoPopup.jsx";
 import defaultImage from "../../assets/Default_pfp.jpg"; //CHANGE THIS
 
-
 const DailyFeed = (props) => {
   const [groups, setGroups] = useState([]);
   const [friends, setFriends] = useState([]);
   const [isPopupVisible, setPopupVisible] = useState(false);
+  const [dailyPicture, setDailyPicture] = useState([]);
+  const [user, setUser] = useState(null);
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
@@ -63,32 +64,44 @@ const DailyFeed = (props) => {
   }, [friendsList])
 
 
+
+  useEffect(() => {
+    if (props.userId !== user?.id) {
+      get(`/api/user`, { userid: props.userId }).then((userObj) => {
+        setUser(userObj);
+        setDailyPicture(userObj.dailyPicture);
+      });
+    }
+  }, [props.userId]);
+
   return (
     <div className="daily-feed-container">
       <div className="feed-inner">
         {friends.map((friend, index) => (
-          <div className="feed-friend-container" key={friendsList[index].id}>
-            <button className="feed-profile-pic" onClick={togglePopup} key={friendsList[index]}>
-              <img src={defaultImage} alt={friend} />
-            </button>
-            <div className="feed-profile-name">{friend}</div>
+          <div userId={friends[index].id}>
+            {dailyPicture && (
+              <div
+                className="feed-popup-overlay"
+                style={{ display: isPopupVisible ? "block" : "none" }}q
+                onClick={togglePopup}
+              >
+                <div className="feed-popup-container">
+                  <div className="feed-popup">
+                    <div className="feed-popup-inner">
+                      <PhotoPopup
+                        _id={friendsList[index].id}
+                        closeModal={togglePopup}
+                        link={dailyPicture}
+                        creator_id={props.creator_id}
+                        userId={props.userId}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ))}
-        <div
-          className="feed-popup-overlay"
-          style={{ display: isPopupVisible ? "block" : "none" }}
-          onClick={togglePopup}
-        >
-          <div
-            className="feed-popup-container"
-          >
-            <div className="feed-popup">
-              <div className="feed-popup-inner">
-                <PhotoPopup photo={friendsList[0]} />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
