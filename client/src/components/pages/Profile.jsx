@@ -90,6 +90,7 @@ const Profile = () => {
           ...prevUser,
           profilePicture: data.fileUrl, // Assuming backend sends the new image URL
         }));
+        setUploadedFileUrl(null);
       } else {
         const error = await response.json();
         // setUploadMessage(`Upload failed: ${error.error}`);
@@ -130,42 +131,43 @@ const Profile = () => {
   }
   return (
     <>
-      <div>
-        <div className="Profile-avatarCenter">
-          <div className="Profile-avatarContainer">
-            <img classname="Profile-avatar" src={user.profilePicture} />
+      <div className="Profile-container">
+        <div className="Profile-avatar-container">
+          <img className="Profile-avatar" src={user.profilePicture} alt="Profile" />
+        </div>
+        <div className="Profile-info-container">
+          <div className="Profile-name-container">
+            <h1 className="Profile-name u-textCenter">{user.name}</h1>
+            {showEditButton && (
+              <button className="Profile-edit-button" onClick={togglePopup}>
+                <span className="material-icons">edit</span>
+              </button>
+            )}
           </div>
+          <div className="Profile-bio">{bio}</div>
         </div>
-        <div className="Profile-name-container">
-          <h1 className="Profile-name u-textCenter">{user.name}</h1>
-          {showEditButton && (
-            <button className="Profile-edit-button" onClick={togglePopup}>
-              <span className="material-icons">edit</span>
-            </button>
-          )}
+        <div>
+          <div>
+            <h4 className="Profile-subTitle">Past Uploads</h4>
+          </div>
+          {picturesList}
         </div>
-
-        <h4 className="Profile-bio u-textCenter">{bio}</h4>
       </div>
-      <Popup open={isOpen} isOpen={togglePopup} className="Profile-popup">
+      <Popup open={isOpen} className="Profile-popup">
         <h2 className="Profile-popup-header">Update Profile</h2>
         <div className="Profile-popup-content">
-          <div className="Profile-popupAvatar">
-            <img classname="Profile-popup-avatar" src={user.profilePicture} />
-          </div>
           <div className="upload">
             {uploaded ? (
               <>
                 <div className="button_group">
                   <form onSubmit={handleSubmit}>
                     {uploadedFileUrl ? null : (
-                      <button type="submit" value="Submit">
+                      <button type="submit" value="Submit" className="Profile-popup-upload">
                         Upload!
                       </button>
                     )}
                   </form>
                 </div>
-                {uploadedFileUrl && <div>Success!</div>}
               </>
             ) : (
               <div className="button_group">
@@ -200,12 +202,6 @@ const Profile = () => {
           </button>
         </div>
       </Popup>
-      <div>
-        <div>
-          <h4 className="Profile-subTitle">Past Uploads</h4>
-        </div>
-        {picturesList}
-      </div>
     </>
   );
 };
