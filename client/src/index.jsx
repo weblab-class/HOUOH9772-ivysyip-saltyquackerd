@@ -7,7 +7,7 @@ import NotFound from "./components/pages/NotFound";
 import Badges from "./components/pages/Badges";
 import Welcome from "./components/pages/Welcome";
 import Profile from "./components/pages/Profile";
-import { PopupProvider } from "./components/pages/PopupContext.jsx";
+import { PopupProvider } from "./components/modules/PopupContext"; 
 
 import {
   createBrowserRouter,

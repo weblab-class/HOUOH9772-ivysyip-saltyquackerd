@@ -46,8 +46,8 @@
 .navbar-popup-container {
   position: relative;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   display: flex;
   align-items: center;
 }
@@ -142,7 +142,7 @@
     font-size: 14px;
   }
 }
-.setting {
+.settings {
   background: none;
   border: none;
   position: absolute;
@@ -152,11 +152,17 @@
   z-index: 10;
 }
 
-.setting img {
+.settings img {
   width: 28px; /* Set a visible width */
   height: 24px; /* Set a visible height */
   display: block; /* Ensure it's displayed */
 }
+
+.settings.hidden {
+  opacity: 0;
+  pointer-events: none; /* Prevent clicking */
+  display: none;
+} 
 
 html,
 body {

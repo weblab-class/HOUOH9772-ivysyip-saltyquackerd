@@ -42,6 +42,7 @@ const Picture = (props) => {
           _id={props._id}
           creator_id={props.creator_id}
           userId={props.userId}
+          upvotes={props.upvotes}
         />
       )}
     </div>
