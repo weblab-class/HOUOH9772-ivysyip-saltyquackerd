@@ -164,14 +164,39 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
       user.currentStreak = user.currentStreak + 1;
       user.highestStreak = Math.max(user.highestStreak, user.currentStreak);
+
       if (user.currentStreak >= 3) {
         const badge = await Badge.findOne({
           badge_description: "Complete the challenge 3 days in a row",
         });
 
-        user.badges.concat(badge._id);
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
       }
+
+      if (user.currentStreak >= 7) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 7 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
+      if (user.currentStreak >= 30) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 30 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
       user.completedDaily = true;
+      await user.save();
 
       for (const group of groups) {
         let allUploaded = true;
@@ -192,7 +217,6 @@ router.post("/upload", upload.single("file"), async (req, res) => {
           group.longestStreak = Math.max(group.longestStreak, group.currentStreak);
           group.completedDaily = true;
           group.save();
-          console.log("Updated Group:", group);
         }
       }
 
@@ -370,7 +394,6 @@ router.post("/join", async (req, res) => {
 
     if (groups.length >= 3) {
       const user = await User.findOne({ _id: req.body.userId });
-      console.log(user);
 
       if (user) {
         const groupBadge = await Badge.findOne({
