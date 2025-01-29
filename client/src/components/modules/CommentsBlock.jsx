@@ -19,7 +19,7 @@ import { NewComment } from "./NewPostInput";
 const CommentsBlock = (props) => {
   return (
     <div>
-      <div>
+      <div className="CommentsBlock-content">
         {props.comments.map((comment) => (
           <SingleComment
             key={`SingleComment_${comment._id}`}
