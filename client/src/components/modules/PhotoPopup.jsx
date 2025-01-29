@@ -6,6 +6,7 @@ import { NewComment } from "./NewPostInput.jsx";
 
 const PhotoPopup = (props) => {
   const [comments, setComments] = useState([]);
+  const [upvotes, setUpvotes] = useState(props.upvotes);
 
   useEffect(() => {
     get("/api/comment", { parent: props._id }).then((comments) => {
@@ -17,8 +18,53 @@ const PhotoPopup = (props) => {
     setComments(comments.concat([commentObj]));
   };
 
-  console.log("Friend Pictures from PhotoPopup: ", props.link);
-  console.log("Which friend", props.userId);
+  const [liked, setLiked] = useState(false);
+
+  const handleLikeClick = async () => {
+    try {
+      setLiked(!liked); // Toggle the like state
+
+      const response = await post("/api/upvote", {
+        pictureId: props._id,
+        userId: props.userId,
+      });
+
+      if (response.message) {
+        // If the response contains a message (e.g., user has already upvoted), show an alert
+        alert(response.message);
+        return;
+      }
+
+      // If the upvote was successful, log or display the updated upvote count
+      console.log("Upvote successful", response.upvotes);
+      setUpvotes(response.upvotes);
+    } catch (error) {
+      console.error("Error occurred while making the upvote request:", error);
+    }
+  };
+
+  const handleUnlikeClick = async () => {
+    try {
+      setLiked(!liked); // Toggle the like state
+
+      const response = await post("/api/un-upvote", {
+        pictureId: props._id,
+        userId: props.userId,
+      });
+
+      if (response.message) {
+        // If the response contains a message (e.g., user has already upvoted), show an alert
+        alert(response.message);
+        return;
+      }
+
+      // If the upvote was successful, log or display the updated upvote count
+      console.log("Upvote successful", response.upvotes);
+      setUpvotes(response.upvotes);
+    } catch (error) {
+      console.error("Error occurred while making the upvote request:", error);
+    }
+  };
 
   return (
     <>
@@ -42,6 +88,22 @@ const PhotoPopup = (props) => {
             </div>
             <div className="new-comment-section">
               {props.userId && <NewComment pictureId={props._id} addNewComment={addNewComment} />}{" "}
+            </div>
+            <div className="upvote">
+              {props.userId && (
+                <>
+                  <div>
+                    <span
+                      className={`material-icons heart-icon ${liked ? "liked" : ""}`}
+                      onClick={!liked ? handleLikeClick : handleUnlikeClick}
+                    >
+                      {liked ? "favorite" : "favorite_border"}
+                    </span>
+                  </div>
+                  {console.log(upvotes)}
+                  <div>{upvotes}</div>
+                </>
+              )}
             </div>
             {console.log(comments)}
           </div>

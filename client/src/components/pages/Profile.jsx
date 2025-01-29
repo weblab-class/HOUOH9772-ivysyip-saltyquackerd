@@ -122,6 +122,7 @@ const Profile = () => {
             challenge={image.challenge}
             link={image.link}
             userId={userId}
+            upvotes={image.upvotes}
           />
         ))}
       </div>

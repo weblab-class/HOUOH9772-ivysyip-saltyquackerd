@@ -519,6 +519,58 @@ router.post("/leavegroup", async (req, res) => {
   }
 });
 
+// Endpoint for upvoting a picture
+router.post("/upvote", async (req, res) => {
+  const { pictureId, userId } = req.body; // Get pictureId and userId from the body
+
+  // Find the picture by its ID
+  const picture = await Picture.findById(pictureId);
+
+  if (!picture) {
+    return res.status(404).json({ message: "Picture not found" });
+  }
+
+  // If the user has already upvoted, return early
+  if (picture.upvotedBy.includes(userId)) {
+    return res.status(400).json({ message: "You have already upvoted this picture" });
+  }
+
+  // Otherwise, add user to the upvotedBy array and increment the upvotes
+  picture.upvotedBy.push(userId);
+  picture.upvotes += 1;
+
+  // Save the picture with updated upvotes and upvotedBy
+  await picture.save();
+
+  return res.json({ upvotes: picture.upvotes }); // Send the updated upvotes count
+});
+
+// Endpoint for un-upvoting a picture
+router.post("/un-upvote", async (req, res) => {
+  const { pictureId, userId } = req.body; // Get pictureId and userId from the body
+
+  // Find the picture by its ID
+  const picture = await Picture.findById(pictureId);
+
+  if (!picture) {
+    return res.status(404).json({ message: "Picture not found" });
+  }
+
+  // If the user has already upvoted, return early
+  if (!picture.upvotedBy.includes(userId)) {
+    return res.status(400).json({ message: "You haven't upvoted this picture" });
+  }
+
+  // Otherwise, add user to the upvotedBy array and increment the upvotes
+  picture.upvotedBy.pop(userId);
+  picture.upvotes -= 1;
+
+  // Save the picture with updated upvotes and upvotedBy
+  await picture.save();
+
+  return res.json({ upvotes: picture.upvotes }); // Send the updated upvotes count
+});
+
 // generate code
 const generateRandomGroupCode = () => {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
