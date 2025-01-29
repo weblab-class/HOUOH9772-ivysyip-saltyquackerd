@@ -19,6 +19,7 @@ const Group = require("./models/group");
 const Picture = require("./models/picture");
 const Challenge = require("./models/challenge");
 const Comment = require("./models/comment");
+const Badge = require("./models/badges");
 
 // import authentication library
 const auth = require("./auth");
@@ -28,6 +29,7 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+const { UNSAFE_useRouteId } = require("react-router-dom");
 
 // Middleware
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -81,7 +83,7 @@ router.get("/user", async (req, res) => {
 router.get("/userDailyPicture", async (req, res) => {
   User.findById(req.query.userid)
     .then((user) => {
-      res.send(user.dailyPicture);
+      res.send({ dailyPicture: user.dailyPicture });
     })
     .catch((err) => {
       res.status(500).send("User Not Found");
@@ -97,6 +99,18 @@ router.get("/picturesbyuser", (req, res) => {
 router.get("/picturesByUserAndDate", (req, res) => {
   Picture.find({ creator_id: req.query.userid, date: req.query.date }).then((pictures) => {
     res.send(pictures);
+  });
+});
+
+router.get("/allUserBadges", (req, res) => {
+  Badge.find({ category: "user" }).then((badges) => {
+    res.send(badges);
+  });
+});
+
+router.get("/allGroupBadges", (req, res) => {
+  Badge.find({ category: "group" }).then((badges) => {
+    res.send(badges);
   });
 });
 
@@ -126,6 +140,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
     const existingPicture = await Picture.findOne({ creator_id: user_id, date: day });
     const user = await User.findOne({ _id: user_id });
+    const groups = await Group.find({ users: { $in: [user_id] } });
 
     user.dailyPicture = uploadResult.Location;
 
@@ -150,6 +165,61 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       user.currentStreak = user.currentStreak + 1;
       user.highestStreak = Math.max(user.highestStreak, user.currentStreak);
 
+      if (user.currentStreak >= 3) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 3 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
+      if (user.currentStreak >= 7) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 7 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
+      if (user.currentStreak >= 30) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 30 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
+      user.completedDaily = true;
+      await user.save();
+
+      for (const group of groups) {
+        let allUploaded = true;
+
+        const userChecks = group.users
+          .filter((user) => user !== user_id)
+          .map(async (user) => {
+            const currentUser = await User.findOne({ _id: user });
+            if (!currentUser || currentUser.dailyPicture === "") {
+              allUploaded = false;
+            }
+          });
+
+        await Promise.all(userChecks);
+
+        if (allUploaded) {
+          group.currentStreak += 1;
+          group.longestStreak = Math.max(group.longestStreak, group.currentStreak);
+          group.completedDaily = true;
+          group.save();
+        }
+      }
+
       await newPicture.save();
 
       res.status(200).json({
@@ -157,8 +227,8 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         fileUrl: uploadResult.Location,
         pictureId: newPicture._id,
       });
+      user.save();
     }
-    user.save();
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });
@@ -261,14 +331,39 @@ router.post("/bio", (req, res) => {
 });
 
 // creating new group
-router.post("/newgroup", (req, res) => {
-  const newGroup = new Group({
-    join_code: req.body.join_code,
-    group_name: req.body.group_name,
-    users: req.body.users,
-  });
+router.post("/newgroup", async (req, res) => {
+  try {
+    const newGroup = new Group({
+      join_code: req.body.join_code,
+      group_name: req.body.group_name,
+      users: req.body.users,
+    });
 
-  newGroup.save().then((group) => res.send(group));
+    const group = await newGroup.save();
+
+    const groups = await Group.find({ users: { $in: [req.body.userId] } });
+
+    if (groups.length >= 3) {
+      const user = await User.findOne({ _id: req.body.userId });
+      console.log(user);
+
+      if (user) {
+        const groupBadge = await Badge.findOne({
+          badge_description: "Create/join 3 or more groups",
+        });
+
+        if (groupBadge && !user.badges.includes(groupBadge._id)) {
+          user.badges.push(groupBadge._id);
+          await user.save();
+        }
+      }
+    }
+
+    res.send(group);
+  } catch (err) {
+    console.error("Error creating group:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 // geting groups based on userid
@@ -294,6 +389,23 @@ router.post("/join", async (req, res) => {
 
     existingGroup.users.push(req.body.userId);
     await existingGroup.save();
+
+    const groups = await Group.find({ users: { $in: [req.body.userId] } });
+
+    if (groups.length >= 3) {
+      const user = await User.findOne({ _id: req.body.userId });
+
+      if (user) {
+        const groupBadge = await Badge.findOne({
+          badge_description: "Create/join 3 or more groups",
+        });
+
+        if (groupBadge && !user.badges.includes(groupBadge._id)) {
+          user.badges.push(groupBadge._id);
+          await user.save();
+        }
+      }
+    }
 
     res.status(200).json({ message: "User successfully added to the group." });
   } catch (error) {

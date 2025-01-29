@@ -4,7 +4,7 @@ import App from "./components/App";
 import Home from "./components/pages/Home";
 import Friends from "./components/pages/Friends";
 import NotFound from "./components/pages/NotFound";
-// import Badges from "/components/pages/Badges";
+import Badges from "./components/pages/Badges";
 import Welcome from "./components/pages/Welcome";
 import Profile from "./components/pages/Profile";
 
@@ -27,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/profile/:userId" element={<Profile />} />
       <Route path="/friends" element={<Friends />} />
+      <Route path="/badges" element={<Badges />} />
     </Route>
   )
 );

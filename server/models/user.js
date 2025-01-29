@@ -8,9 +8,11 @@ const UserSchema = new mongoose.Schema({
   bio: String,
   currentStreak: { type: Number, default: 0 },
   highestStreak: { type: Number, default: 0 },
+  completedDaily: { type: Boolean, default: false },
   upvotesReceived: { type: Number, default: 0 },
   upvotesGiven: { type: Number, default: 0 },
   comments: { type: Number, default: 0 },
+  badges: { type: [String], default: [] },
 });
 
 // compile model from schema
