@@ -4,7 +4,11 @@ const UserSchema = new mongoose.Schema({
   name: String,
   googleid: String,
   dailyPicture: { type: String, default: "" },
-  profilePicture: { type: String, default: "Default_pfp.jpg" },
+  profilePicture: {
+    type: String,
+    default:
+      "https://picventurephotos.s3.us-east-2.amazonaws.com/uploads/6789dea16b973c7456b0eb87/1738158817399_Default_pfp.jpg",
+  },
   bio: String,
   currentStreak: { type: Number, default: 0 },
   highestStreak: { type: Number, default: 0 },

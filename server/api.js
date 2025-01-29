@@ -376,7 +376,6 @@ router.post("/newgroup", async (req, res) => {
 
     if (groups.length >= 3) {
       const user = await User.findOne({ _id: req.body.userId });
-      console.log(user);
 
       if (user) {
         const groupBadge = await Badge.findOne({
@@ -413,6 +412,7 @@ router.get("/groupById", (req, res) => {
 router.post("/join", async (req, res) => {
   try {
     const existingGroup = await Group.findOne({ join_code: req.body.join_code });
+    const user = await User.findOne({ _id: req.body.userId });
 
     if (!existingGroup) {
       return res.status(404).json({ error: "Group not found." });
@@ -444,6 +444,16 @@ router.post("/join", async (req, res) => {
       if (groupBadge && !existingGroup.badges.includes(groupBadge._id)) {
         existingGroup.badges.push(groupBadge._id);
       }
+    }
+
+    if (existingGroup.completedDaily) {
+      if (!user.completedDaily) {
+        if (existingGroup.currentStreak === existingGroup.longestStreak) {
+          existingGroup.longestStreak -= 1;
+        }
+        existingGroup.currentStreak -= 1;
+      }
+      existingGroup.completedDaily = user.completedDaily;
     }
 
     await existingGroup.save();

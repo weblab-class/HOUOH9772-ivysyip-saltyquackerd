@@ -39,8 +39,6 @@ const GroupImages = (props) => {
     }
   }, [props.group, props.filteredDate]);
 
-  console.log(selectedPhoto);
-
   return (
     <>
       {props.group ? (

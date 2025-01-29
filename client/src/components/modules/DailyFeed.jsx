@@ -13,7 +13,7 @@ const DailyFeed = (props) => {
   const [friendPictures, setFriendPictures] = useState({});
 
   // const { isIndexOpen, setIndexOpen } = usePopup();
-  
+
   // React.useEffect(() => {
   //   setPopupOpen(true);
   //   return () => setPopupOpen(false); // Reset when closed
@@ -100,8 +100,8 @@ const DailyFeed = (props) => {
                 profilePicture: userObj.profilePicture || defaultImage,
               },
             }))
-            )
           )
+        )
           .then((results) => {
             const updatedPictures = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
             setFriendPictures((prevState) => ({
@@ -159,8 +159,6 @@ const DailyFeed = (props) => {
       </div>
     </div>
   );
-
-
 };
 
 export default DailyFeed;
