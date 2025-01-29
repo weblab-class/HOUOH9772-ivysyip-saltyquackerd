@@ -15,14 +15,17 @@ const GroupPopup = (props) => {
     event.preventDefault();
 
     if (groupName.trim()) {
-      post("/api/newgroup", { join_code: groupCode, group_name: groupName, users: [userId] }).then(
-        (group) => {
-          setGroupName("");
-          handleClose();
+      post("/api/newgroup", {
+        join_code: groupCode,
+        group_name: groupName,
+        users: [userId],
+        userId: userId,
+      }).then((group) => {
+        setGroupName("");
+        handleClose();
 
-          props.refreshGroups();
-        }
-      );
+        props.refreshGroups();
+      });
     } else {
       alert("Please enter a valid name.");
     }
@@ -61,7 +64,6 @@ const GroupPopup = (props) => {
       alert("Please enter a valid group code.");
     }
   };
-
 
   async function fetchGroupCode() {
     try {
