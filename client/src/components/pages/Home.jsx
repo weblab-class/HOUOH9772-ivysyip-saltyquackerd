@@ -102,13 +102,8 @@ const Home = () => {
             )
           )}
           {uploadedFileUrl && (
-            <div>
-              <img
-                id="photo"
-                src={uploadedFileUrl}
-                alt="Uploaded file"
-                style={{ width: "300px" }}
-              />
+            <div id="photo-container">
+              <img id="photo" src={uploadedFileUrl} alt="Uploaded file" />
             </div>
           )}
         </div>
