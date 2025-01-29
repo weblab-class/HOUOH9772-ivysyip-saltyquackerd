@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { get } from "../../utilities";
 import PhotoPopup from "../modules/PhotoPopup.jsx";
 import defaultImage from "../../assets/Default_pfp.jpg"; //CHANGE THIS
-import { usePopup } from "../../components/pages/PopupContext.jsx";
+import { usePopup } from "./PopupContext.jsx";
 
 const DailyFeed = (props) => {
   const [groups, setGroups] = useState([]);
@@ -11,6 +11,24 @@ const DailyFeed = (props) => {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [user, setUser] = useState(null);
   const [friendPictures, setFriendPictures] = useState({});
+
+  const  { activePopup, setActivePopup } = usePopup();
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Closes the currently active popup and resets the selected friend.
+ * Sets the active popup to null and clears the selected friend state.
+ */
+
+/******  40b34775-81ec-4170-9e86-fc644362fb18  *******/
+  const ClosePopup = () => {
+    setActivePopup(null);
+    setSelectedFriend(null); 
+  }
+
+  const OpenPopup = (friend) => {
+    setActivePopup("image");
+    setSelectedFriend(friend)
+  }
 
 
   useEffect(() => {
@@ -90,8 +108,8 @@ const DailyFeed = (props) => {
                 profilePicture: userObj.profilePicture || defaultImage,
               },
             }))
-            )
           )
+        )
           .then((results) => {
             const updatedPictures = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
             setFriendPictures((prevState) => ({
@@ -106,7 +124,6 @@ const DailyFeed = (props) => {
     }
   }, [friendsList]);
 
-
   return (
     <div className="daily-feed-container">
       <div className="feed-inner">
@@ -115,7 +132,7 @@ const DailyFeed = (props) => {
             {/* Only render if the picture exists for the friend */}
             {friendPictures[friend]?.dailyPicture && (
               <div className="feed-friend-container">
-                <button className="feed-profile-pic" onClick={() => setSelectedFriend(friend)}>
+                <button className="feed-profile-pic" onClick={() => OpenPopup(friend)}>
                   <img src={friendPictures[friend]?.profilePicture || defaultImage} alt={friend} />
                 </button>
                 <div className="feed-profile-name">{friends[index]}</div>
@@ -127,7 +144,7 @@ const DailyFeed = (props) => {
               <div
                 className="feed-popup-overlay"
                 style={{ display: selectedFriend ? "block" : "none" }}
-                onClick={() => setSelectedFriend(null)}
+                onClick={() => OpenPopup(friend)}
               >
                 <div className="feed-popup-container">
                   <div className="feed-popup">
@@ -135,7 +152,7 @@ const DailyFeed = (props) => {
                       {/* Passing the friend's picture directly */}
                       <PhotoPopup
                         _id={friendPictures[friend]?.dailyPicture._id}
-                        closeModal={() => setSelectedFriend(null)}
+                        closeModal={ClosePopup}
                         link={friendPictures[friend]?.dailyPicture} // Correctly passing the link
                         creator_id={friend}
                         userId={props.userId}
@@ -150,8 +167,6 @@ const DailyFeed = (props) => {
       </div>
     </div>
   );
-
-
 };
 
 export default DailyFeed;

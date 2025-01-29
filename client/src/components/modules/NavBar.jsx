@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { usePopup } from "./PopupContext.jsx";
 
 import "./NavBar.css";
 import { UserContext } from "../App";
@@ -14,6 +15,11 @@ const NavBar = (props) => {
   const [isSettingsVisible, setSettingsVisible] = useState(false);
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
 
+  const { activePopup, setActivePopup } = usePopup();
+  const openSettings = () => setActivePopup("settings");
+  const closeSettings = () => setActivePopup(null);
+
+  console.log(activePopup);
   return (
     <nav className="NavBar-container">
       <div className="NavBar-linkContainer u-inlineBlock">
@@ -51,36 +57,41 @@ const NavBar = (props) => {
         )}
       </div>
       <div className="navbar-popup-container">
-        <button className="setting" onClick={() => setSettingsVisible(true)}>
+        <button className={`settings ${activePopup ? "hidden" : ""}`} onClick={openSettings}>
           <img src={gearIcon} alt="Gear Icon" />
         </button>
-        <div className="navbar-popup-overlay" style={{ display: isSettingsVisible ? "block" : "none" }}>
-          <div className="navbar-popup">
-            <div className="navbar-popuptext">
-              <button className="close-btn" onClick={() => setSettingsVisible(false)}>
-                x
-              </button>
-              {userId ? (
-                <button
-                  className="navbar-popup-option"
-                  onClick={() => {
-                    googleLogout();
-                    handleLogout();
-                  }}
-                >
-                  Logout
+        {activePopup === "settings" && (
+          <div
+            className="navbar-popup-overlay"
+            style={{ display: openSettings ? "block" : "none" }}
+          >
+            <div className="navbar-popup">
+              <div className="navbar-popuptext">
+                <button className="close-btn" onClick={closeSettings}>
+                  x
                 </button>
-              ) : (
-                <GoogleLogin
-                  key="google-login"
-                  onSuccess={handleLogin}
-                  onError={(err) => console.log(err)}
-                />
-              )}
-              <button className="navbar-popup-option">Color Change</button>
+                {userId ? (
+                  <button
+                    className="navbar-popup-option"
+                    onClick={() => {
+                      googleLogout();
+                      handleLogout();
+                    }}
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <GoogleLogin
+                    key="google-login"
+                    onSuccess={handleLogin}
+                    onError={(err) => console.log(err)}
+                  />
+                )}
+                {/* <button className="navbar-popup-option">Color Change</button> */}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );

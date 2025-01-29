@@ -5,6 +5,7 @@ import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";
 
 const PhotoPopup = (props) => {
+  
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
