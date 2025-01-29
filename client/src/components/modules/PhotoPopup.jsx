@@ -103,7 +103,6 @@ const PhotoPopup = (props) => {
                     </span>
                     <span style={{ fontSize: "16px" }}>{upvotes}</span>
                   </div>
-                  <div>{upvotes}</div>
                 </>
               )}
             </div>
