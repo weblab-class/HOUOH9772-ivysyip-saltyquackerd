@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
 import { get } from "../../utilities";
+import PhotoPopup from "../modules/PhotoPopup";
 
 import "./Home.css";
 
@@ -14,6 +15,7 @@ const Home = () => {
   const [uploadedFileUrl, setUploadedFileUrl] = useState("");
   const [user, setUser] = useState("");
   const [photoChallenge, setPhotoChallenge] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -66,6 +68,14 @@ const Home = () => {
     }
   };
 
+  const handleImageClick = (index) => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <div className="u-homepage">
       {/* Insert below the challenge */}
@@ -102,9 +112,24 @@ const Home = () => {
             )
           )}
           {uploadedFileUrl && (
-            <div id="photo-container">
-              <img id="photo" src={uploadedFileUrl} alt="Uploaded file" />
-            </div>
+            <>
+              <div id="photo-container">
+                <img
+                  id="photo"
+                  onClick={handleImageClick}
+                  src={uploadedFileUrl}
+                  alt="Uploaded file"
+                />
+              </div>
+              {isModalOpen && (
+                <PhotoPopup
+                  closeModal={closeModal}
+                  link={uploadedFileUrl}
+                  creator_id={userId}
+                  userId={userId}
+                />
+              )}
+            </>
           )}
         </div>
       </div>
