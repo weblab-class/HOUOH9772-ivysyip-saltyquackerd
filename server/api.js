@@ -28,6 +28,7 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+const { UNSAFE_useRouteId } = require("react-router-dom");
 
 // Middleware
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -81,7 +82,7 @@ router.get("/user", async (req, res) => {
 router.get("/userDailyPicture", async (req, res) => {
   User.findById(req.query.userid)
     .then((user) => {
-      res.send(user.dailyPicture);
+      res.send({ dailyPicture: user.dailyPicture });
     })
     .catch((err) => {
       res.status(500).send("User Not Found");
@@ -126,6 +127,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
     const existingPicture = await Picture.findOne({ creator_id: user_id, date: day });
     const user = await User.findOne({ _id: user_id });
+    const groups = await Group.find({ users: { $in: [user_id] } });
 
     user.dailyPicture = uploadResult.Location;
 
@@ -150,6 +152,28 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       user.currentStreak = user.currentStreak + 1;
       user.highestStreak = Math.max(user.highestStreak, user.currentStreak);
 
+      for (const group of groups) {
+        let allUploaded = true;
+
+        const userChecks = group.users
+          .filter((user) => user !== user_id)
+          .map(async (user) => {
+            const currentUser = await User.findOne({ _id: user });
+            if (!currentUser || currentUser.dailyPicture === "") {
+              allUploaded = false;
+            }
+          });
+
+        await Promise.all(userChecks);
+
+        if (allUploaded) {
+          group.currentStreak += 1;
+          group.longestStreak = Math.max(group.longestStreak, group.currentStreak);
+          group.save();
+          console.log("Updated Group:", group);
+        }
+      }
+
       await newPicture.save();
 
       res.status(200).json({
@@ -157,8 +181,8 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         fileUrl: uploadResult.Location,
         pictureId: newPicture._id,
       });
+      user.save();
     }
-    user.save();
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });
