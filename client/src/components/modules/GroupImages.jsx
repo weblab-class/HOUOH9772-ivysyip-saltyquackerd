@@ -21,12 +21,18 @@ const GroupImages = (props) => {
   };
 
   useEffect(() => {
-    setPhotos([]);
+    setPhotos([]); // Clear photos when group or date changes
     if (props.group) {
-      props.group.users.forEach((user) => {
-        get("/api/picturesByUserAndDate", { userid: user, date: props.filteredDate }).then(
+      props.group.users.forEach((userId) => {
+        get("/api/picturesByUserAndDate", { userid: userId, date: props.filteredDate }).then(
           (pictures) => {
-            setPhotos((prevPhotos) => [...prevPhotos, ...pictures]);
+            setPhotos((prevPhotos) => {
+              // Filter out duplicates before updating state
+              const newPhotos = pictures.filter(
+                (newPic) => !prevPhotos.some((existingPic) => existingPic._id === newPic._id)
+              );
+              return [...prevPhotos, ...newPhotos];
+            });
           }
         );
       });
@@ -44,6 +50,7 @@ const GroupImages = (props) => {
                 <img
                   key={index}
                   src={photo.link}
+                  className={"photo"}
                   onClick={() => handleImageClick(index)}
                   alt="Image"
                 />
@@ -53,7 +60,6 @@ const GroupImages = (props) => {
             <PhotoPopup
               closeModal={closeModal}
               link={selectedPhoto.link}
-              _id={selectedPhoto._id}
               creator_id={selectedPhoto.creator_id}
               userId={userId}
             />

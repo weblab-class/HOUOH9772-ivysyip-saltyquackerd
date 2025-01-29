@@ -5,12 +5,17 @@ import CommentsBlock from "./CommentsBlock.jsx";
 import { NewComment } from "./NewPostInput.jsx";
 
 const PhotoPopup = (props) => {
+  
   const [comments, setComments] = useState([]);
   const [upvotes, setUpvotes] = useState(props.upvotes);
+  const [photoId, setPhotoId] = useState("");
 
   useEffect(() => {
-    get("/api/comment", { parent: props._id }).then((comments) => {
-      setComments(comments);
+    get("/api/pictureByLink", { link: props.link }).then((photo) => {
+      setPhotoId(photo._id);
+      get("/api/comment", { parent: photo._id }).then((comments) => {
+        setComments(comments);
+      });
     });
   }, []);
 
@@ -87,7 +92,7 @@ const PhotoPopup = (props) => {
               />
             </div>
             <div className="new-comment-section">
-              {props.userId && <NewComment pictureId={props._id} addNewComment={addNewComment} />}{" "}
+              {props.userId && <NewComment pictureId={photoId} addNewComment={addNewComment} />}{" "}
             </div>
             <div className="upvote">
               {props.userId && (
@@ -106,6 +111,7 @@ const PhotoPopup = (props) => {
               )}
             </div>
             {console.log(comments)}
+
           </div>
         </div>
       </div>

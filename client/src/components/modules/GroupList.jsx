@@ -25,11 +25,17 @@ const GroupList = (props) => {
   };
 
   useEffect(() => {
-    setUsers([]);
+    setUsers([]); // Clear users when group changes
     if (props.group) {
-      props.group.users.forEach((user) => {
-        get("/api/user", { userid: user }).then((user) => {
-          setUsers((prevUsers) => [...prevUsers, user]);
+      props.group.users.forEach((userId) => {
+        get("/api/user", { userid: userId }).then((user) => {
+          setUsers((prevUsers) => {
+            // Check if the user already exists in the list
+            if (!prevUsers.some((existingUser) => existingUser._id === user._id)) {
+              return [...prevUsers, user]; // Add user only if not already in the list
+            }
+            return prevUsers; // Return previous users if duplicate
+          });
         });
       });
     }
