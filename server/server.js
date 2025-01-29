@@ -121,11 +121,18 @@ server.listen(port, () => {
 const { CronJob } = require("cron");
 const setDailyChallenge = require("./challengeGenerator");
 
+const User = require("./models/user");
+
+const updateDailyPicture = async () => {
+  await User.updateMany({}, { $set: { dailyPicture: "" } });
+};
+
 const job = new CronJob(
   "0 0 * * *",
   async () => {
     console.log("Generating daily challenge at UTC midnight...");
     await setDailyChallenge();
+    await updateDailyPicture();
   },
   null,
   true,
