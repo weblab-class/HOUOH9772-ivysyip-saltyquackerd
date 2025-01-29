@@ -1,0 +1,33 @@
+.SingleComment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: baseline;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 5px 0;
+}
+
+.SingleComment-username {
+  font-weight: bold;
+  color: #262626;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.SingleComment-username:hover {
+  text-decoration: underline;
+}
+
+.SingleComment-content {
+  color: #262626;
+  word-break: break-word; /* Ensures long words or URLs wrap properly */
+}
+
+.SingleComment-timestamp {
+  font-size: 12px;
+  color: #8e8e8e;
+  margin-left: auto; /* Push timestamp to the far right if needed */
+  white-space: nowrap; /* Prevents the timestamp from wrapping */
+}

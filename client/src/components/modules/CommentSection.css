@@ -1,0 +1,17 @@
+.instagram-comments-container {
+  display: flex;
+  flex-direction: column;
+  height: 90%; /* Or a custom height for the container */
+}
+
+.comments-section {
+  flex-grow: 1; /* Allows the comments to expand and take available space */
+  overflow-y: auto; /* Ensures scrolling if there are many comments */
+  padding: 10px; /* Add some padding for spacing */
+}
+
+.new-comment-section {
+  border-top: 1px solid #dbdbdb; /* Separates the input from the comments */
+  padding: 10px; /* Spacing for the input box */
+  background-color: #fff; /* Background for the input section */
+}

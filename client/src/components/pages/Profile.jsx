@@ -50,11 +50,12 @@ const Profile = () => {
 
   let picturesList = [];
   if (images && images.length !== 0) {
+    const sortedImages = images.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     picturesList = (
       <div className="picture-grid">
-        {" "}
         {/* Add the grid container here */}
-        {images.map((image, index) => (
+        {sortedImages.map((image, index) => (
           <Picture
             key={`Picture_${index}`}
             // creator_name={image.creator_name}
@@ -62,6 +63,7 @@ const Profile = () => {
             date={image.date}
             challenge={image.challenge}
             link={image.link}
+            userId={userId}
           />
         ))}
       </div>
