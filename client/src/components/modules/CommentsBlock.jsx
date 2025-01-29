@@ -29,9 +29,7 @@ const CommentsBlock = (props) => {
             content={comment.content}
           />
         ))}
-        {props.userId && (
-          <NewComment pictureId={props.picture._id} addNewComment={props.addNewComment} />
-        )}
+        {/* {props.userId && <NewComment pictureId={props._id} addNewComment={props.addNewComment} />} */}
       </div>
     </div>
   );

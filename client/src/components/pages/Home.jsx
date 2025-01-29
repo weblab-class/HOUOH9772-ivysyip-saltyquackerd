@@ -19,6 +19,7 @@ const Home = () => {
     if (userId) {
       get("/api/user", { userid: userId }).then((user) => {
         setUser(user);
+        setUploadedFileUrl(user.dailyPicture);
       });
     }
   }, []);
@@ -68,8 +69,7 @@ const Home = () => {
   return (
     <div className="u-homepage">
       {/* Insert below the challenge */}
-      <DailyFeed 
-        userId={userId}/>
+      <DailyFeed userId={userId} />
       <h1 className="home-title">Today's Challenge</h1>
       <div className="challenge-upload">
         <div className="upload">
@@ -77,13 +77,6 @@ const Home = () => {
             <>
               <div className="button_group">
                 <form onSubmit={handleSubmit}>
-                  {/* <input
-                    type="file"
-                    id="input1"
-                    name="filename"
-                    accept="image/*"
-                    onChange={handleUpload}
-                  /> */}
                   {uploadedFileUrl ? null : (
                     <button type="submit" value="Submit">
                       Upload!
@@ -91,29 +84,31 @@ const Home = () => {
                   )}
                 </form>
               </div>
-              {uploadedFileUrl && (
-                <div>
-                  <img
-                    id="photo"
-                    src={uploadedFileUrl}
-                    alt="Uploaded file"
-                    style={{ width: "300px" }}
-                  />
-                </div>
-              )}
             </>
           ) : (
-            <div className="button_group">
-              <form onSubmit={handleSubmit}>
-                <label htmlFor="input1">Upload Photo Here</label>
-                <input
-                  type="file"
-                  id="input1"
-                  name="filename"
-                  accept="image/*"
-                  onChange={handleUpload}
-                />
-              </form>
+            !uploadedFileUrl && (
+              <div className="button_group">
+                <form onSubmit={handleSubmit}>
+                  <label htmlFor="input1">Upload Photo Here</label>
+                  <input
+                    type="file"
+                    id="input1"
+                    name="filename"
+                    accept="image/*"
+                    onChange={handleUpload}
+                  />
+                </form>
+              </div>
+            )
+          )}
+          {uploadedFileUrl && (
+            <div>
+              <img
+                id="photo"
+                src={uploadedFileUrl}
+                alt="Uploaded file"
+                style={{ width: "300px" }}
+              />
             </div>
           )}
         </div>

@@ -20,6 +20,7 @@
     "node": ">=18.x"
   },
   "dependencies": {
+    "@mui/icons-material": "^6.4.1",
     "@react-oauth/google": "^0.12.1",
     "aws-sdk": "^2.1692.0",
     "connect-ensure-login": "^0.1.1",

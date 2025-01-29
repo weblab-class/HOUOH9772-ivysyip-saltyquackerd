@@ -49,7 +49,7 @@ const NavBar = (props) => {
         </Link>
         {props.userId && (
           <Link
-            to={`/badges/${props.userId}`}
+            to={`/badges`}
             className={`NavBar-link ${
               location.pathname === "/badges" ? "NavBar-link--active" : ""
             }`}

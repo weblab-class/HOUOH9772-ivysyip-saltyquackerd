@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./SingleComment.css";
 
 /**
  * Component to render a single comment
@@ -12,9 +13,11 @@ import { Link } from "react-router-dom";
  */
 const SingleComment = (props) => {
   return (
-    <div>
-      <Link to={`/profile/${props.creator_id}`}>{props.creator_name}</Link>
-      <span>{" | " + props.content}</span>
+    <div className="SingleComment">
+      <Link className="SingleComment-username" to={`/profile/${props.creator_id}`}>
+        {props.creator_name}
+      </Link>
+      <span className="SingleComment-content">{props.content}</span>
     </div>
   );
 };

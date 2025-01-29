@@ -122,9 +122,13 @@ const { CronJob } = require("cron");
 const setDailyChallenge = require("./challengeGenerator");
 
 const User = require("./models/user");
+const Group = require("./models/group");
 
 const updateDailyPicture = async () => {
-  await User.updateMany({}, { $set: { dailyPicture: "" } });
+  await User.updateMany({ completedDaily: false }, { $set: { currentStreak: 0 } });
+  await User.updateMany({}, { $set: { dailyPicture: "", completedDaily: false } });
+  await Group.updateMany({ completedDaily: false }, { $set: { currentStreak: 0 } });
+  await Group.updateMany({}, { $set: { completedDaily: false } });
 };
 
 const job = new CronJob(

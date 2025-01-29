@@ -19,6 +19,7 @@ const Group = require("./models/group");
 const Picture = require("./models/picture");
 const Challenge = require("./models/challenge");
 const Comment = require("./models/comment");
+const Badge = require("./models/badges");
 
 // import authentication library
 const auth = require("./auth");
@@ -28,6 +29,7 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+const { UNSAFE_useRouteId } = require("react-router-dom");
 
 // Middleware
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -81,7 +83,7 @@ router.get("/user", async (req, res) => {
 router.get("/userDailyPicture", async (req, res) => {
   User.findById(req.query.userid)
     .then((user) => {
-      res.send({dailyPicture: user.dailyPicture});
+      res.send({ dailyPicture: user.dailyPicture });
     })
     .catch((err) => {
       res.status(500).send("User Not Found");
@@ -97,6 +99,18 @@ router.get("/picturesbyuser", (req, res) => {
 router.get("/picturesByUserAndDate", (req, res) => {
   Picture.find({ creator_id: req.query.userid, date: req.query.date }).then((pictures) => {
     res.send(pictures);
+  });
+});
+
+router.get("/allUserBadges", (req, res) => {
+  Badge.find({ category: "user" }).then((badges) => {
+    res.send(badges);
+  });
+});
+
+router.get("/allGroupBadges", (req, res) => {
+  Badge.find({ category: "group" }).then((badges) => {
+    res.send(badges);
   });
 });
 
@@ -126,6 +140,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
     const existingPicture = await Picture.findOne({ creator_id: user_id, date: day });
     const user = await User.findOne({ _id: user_id });
+    const groups = await Group.find({ users: { $in: [user_id] } });
 
     user.dailyPicture = uploadResult.Location;
 
@@ -150,6 +165,92 @@ router.post("/upload", upload.single("file"), async (req, res) => {
       user.currentStreak = user.currentStreak + 1;
       user.highestStreak = Math.max(user.highestStreak, user.currentStreak);
 
+      if (user.currentStreak >= 3) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 3 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
+      if (user.currentStreak >= 7) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 7 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
+      if (user.currentStreak >= 30) {
+        const badge = await Badge.findOne({
+          badge_description: "Complete the challenge 30 days in a row",
+        });
+
+        if (badge && !user.badges.includes(badge._id)) {
+          user.badges.push(badge._id);
+        }
+      }
+
+      user.completedDaily = true;
+      await user.save();
+
+      for (const group of groups) {
+        let allUploaded = true;
+
+        const userChecks = group.users
+          .filter((user) => user !== user_id)
+          .map(async (user) => {
+            const currentUser = await User.findOne({ _id: user });
+            if (!currentUser || currentUser.dailyPicture === "") {
+              allUploaded = false;
+            }
+          });
+
+        await Promise.all(userChecks);
+
+        if (allUploaded) {
+          group.currentStreak += 1;
+          group.longestStreak = Math.max(group.longestStreak, group.currentStreak);
+          group.completedDaily = true;
+
+          if (group.currentStreak >= 3) {
+            const badge = await Badge.findOne({
+              badge_description: "Everyone uploads for 3 days in a row",
+            });
+
+            if (badge && !group.badges.includes(badge._id)) {
+              group.badges.push(badge._id);
+            }
+          }
+
+          if (group.currentStreak >= 7) {
+            const badge = await Badge.findOne({
+              badge_description: "Everyone uploads for 7 days in a row",
+            });
+
+            if (badge && !group.badges.includes(badge._id)) {
+              group.badges.push(badge._id);
+            }
+          }
+
+          if (group.currentStreak >= 30) {
+            const badge = await Badge.findOne({
+              badge_description: "Everyone uploads for 30 days in a row",
+            });
+
+            if (badge && !group.badges.includes(badge._id)) {
+              group.badges.push(badge._id);
+            }
+          }
+
+          group.save();
+        }
+      }
+
       await newPicture.save();
 
       res.status(200).json({
@@ -157,11 +258,72 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         fileUrl: uploadResult.Location,
         pictureId: newPicture._id,
       });
+      user.save();
     }
-    user.save();
   } catch (error) {
     console.error("Error uploading file:", error);
     res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
+router.post("/uploadProfilePicture", upload.single("file"), async (req, res) => {
+  const { user_id, challenge } = req.body;
+
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  if (!user_id) {
+    return res.status(400).json({ error: "User ID is required." });
+  }
+
+  // Validate file type and size
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  if (!allowedTypes.includes(req.file.mimetype)) {
+    return res
+      .status(400)
+      .json({ error: "Invalid file type. Only JPEG, PNG, and GIF are allowed." });
+  }
+
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (req.file.size > maxSize) {
+    return res.status(400).json({ error: "File is too large. Max size is 5MB." });
+  }
+
+  const fileContent = req.file.buffer;
+  const fileName = `uploads/${user_id}/${Date.now()}_${req.file.originalname}`;
+
+  const params = {
+    Bucket: bucketName,
+    Key: fileName,
+    Body: fileContent,
+    ContentType: req.file.mimetype,
+  };
+
+  try {
+    const uploadResult = await s3.upload(params).promise();
+
+    const user = await User.findOne({ _id: user_id });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    user.profilePicture = uploadResult.Location;
+
+    try {
+      await user.save();
+      return res.status(200).json({
+        message: "Profile picture uploaded successfully",
+        fileUrl: uploadResult.Location,
+        pictureId: 0, // why is this needed?
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Failed to save user profile picture", details: error.message });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to upload image to S3", details: error.message });
   }
 });
 
@@ -200,20 +362,51 @@ router.post("/bio", (req, res) => {
 });
 
 // creating new group
-router.post("/newgroup", (req, res) => {
-  const newGroup = new Group({
-    join_code: req.body.join_code,
-    group_name: req.body.group_name,
-    users: req.body.users,
-  });
+router.post("/newgroup", async (req, res) => {
+  try {
+    const newGroup = new Group({
+      join_code: req.body.join_code,
+      group_name: req.body.group_name,
+      users: req.body.users,
+    });
 
-  newGroup.save().then((group) => res.send(group));
+    const group = await newGroup.save();
+
+    const groups = await Group.find({ users: { $in: [req.body.userId] } });
+
+    if (groups.length >= 3) {
+      const user = await User.findOne({ _id: req.body.userId });
+      console.log(user);
+
+      if (user) {
+        const groupBadge = await Badge.findOne({
+          badge_description: "Create or join 3 or more groups",
+        });
+
+        if (groupBadge && !user.badges.includes(groupBadge._id)) {
+          user.badges.push(groupBadge._id);
+          await user.save();
+        }
+      }
+    }
+
+    res.send(group);
+  } catch (err) {
+    console.error("Error creating group:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 // geting groups based on userid
 router.get("/group", (req, res) => {
   Group.find({ users: { $in: [req.query.userid] } }).then((groups) => {
     res.send(groups);
+  });
+});
+
+router.get("/groupById", (req, res) => {
+  Group.findOne({ _id: req.query.groupId }).then((group) => {
+    res.send(group);
   });
 });
 
@@ -232,7 +425,45 @@ router.post("/join", async (req, res) => {
     }
 
     existingGroup.users.push(req.body.userId);
+
+    if (existingGroup.users.length >= 5) {
+      const groupBadge = await Badge.findOne({
+        badge_description: "Have 5 or more people in this group",
+      });
+
+      if (groupBadge && !existingGroup.badges.includes(groupBadge._id)) {
+        existingGroup.badges.push(groupBadge._id);
+      }
+    }
+
+    if (existingGroup.users.length >= 10) {
+      const groupBadge = await Badge.findOne({
+        badge_description: "Have 10 or more people in this group",
+      });
+
+      if (groupBadge && !existingGroup.badges.includes(groupBadge._id)) {
+        existingGroup.badges.push(groupBadge._id);
+      }
+    }
+
     await existingGroup.save();
+
+    const groups = await Group.find({ users: { $in: [req.body.userId] } });
+
+    if (groups.length >= 3) {
+      const user = await User.findOne({ _id: req.body.userId });
+
+      if (user) {
+        const groupBadge = await Badge.findOne({
+          badge_description: "Create or join 3 or more groups",
+        });
+
+        if (groupBadge && !user.badges.includes(groupBadge._id)) {
+          user.badges.push(groupBadge._id);
+          await user.save();
+        }
+      }
+    }
 
     res.status(200).json({ message: "User successfully added to the group." });
   } catch (error) {
@@ -251,6 +482,33 @@ router.post("/leavegroup", async (req, res) => {
 
     const userIdToRemove = req.body.userId;
     existingGroup.users = existingGroup.users.filter((userId) => userId !== userIdToRemove);
+
+    const badgesToRemove = [];
+
+    if (existingGroup.users.length < 5) {
+      const groupBadge = await Badge.findOne({
+        badge_description: "Have 5 or more people in this group",
+      });
+
+      if (groupBadge && existingGroup.badges.includes(groupBadge._id)) {
+        badgesToRemove.push(groupBadge._id);
+      }
+    }
+
+    if (existingGroup.users.length < 10) {
+      const groupBadge = await Badge.findOne({
+        badge_description: "Have 10 or more people in this group",
+      });
+
+      if (groupBadge && existingGroup.badges.includes(groupBadge._id)) {
+        badgesToRemove.push(groupBadge._id);
+      }
+    }
+
+    existingGroup.badges = existingGroup.badges.filter(
+      (badgeId) =>
+        !badgesToRemove.some((badgeToRemove) => badgeId.toString() === badgeToRemove.toString())
+    );
 
     await existingGroup.save();
 
@@ -296,15 +554,40 @@ router.get("/comment", (req, res) => {
   });
 });
 
-router.post("/comment", auth.ensureLoggedIn, (req, res) => {
-  const newComment = new Comment({
-    creator_id: req.user._id,
-    creator_name: req.user.name,
-    parent: req.body.parent,
-    content: req.body.content,
-  });
+router.post("/comment", async (req, res) => {
+  try {
+    const newComment = new Comment({
+      creator_id: req.body.creator_id,
+      creator_name: req.body.creator_name,
+      parent: req.body.parent,
+      content: req.body.content,
+    });
 
-  newComment.save().then((comment) => res.send(comment));
+    const user = await User.findOne({ _id: req.body.creator_id });
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    user.comments += 1;
+
+    if (user.comments >= 3) {
+      const badge = await Badge.findOne({
+        badge_description: "Make 3 or more comments on posts",
+      });
+      if (badge && !user.badges.includes(badge._id)) {
+        user.badges.push(badge._id);
+      }
+    }
+
+    await user.save();
+
+    const savedComment = await newComment.save();
+
+    res.status(201).send(savedComment);
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).send({ error: "An error occurred while creating the comment" });
+  }
 });
 
 // anything else falls to this "not found" case

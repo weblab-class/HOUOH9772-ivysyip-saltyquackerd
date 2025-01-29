@@ -5,6 +5,7 @@ const PictureSchema = new mongoose.Schema({
   date: String,
   link: String,
   challenge: String,
+  upvotes: Number,
 });
 
 // compile model from schema

@@ -1,0 +1,26 @@
+.group-selector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.group-selector-container label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.group-selector-container select {
+  width: 300px;
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+.group-selector-container .badge-group-feed {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
